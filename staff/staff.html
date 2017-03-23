@@ -1,0 +1,67 @@
+<div class="comptingServices">
+    <div class="container">
+        <h2>Staff</h2>
+        <hr>
+        <div class="row staff">
+            <div data-ng-repeat="member in staffMembers" class="col-md-6">
+                    <h3>{{ member.name }}</h3>
+                    <h5>{{ member.position }}</h5>
+                    <p>{{ member.description}}</p>
+                    <p><a class="btn btn-default" href="#" role="button">LinkedIn &raquo;</a></p>
+            </div>
+        </div>
+<!--
+        <div ng-repeat="member in staffMembers" ng-if="$index % 2 == 0" class="row">
+            <div ng-class="columns6">
+                <h3>{{ staffMembers[$index + 0].name }}</h3>
+                <h5>{{ staffMembers[$index + 0].position }}</h5>
+                <p>{{ staffMembers[$index + 0].description}}</p>
+                <p><a class="btn btn-default" href="grid.html" role="button">LinkedIn &raquo;</a></p>
+            </div>
+            <div ng-class="columns6">
+                <h3>{{ staffMembers[$index + 1].name }}</h3>
+                <h5>{{ staffMembers[$index + 1].position }}</h5>
+                <p>{{ staffMembers[$index + 1].description}}</p>
+                <p><a class="btn btn-default" href="grid.html" role="button">LinkedIn &raquo;</a></p>
+            </div>
+        </div>
+-->
+        
+        <br/>
+<!--        Display Next Job Category-->
+        
+        <h2>Lab Assistants</h2>
+        <hr>
+        <div class="row staff">
+            <div data-ng-repeat="member in assistants" class="col-md-4">
+                    <h3>{{ member.name }}</h3>
+                    <h5>{{ member.position }}</h5>
+                    <p>{{ member.description}}</p>
+                    <p><a class="btn btn-default" href="#" role="button">LinkedIn &raquo;</a></p>
+            </div>
+        </div>
+<!--
+        <div ng-repeat="member in assistants" ng-if="$index % 3 == 0" class="row">
+            <div ng-class="columns4">
+                <h3>{{ assistants[$index + 0].name }}</h3>
+                <h5>{{ assistants[$index + 0].position }}</h5>
+                <p>{{ assistants[$index + 0].description}}</p>
+                <p><a class="btn btn-default" href="grid.html" role="button">LinkedIn &raquo;</a></p>
+            </div>
+            <div ng-class="columns4">
+                <h3>{{ assistants[$index + 1].name }}</h3>
+                <h5>{{ assistants[$index + 1].position }}</h5>
+                <p>{{ assistants[$index + 1].description}}</p>
+                <p><a class="btn btn-default" href="grid.html" role="button">LinkedIn &raquo;</a></p>
+            </div>
+            <div ng-class="columns4">
+                <h3>{{ assistants[$index + 2].name }}</h3>
+                <h5>{{ assistants[$index + 2].position }}</h5>
+                <p>{{ assistants[$index + 2].description}}</p>
+                <p><a class="btn btn-default" href="grid.html" role="button">LinkedIn &raquo;</a></p>
+            </div>
+        </div>
+-->
+        
+    </div>
+</div>

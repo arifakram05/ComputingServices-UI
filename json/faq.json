@@ -1,0 +1,54 @@
+[
+    {
+        "question":"What is your favorite color?",
+        "answer":"Black is my favorite color."
+    },
+    {
+        "question":"Which is your favorite car?",
+        "answer":"Audi is my favorite car."
+    },
+    {
+        "question":"Whats' the name of your school?",
+        "answer":"Fairleigh Dickinson University."
+    },
+    {
+        "question":"Which city did you grew up in?",
+        "answer":"I grew up in Godavarikhani."
+    },
+    {
+        "question":"What are your hobbies?",
+        "answer":"Playing Criket, Video games, watching movies."
+    },
+    {
+        "question":"When did you come to the United States?",
+        "answer":"August of 2013."
+    },
+    {
+        "question":"Where was your first job?",
+        "answer":"My first job was in California."
+    },
+    {
+        "question":"Which company did you work for in the beginning of your career?",
+        "answer":"Apple Inc."
+    },
+    {
+        "question":"What was your first ever job in the US?",
+        "answer":"Lab Assistant."
+    },
+    {
+        "question":"Who was your first manager?",
+        "answer":"Lauren."
+    },
+    {
+        "question":"Whats' your specialization in Master's?",
+        "answer":"Computer Science."
+    },
+    {
+        "question":"What color is your car?",
+        "answer":"Black."
+    },
+    {
+        "question":"Which super hero character do you like the most!",
+        "answer":"Iron Man."
+    }
+]

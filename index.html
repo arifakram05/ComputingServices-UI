@@ -1,0 +1,165 @@
+<!DOCTYPE html>
+<html lang="en" ng-app="computingServices">
+
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Computing Services</title>
+    <link rel="stylesheet" href="lib/bootstrap.min.css">
+    <!-- Custom styles for this template -->
+    <link rel="stylesheet" href="app.css">
+
+    <!-- Angular Material style sheet -->
+    <link rel="stylesheet" href="http://ajax.googleapis.com/ajax/libs/angular_material/1.1.0/angular-material.min.css">
+
+    <link data-require="font-awesome@*" data-semver="4.3.0" rel="stylesheet" href="//maxcdn.bootstrapcdn.com/font-awesome/4.3.0/css/font-awesome.min.css" />
+
+    <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+
+</head>
+
+<body>
+
+    <!--<nav class="navbar navbar-inverse navbar-fixed-top">-->
+    <nav class="navbar navbar-default" ng-controller="LogoutCtrl">
+        <div class="container-fluid">
+            <div class="navbar-header">
+                <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#navbar" aria-expanded="false" aria-controls="navbar">
+                    <span class="sr-only">Toggle navigation</span>
+                    <span class="icon-bar"></span>
+                    <span class="icon-bar"></span>
+                    <span class="icon-bar"></span>
+                </button>
+                <a class="navbar-brand" href="#/home">Computing Services</a>
+            </div>
+            <div id="navbar" class="navbar-collapse collapse">
+                <ul class="nav navbar-nav navbar-right">
+                    <li><a href="#/labSchedule">Lab Schedule</a></li>
+                    <li><a href="#/staffSchedule">Staff Schedule</a></li>
+                    <li><a href="#/staff">Staff</a></li>
+                    <li><a href="#/faq">FAQ</a></li>
+                    <li><a href="#/about">About</a></li>
+                    <li><a href="#/contact">Contact</a></li>
+                    <li><a href="#/careers">Apply for a LA Position</a></li>
+
+                    <!--Admin only features-->
+                    <!--<li><a href="#/manageJobApplicants">Manage Job Applicants</a></li>
+                    <li><a href="#/manageLabSchedule">Manage Lab Schedule</a></li>
+                    <li><a href="#/manageStaffSchedule">Manage Staff Schedule</a></li>
+                    <li><a href="#/manageRoles">Manage Roles</a></li>
+                    <li><a href="#/authorize">Authorize</a></li>
+                    <li><a href="#/manageLabAssistants">Manage Lab Assistants</a></li>-->
+
+                    <!--Admin only features-->
+                    <li class="dropdown" ng-show="!isEmpty(globals)">
+                        <a class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">Admin <span class="caret"></span></a>
+                        <ul class="dropdown-menu">
+                            <li ng-show="!isEmpty(globals)"><a href="#/manageJobApplicants">Job Applicants</a></li>
+                            <li ng-show="!isEmpty(globals)"><a href="#/manageLabAssistants">Lab Assistants</a></li>
+                            <li ng-show="!isEmpty(globals)"><a href="#/manageLabSchedule">Lab Schedule</a></li>
+                            <li ng-show="!isEmpty(globals)"><a href="#/manageStaffSchedule">Staff Schedule</a></li>
+                            <li ng-show="!isEmpty(globals)"><a href="#/manageRoles">Roles</a></li>
+                            <li ng-show="!isEmpty(globals)"><a href="#/authorize">Authorize</a></li>
+                        </ul>
+                    </li>
+
+                    <!--LA only features-->
+                    <li class="dropdown" ng-show="!isEmpty(globals)">
+                        <a class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">LA <span class="caret"></span></a>
+                        <ul class="dropdown-menu">
+                            <li ng-show="!isEmpty(globals)"><a href="#/recordwork">Log Shift</a></li>
+                            <li ng-show="!isEmpty(globals)"><a href="#/displaywork">Show Recorded Work</a></li>
+                            <li ng-show="!isEmpty(globals)"><a href="#/viewworkschedule">Work Schedule</a></li>
+                            <li ng-show="!isEmpty(globals)"><a href="#/manageprofile">Manage Profile</a></li>
+                        </ul>
+                    </li>
+
+                    <li ng-show="isEmpty(globals)" class="active"><a href="#/login">Login <span class="sr-only">(current)</span></a></li>
+                    <li ng-show="!isEmpty(globals)" ng-click="logout()" class="active"><a href="#/home">Logout <span class="sr-only">(current)</span></a></li>
+                </ul>
+            </div>
+            <!--/.nav-collapse -->
+        </div>
+    </nav>
+
+    <!--keep this;dont delete from here-->
+    <div class="jumbotron">
+        <div class="container">
+            <div class="col-sm-8 col-sm-offset-2">
+                <div ng-class="{ 'alert': flash, 'alert-success': flash.type === 'success', 'alert-danger': flash.type === 'error' }" ng-if="flash" ng-bind="flash.message"></div>
+            </div>
+            <br>
+            <div ng-view></div>
+        </div>
+    </div>
+    <!-- /.container -->
+
+    <!--<footer>
+        <div class="credits text-center">
+            <p>
+                <a href="http://www.fdu.edu/">FDU</a>
+            </p>
+            <p>
+                <a href="http://www.google.com">Arif Akram</a>
+            </p>
+        </div>
+    </footer>-->
+
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.2/jquery.min.js"></script>
+    <script src="lib/bootstrap.min.js"></script>
+
+    <!-- Angular Material requires Angular.js Libraries -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/angular.js/1.5.5/angular.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/angular.js/1.5.5/angular-cookies.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/angular.js/1.5.5/angular-route.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/angular.js/1.5.5/angular-animate.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/angular.js/1.5.5/angular-aria.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/angular.js/1.5.5/angular-messages.min.js"></script>
+
+    <!-- Angular Material Library -->
+    <script src="http://ajax.googleapis.com/ajax/libs/angular_material/1.1.0/angular-material.min.js"></script>
+
+    <script src="app.js"></script>
+    <script src="home/home.js"></script>
+    <script src="about/about.js"></script>
+    <script src="careers/careers.js"></script>
+    <script src="contact/contact.js"></script>
+    <script src="faq/faq.js"></script>
+    <script src="labschedule/labschedule.js"></script>
+    <script src="staffschedule/staffschedule.js"></script>
+    <script src="staff/staff.js"></script>
+    <script src="admin/manageLabAssistants.js"></script>
+    <script src="admin/manageJobApplicants.js"></script>
+    <script src="admin/manageLabSchedule.js"></script>
+    <script src="admin/manageRoles.js"></script>
+    <script src="admin/manageStaffSchedule.js"></script>
+    <script src="admin/authorize.js"></script>
+
+    <!--Lab Assistant scripts-->
+    <script src="labassistant/recordwork.js"></script>
+    <script src="labassistant/displaywork.js"></script>
+    <script src="labassistant/viewworkschedule.js"></script>
+    <script src="labassistant/manageprofile.js"></script>
+
+    <script src="login/LocalLoginService.js"></script>
+    <!-- Fake user service for demo that uses local storage-->
+    <script src="login/login.js"></script>
+    <!--<script src="logout/logout.js"></script>-->
+    <script src="register/register.js"></script>
+    <script src="core/flashService.js"></script>
+
+    <script src="core/dirPagination.js"></script>
+    <script src="directives/formValidation.js"></script>
+    <!--<script src="directives/fileUpload.js"></script>-->
+    <script src="directives/fileModel.js"></script>
+
+    <!--ng-file-upload-->
+    <script src="lib/ng-file-upload/FileAPI.min.js"></script>
+    <script src="lib/ng-file-upload/ng-file-upload-all.min.js"></script>
+    <script src="lib/ng-file-upload/ng-file-upload-shim.min.js"></script>
+    <script src="lib/ng-file-upload/ng-file-upload.min.js"></script>
+
+</body>
+
+</html>

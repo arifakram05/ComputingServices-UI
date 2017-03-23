@@ -1,0 +1,22 @@
+<div ng-controller="AuthorizeCtrl">
+    <div class="col-md-8 col-md-offset-2">
+        <md-content class="md-padding">
+            <md-toolbar class="md-primary">
+                <div class="md-toolbar-tools">
+                    <h2 class="md-flex">Authorize a User</h2>
+                </div>
+            </md-toolbar>
+            <form name="authorizeAUserForm">
+                <md-content class="md-no-momentum">
+                    <md-input-container md-no-float class="md-block">
+                        <input ng-model="idNumber" type="number" placeholder="Id Number to Authorize" required>
+                    </md-input-container>
+                </md-content>
+
+                <div layout="row" layout-align="center" flex>
+                    <md-button class="md-raised md-primary" ng-disabled="!idNumber" ng-click="authorize(idNumber)">Authorize</md-button>
+                </div>
+            </form>
+        </md-content>
+    </div>
+</div>

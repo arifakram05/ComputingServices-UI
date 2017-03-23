@@ -1,0 +1,38 @@
+[
+    {
+        "name":"Laren",
+        "position":"Lab Manager",
+        "description":"Lauren has been working as FDU computing services lab manager since about 5 years.",
+        "category":"staff"
+    },
+    {
+        "name":"Bob",
+        "position":"Lab Director",
+        "description":"Bob is the director of FDU computing services labs.",
+        "category":"staff"
+    },
+    {
+        "name":"Arif",
+        "position":"Lab Assistant",
+        "description":"Works as Lab Assistant.",
+        "category":"assistant"
+    },
+    {
+        "name":"Abhishek",
+        "position":"Lab Assistant",
+        "description":"Works as Lab Assistant.",
+        "category":"assistant"
+    },
+    {
+        "name":"Dhaval",
+        "position":"Lab Assistant",
+        "description":"Works as Lab Assistant.",
+        "category":"assistant"
+    },
+    {
+        "name":"Kym",
+        "position":"Lab Assistant",
+        "description":"Works as Lab Assistant.",
+        "category":"assistant"
+    }
+]

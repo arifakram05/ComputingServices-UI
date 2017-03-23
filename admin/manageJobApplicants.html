@@ -1,0 +1,279 @@
+<div layout="column" ng-cloak ng-controller="ManageJobApplicantsCtrl">
+    <div id="viewJobApplicantsDiv">
+        <md-tabs md-dynamic-height md-border-bottom>
+
+            <!--beginning of first tab-->
+            <md-tab label="View Job Applicants">
+                <md-content class="md-padding">
+                    <md-toolbar class="md-primary">
+                        <div class="md-toolbar-tools">
+                            <h2 class="md-flex">Job Applicants</h2>
+                        </div>
+                    </md-toolbar>
+                    <md-content layout-padding>
+
+                        <div layout="row" layout-align="center" md-no-float class="md-block">
+                            <md-input-container flex="50">
+                                <input ng-model="search" id="search" placeholder="Search Job Applicants">
+                            </md-input-container>
+                        </div>
+
+                        <div flex="75" ng-style="{'text-align':'left', 'margin':'0 auto'}">
+                            <table class="table borderless" >
+                                <thead>
+                                    <tr>
+                                        <th ng-style="{'text-align':'left'}">First Name</th>
+                                        <th ng-style="{'text-align':'left'}">Last Name</th>
+                                        <th ng-style="{'text-align':'left'}">Education</th>
+                                        <th ng-style="{'text-align':'left'}">Resume</th>
+                                        <th ng-style="{'text-align':'left'}">Actions</th>
+                                    </tr>
+                                </thead>
+                                <tbody dir-paginate="applicant in jobApplicants | filter : search | itemsPerPage : pageSize">
+                                    <form name="vjaform">
+                                        <tr>
+                                            <td>
+                                                <span ng-bind="applicant.firstName"></span>
+                                            </td>
+
+                                            <td>
+                                                <span ng-bind="applicant.lastName"></span>
+                                            </td>
+
+                                            <td>
+                                                <span ng-bind="applicant.education"></span>
+                                            </td>
+
+                                            <td>
+                                                <a class="btn btn-default btn">
+                                                    <i class="glyphicon glyphicon-save-file"></i>
+                                                </a>
+                                            </td>
+
+                                            <td>
+                                                <div class="btn-group">
+                                                    <button type="button" class="btn btn-danger btn" ng-click="delete(applicant.studentId)">
+                                                        <i class="glyphicon glyphicon-trash"></i>
+                                                    </button>
+
+                                                    <button type="button" class="btn btn-default btn" ng-click="email(applicant)">
+                                                        <i class="glyphicon glyphicon-envelope"></i>
+                                                    </button>
+
+                                                    <button type="button" class="btn btn-primary btn" ng-click="hire(applicant)">
+                                                        <i class="glyphicon glyphicon-star"></i>
+                                                    </button>
+
+                                                    <button type="button" class="btn btn-default btn" ng-click="edit(applicant); showDetails(applicant)">
+                                                        <i class="fa fa-binoculars"></i>
+                                                    </button>
+                                                </div>
+                                            </td>
+                                        </tr>
+                                    </form>
+                                </tbody>
+                            </table>
+                        </div>
+
+                        <div>
+                            <div class="text-center">
+                                <dir-pagination-controls max-size="5" boundary-links="true" direction-links="true" on-page-change="pageChangeHandler(newPageNumber)" template-url="core/dirPagination.tpl.html"></dir-pagination-controls>
+                            </div>
+                        </div>
+                    </md-content>
+                </md-content>
+            </md-tab>
+
+        </md-tabs>
+    </div>
+
+    <div class="modal fade" id="jadModal" tabindex="-1" role="dialog" aria-labelledby="jadeModal" aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+
+                <div class="modal-body">
+                    <md-toolbar class="md-primary">
+                        <div class="md-toolbar-tools">
+                            <h2 class="md-flex">Applicant Details</h2>
+                        </div>
+                    </md-toolbar>
+
+                    <md-content class="md-no-momentum">
+
+                        <form name="editjaForm" role="form" layout="column" layout-padding ng-cloak>
+
+                            <!--Student ID# and Applied Date, both disabled-->
+                            <div layout="row">
+                                <md-input-container flex="50" md-no-float class="md-block">
+                                    <label>Candidate ID #</label>
+                                    <input name="studentID" ng-model="selectedApplicant.studentId" disabled>
+                                </md-input-container>
+
+                                <md-input-container flex="10"></md-input-container>
+
+                                <md-input-container flex="50">
+                                    <label>Applied Job On</label>
+                                    <input name="dateApplied" ng-model="selectedApplicant.dateApplied" disabled/>
+                                </md-input-container>
+                            </div>
+
+                            <!--First and Last name-->
+                            <div layout="row">
+                                <md-input-container flex="50">
+                                    <label>First Name</label>
+                                    <input type="text" name="firstName" ng-model="selectedApplicant.firstName" required/>
+                                    <div class="validation-messages" ng-messages="editjaForm.firstName.$error">
+                                        <div ng-message="required">Required</div>
+                                    </div>
+                                </md-input-container>
+
+                                <md-input-container flex="10"></md-input-container>
+
+                                <md-input-container flex="50">
+                                    <label>Last Name</label>
+                                    <input type="text" name="lastName" ng-model="selectedApplicant.lastName" required/>
+                                    <div class="validation-messages" ng-messages="editjaForm.lastName.$error">
+                                        <div ng-message="required">Required</div>
+                                    </div>
+                                </md-input-container>
+                            </div>
+
+                            <!--Email and Phone-->
+                            <div layout="row">
+                                <md-input-container flex="50">
+                                    <label>Email</label>
+                                    <input type="email" name="email" ng-model="selectedApplicant.email" required/>
+                                    <div class="validation-messages" ng-messages="editjaForm.email.$error">
+                                        <div ng-message="required">Required</div>
+                                    </div>
+                                </md-input-container>
+
+                                <md-input-container flex="10"></md-input-container>
+
+                                <md-input-container flex="50">
+                                    <label>Phone</label>
+                                    <input name="phone" ng-model="selectedApplicant.phone" ng-pattern="/^[0-9]{3}[0-9]{3}[0-9]{4}$/" required/>
+                                    <div ng-messages="editjaForm.phone.$error">
+                                        <div ng-message="pattern">Phone number format is ##########</div>
+                                    </div>
+                                </md-input-container>
+                            </div>
+
+                            <!--Education level and LinkedIn Profile-->
+                            <div layout="row">
+                                <select flex="50" class="form-control" name="education" ng-model="selectedApplicant.education">
+                                    <option value="ASSOCIATES">Associates</option>
+                                    <option value="UNDERGRAD">Under Grad</option>
+                                    <option value="GRAD">Grad</option>
+                                    <option value="POSTGRAD">Post Grad</option>
+                                </select>
+
+                                <md-input-container flex="10"></md-input-container>
+
+                                <md-input-container flex="50" md-no-float class="md-block">
+                                    <label>LinkedIn Profile</label>
+                                    <input name="linkedInProfile" ng-model="selectedApplicant.linkedInProfile" type="url">
+                                </md-input-container>
+                            </div>
+
+                            <div layout="row" layout-align="center" flex>
+                                <md-button class="md-raised md-default" ng-click="cancel(selectedApplicant)" data-dismiss="modal">close</md-button>
+                                <md-button class="md-raised md-primary" ng-click="update(selectedApplicant)">Submit</md-button>
+                            </div>
+
+                        </form>
+                    </md-content>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+
+<!--<div class="comptingServices">
+    <div class="generic-container">
+        <div class="panel panel-primary" ng-controller="ManageJobApplicantsCtrl">
+            <div class="panel-heading">Job Applicants</div>
+            <div class="panel-body">
+                <div class="col-xs-4">
+                    <h3>Page: {{ currentPage }}</h3>
+                </div>
+                <div class="col-xs-4">
+                    <label for="search">Search:</label>
+                    <input ng-model="search" id="search" class="form-control" placeholder="Search Job Applicants">
+                </div>
+                <div class="col-xs-4">
+                    <h3>Items Per Page: {{ pageSize }}</h3>
+                </div>
+                <table class="table table-striped table-hover">
+                    <thead>
+                        <tr>
+                            <th ng-click="sort('studentId')">Student Id <span class="glyphicon sort-icon" ng-show="sortKey=='studentId'" ng-class="{'glyphicon-chevron-up':!reverse,'glyphicon-chevron-down':reverse}"></span></th>
+                            <th ng-click="sort('firstName')">First Name <span class="glyphicon sort-icon" ng-show="sortKey=='firstName'" ng-class="{'glyphicon-chevron-up':!reverse,'glyphicon-chevron-down':reverse}"></span></th>
+                            <th ng-click="sort('lastName')">Last Name <span class="glyphicon sort-icon" ng-show="sortKey=='lastName'" ng-class="{'glyphicon-chevron-up':!reverse,'glyphicon-chevron-down':reverse}"></span></th>
+                            <th>Email</th>
+                            <th>Phone</th>
+                            <th ng-click="sort('dateApplied')">Applied On <span class="glyphicon sort-icon" ng-show="sortKey=='dateApplied'" ng-class="{'glyphicon-chevron-up':!reverse,'glyphicon-chevron-down':reverse}"></span></th>
+                            <th ng-click="sort('education')">Degree <span class="glyphicon sort-icon" ng-show="sortKey=='education'" ng-class="{'glyphicon-chevron-up':!reverse,'glyphicon-chevron-down':reverse}"></span></th>
+                            <th>Resume</th>
+                            <th width="20%">Actions</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr dir-paginate="applicant in jobApplicants | orderBy:sortKey: reverse | filter:search | itemsPerPage: pageSize">
+                            <td><span ng-bind="applicant.studentId"></span></td>
+                            <td>
+                                <span ng-hide="applicant.editing" ng-bind="applicant.firstName"></span>
+                                <input ng-show="applicant.editing" type="text" ng-model="applicant.firstName" ng-required/>
+                            </td>
+                            <td>
+                                <span ng-hide="applicant.editing" ng-bind="applicant.lastName"></span>
+                                <input ng-show="applicant.editing" type="text" ng-model="applicant.lastName" ng-required/>
+                            </td>
+                            <td>
+                                <span ng-hide="applicant.editing" ng-bind="applicant.email"></span>
+                                <input ng-show="applicant.editing" type="email" ng-model="applicant.email" ng-required/>
+                            </td>
+                            <td>
+                                <span ng-hide="applicant.editing" ng-bind="applicant.phone"></span>
+                                <input ng-show="applicant.editing" type="text" ng-model="applicant.phone" ng-required/>
+                            </td>
+                            <td>{{applicant.dateApplied}}</td>
+                            <td>
+                                <span ng-hide="applicant.editing" ng-bind="applicant.education"></span>
+                                <select class="form-control" name="education" id="education" ng-show="applicant.editing" ng-model="applicant.education">
+                                    <option value="UNDERGRAD">UNDERGRAD</option>
+                                    <option value="GRAD">GRAD</option>
+                                    <option value="POSTGRAD">POSTGRAD</option>
+                                </select>
+                            </td>
+                            <td>
+                                <div class="btn-group">
+                                    <button type="button" class="btn btn-default btn"><i class="    glyphicon glyphicon-save-file"></i></button>
+                                </div>
+                            </td>
+                            <td>
+                                <div class="btn-group">
+
+                                    <button type="button" class="btn btn-default btn" ng-hide="applicant.editing" ng-click="edit(applicant); applicant.editing = true"><i class="glyphicon glyphicon-pencil"></i></button>
+                                    <button type="button" class="btn btn-default btn" ng-show="applicant.editing" ng-click="update(applicant); applicant.editing = true"><i class="glyphicon glyphicon-floppy-disk"></i></button>
+                                    <button type="button" class="btn btn-default btn" ng-show="applicant.editing" ng-click="cancel(applicant); applicant.editing = false"><i class="glyphicon glyphicon-remove"></i></button>
+
+                                    <button type="button" class="btn btn-default btn" ng-click="delete(applicant.studentId)"><i class="glyphicon glyphicon-trash"></i></button>
+                                    <button type="button" class="btn btn-default btn" ng-hide="applicant.editing" ng-click="email(applicant)"><i class="glyphicon glyphicon-envelope"></i></button>
+                                    <button type="button" class="btn btn-default btn" ng-hide="applicant.editing" ng-click="hire(applicant)"><i class="glyphicon glyphicon-star"></i></button>
+                                </div>
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
+                <div>
+                    <div class="text-center">
+                        <dir-pagination-controls max-size="5" boundary-links="true" direction-links="true" on-page-change="pageChangeHandler(newPageNumber)" template-url="core/dirPagination.tpl.html"></dir-pagination-controls>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>-->

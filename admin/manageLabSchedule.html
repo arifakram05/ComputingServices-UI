@@ -1,0 +1,316 @@
+<div layout="column" ng-cloak>
+    <div ng-controller="ManageLabScheduleCtrl as ctrl">
+        <md-tabs md-dynamic-height md-border-bottom>
+            <!--beginning of first tab-->
+            <md-tab label="Create">
+                <md-content class="md-padding">
+                    <md-toolbar class="md-primary">
+                        <div class="md-toolbar-tools">
+                            <h2 class="md-flex">Create Lab Schedule</h2>
+                        </div>
+                    </md-toolbar>
+                    <md-content layout-padding>
+                        <form name="create_ls_form">
+
+                            <div layout="row">
+                                <!--Days of a week-->
+                                <div ng-style="{'width':'15%', 'padding-left':'10px'}">
+                                    <div layout="column" layout-align="center" flex="">
+                                        <div flex="50" ng-repeat="item in items">
+                                            <md-checkbox ng-checked="exists(item, selected)" ng-click="toggle(item, selected)">
+                                                {{ item }}
+                                            </md-checkbox>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <!--All other fields-->
+                                <div ng-style="{'display':'block'}" flex="">
+
+                                    <!--Campus and Lab-->
+                                    <div layout="row" layout-align="center">
+                                        <md-input-container flex="50">
+                                            <label>Campus</label>
+                                            <md-select name="create_ls_campus" ng-model="create_ls_selectedCampusName" required>
+                                                <md-option ng-value="campusName" ng-repeat="campusName in campus">{{ campusName.name }}</md-option>
+                                            </md-select>{{selectedCampusName}}
+                                            <div class="errors" ng-messages="create_ls_form.create_ls_campus.$error">
+                                                <div ng-message="required">Required</div>
+                                            </div>
+                                        </md-input-container>
+
+                                        <md-input-container flex="10"></md-input-container>
+
+                                        <md-input-container flex="50">
+                                            <label>Lab Name</label>
+                                            <md-select name="create_ls_labName" ng-model="create_ls_selectedLabName" required>
+                                                <md-option ng-value="labName" ng-repeat="labName in labNames | LabFilter: create_ls_selectedCampusName">{{ labName.name }}</md-option>
+                                            </md-select>
+                                            <div class="errors" ng-messages="create_ls_form.create_ls_labName.$error">
+                                                <div ng-message="required">Required</div>
+                                            </div>
+                                        </md-input-container>
+
+                                        <md-input-container flex="10"></md-input-container>
+
+                                        <md-input-container flex="50">
+                                            <md-checkbox ng-model="labSchedule.isRecurring" aria-label="Checkbox 2" ng-true-value="true" ng-false-value="false"> Recurring
+                                            </md-checkbox>
+                                        </md-input-container>
+                                    </div>
+                                    <!--END - Campus and Lab-->
+
+                                    <!--BEGIN - Start Date, End Date, Input Time, Output Time-->
+                                    <div layout="row">
+                                        <md-input-container flex="50">
+                                            <input name="create_ls_startTime" type="time" ng-bind="labSchedule.startTime = (create_ls_rawStartTime | date: 'HH:mm')" ng-model="create_ls_rawStartTime" placeholder="Start Time" required/>
+                                            <div class="validation-messages" ng-messages="create_ls_form.create_ls_startTime.$error">
+                                                <div ng-message="required">Required</div>
+                                            </div>
+                                        </md-input-container>
+
+                                        <md-input-container flex="10"></md-input-container>
+
+                                        <md-input-container flex="50">
+                                            <input name="create_ls_endTime" type="time" ng-bind="labSchedule.endTime = (create_ls_rawEndTime | date: 'HH:mm')" ng-model="create_ls_rawEndTime" placeholder="End Time" required/>
+                                            <div class="validation-messages" ng-messages="create_ls_form.create_ls_endTime.$error">
+                                                <div ng-message="required">Required</div>
+                                            </div>
+                                        </md-input-container>
+
+                                        <md-input-container flex="10"></md-input-container>
+
+                                        <md-input-container flex="50">
+                                            <md-datepicker name="create_ls_startDate" ng-model="create_ls_rawStartDate" md-placeholder="Start Date" required></md-datepicker>
+                                            <input type="hidden" ng-bind="labSchedule.startDate = ( create_ls_rawStartDate | date: 'mediumDate')" />
+                                            <div class="validation-messages" ng-messages="create_ls_form.create_ls_startDate.$error">
+                                                <div ng-message="required">Required</div>
+                                            </div>
+                                        </md-input-container>
+
+                                        <md-input-container flex="10"></md-input-container>
+
+                                        <md-input-container flex="50" ng-show="labSchedule.isRecurring === true">
+                                            <md-datepicker name="create_ls_endDate" ng-model="create_ls_rawEndDate" md-placeholder="End Date"></md-datepicker>
+                                            <input type="hidden" ng-bind="labSchedule.endDate = ( create_ls_rawEndDate | date: 'mediumDate')" />
+                                            <div class="validation-messages" ng-messages="create_ls_form.create_ls_endDate.$error">
+                                                <div ng-message="required">Required</div>
+                                            </div>
+                                        </md-input-container>
+                                    </div>
+                                    <!--END - Start Date, End Date, Input Time, Output Time-->
+
+                                    <!--Professor name and Session name-->
+                                    <div layout="row" flex="">
+                                        <md-input-container flex="50">
+                                            <label>Professor Name</label>
+                                            <input required name="create_ls_profName" ng-model="labSchedule.profName">
+                                            <div ng-messages="create_ls_form.create_ls_profName.$error">
+                                                <div ng-message="required">Required.</div>
+                                            </div>
+                                        </md-input-container>
+
+                                        <md-input-container flex="10"></md-input-container>
+
+                                        <md-input-container flex="50">
+                                            <label>Subject</label>
+                                            <input required name="create_ls_subject" ng-model="labSchedule.subject">
+                                            <div ng-messages="create_ls_form.create_ls_subject.$error">
+                                                <div ng-message="required">Required.</div>
+                                            </div>
+                                        </md-input-container>
+                                    </div>
+                                    <!--END - Professor name and Session name-->
+                                </div>
+                            </div>
+
+                            <!--buttons-->
+                            <div layout="row" layout-align="center" flex>
+                                <md-button class="md-raised md-default" ng-click="create_ls_clearValue()" ng-disabled="!(create_ls_selectedCampusName || create_ls_selectedLabName || labSchedule )">Clear</md-button>
+                                <md-button class="md-raised md-primary" ng-click="create_ls_save(labSchedule)" class="md-primary">Save</md-button>
+                            </div>
+
+                            <!--Show the detail being saved-->
+                            <div flex="100">
+                                <code style="display: block; padding: 8px;">{{selected | json}}</code>
+                            </div>
+
+                        </form>
+                    </md-content>
+                </md-content>
+            </md-tab>
+            <!--end of first tab-->
+
+            <!--beginning of second tab-->
+            <md-tab label="View">
+                <md-content class="md-padding">
+                    <md-toolbar class="md-primary">
+                        <div class="md-toolbar-tools">
+                            <h2 class="md-flex">View Lab Schedule</h2>
+                        </div>
+                    </md-toolbar>
+                    <md-content layout-padding>
+
+                        <div layout="row" layout-align="center" ng-style="{'float':'left', 'width':'50%'}">
+                            <form name="view_ls_form">
+                                <md-calendar name="view_ls_form_rawSelectedDate" ng-model="view_ls_rawSelectedDate" required></md-calendar>
+                            </form>
+                        </div>
+
+                        <div ng-style="{'float':'right', 'width':'50%'}">
+                            <form name="view_ls_refinedSearchForm">
+
+                                <div layout="column" ng-if="view_ls_searchByLA">
+                                    <md-input-container flex="50">
+                                        <label>Campus</label>
+                                        <md-select name="view_ls_campus" ng-model="ctrl.view_ls_selectedCampusName" required>
+                                            <md-option ng-value="campusName" ng-repeat="campusName in campus">{{ campusName.name }}</md-option>
+                                        </md-select>{{selectedCampusName}}
+                                        <div class="errors" ng-messages="view_ls_refinedSearchForm.view_ls_campus.$error">
+                                            <div ng-message="required">Required</div>
+                                        </div>
+                                    </md-input-container>
+
+                                    <md-input-container flex="10"></md-input-container>
+
+                                    <md-input-container flex="50">
+                                        <label>Lab Name</label>
+                                        <md-select name="view_ls_labName" ng-model="ctrl.view_ls_selectedLabName" required>
+                                            <md-option ng-value="labName" ng-repeat="labName in labNames | LabFilter: ctrl.view_ls_selectedCampusName">{{ labName.name }}</md-option>
+                                        </md-select>
+                                        <div class="errors" ng-messages="view_ls_refinedSearchForm.view_ls_labName.$error">
+                                            <div ng-message="required">Required</div>
+                                        </div>
+                                    </md-input-container>
+                                </div>
+
+                                <div layout="row" layout-align="center">
+                                    <md-switch ng-model="view_ls_searchByLA" flex="100">
+                                        <p>Refine</p>
+                                    </md-switch>
+                                </div>
+
+                                <div layout="row" ng-if="view_ls_searchByLA" layout-align="center">
+                                    <md-button ng-click="view_ls_refineSearch(ctrl.view_ls_selectedCampusName, ctrl.view_ls_selectedLabName, view_ls_rawSelectedDate)" class="md-raised md-primary" ng-style="{'height':'20px'}">Submit</md-button>
+                                </div>
+                            </form>
+                        </div>
+
+                        <!--this is needed such that the next div is displayed below the above two divs-->
+                        <div ng-style="{'clear':'both'}">
+                        </div>
+
+                        <hr/>
+
+                        <div ng-show="view_ls_isDataFetched">
+
+                            <div layout="row" layout-align="center" md-no-float class="md-block" ng-style="{'margin':'0', 'padding':'0'}">
+                                <md-input-container flex="50" ng-style="{'margin':'0', 'padding':'0'}" md-no-float class="md-block">
+                                    <input ng-model="view_ls_search" id="view_ls_search" placeholder="Search Lab Schedule">
+                                </md-input-container>
+                            </div>
+
+                            <table ng-style="{'text-align':'left', 'margin':'0 auto', 'width':'90%'}" flex dir-paginate="details in view_ls_labSchedule | filter:view_ls_search | itemsPerPage: 1">
+                                <tr>
+                                    <td>
+                                        <h4 class="text-center">{{view_ls_selectedDate}} - {{details.labName}}</h4>
+                                        <hr/>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td>
+                                        <table class="table borderless">
+                                            <thead>
+                                                <tr>
+                                                    <th ng-style="{'text-align':'left'}">Start Time</th>
+                                                    <th ng-style="{'text-align':'left'}">End Time</th>
+                                                    <th ng-style="{'text-align':'left'}">Subject</th>
+                                                    <th ng-style="{'text-align':'left'}">Professor</th>
+                                                    <th ng-style="{'text-align':'left'}">Actions</th>
+                                                </tr>
+                                            </thead>
+                                            <tbody ng-repeat="labsched in details.schedule | filter : view_ls_search">
+                                                <tr>
+                                                    <td>
+                                                        <span ng-bind="labsched.startTime"></span>
+                                                    </td>
+                                                    <td>
+                                                        <span ng-bind="labsched.endTime"></span>
+                                                    </td>
+                                                    <td>
+                                                        <span ng-bind="labsched.subject"></span>
+                                                    </td>
+                                                    <td>
+                                                        <span ng-bind="labsched.profName"></span>
+                                                    </td>
+                                                    <td>
+                                                        <div class="btn-group">
+                                                            <button type="button" class="btn btn-danger btn" ng-click="view_ls_delete(labsched.scheduleId)">
+                                                                <i class="glyphicon glyphicon-trash"></i>
+                                                            </button>
+
+                                                            <button type="button" class="btn btn-default btn" ng-click="view_ls_showDetails(labsched)">
+                                                                <i class="fa fa-binoculars"></i>
+                                                            </button>
+
+                                                            <button type="button" class="btn btn-danger btn" ng-click="view_ls_delete_all(labsched.scheduleId)">
+                                                                <i class="glyphicon glyphicon-trash"></i> Delete All
+                                                            </button>
+                                                        </div>
+                                                    </td>
+                                                </tr>
+                                            </tbody>
+                                        </table>
+                                    </td>
+                                </tr>
+                            </table>
+
+                            <div>
+                                <div class="text-center">
+                                    <dir-pagination-controls max-size="5" boundary-links="true" direction-links="true" template-url="core/dirPagination.tpl.html"></dir-pagination-controls>
+                                </div>
+                            </div>
+
+                        </div>
+                    </md-content>
+                </md-content>
+            </md-tab>
+            <!--end of second tab-->
+        </md-tabs>
+
+        <!--Modal Begin-->
+        <div class="modal fade" id="view_ls_modal" tabindex="-1" role="dialog" aria-labelledby="view_ls_modal" aria-hidden="true">
+            <div class="modal-dialog">
+                <div class="modal-content">
+
+                    <div class="modal-body">
+                        <md-toolbar class="md-primary">
+                            <div class="md-toolbar-tools">
+                                <h2 class="md-flex">Lab Schedule details</h2>
+                            </div>
+                        </md-toolbar>
+
+                        <md-content class="md-no-momentum">
+                            <div layout="column" flex="">
+                                <br/>
+                                <p>Subject: <b><span ng-bind="view_ls_selectedLabSchedule.subject"></span></b></p>
+                                <p>Professor: <b><span ng-bind="view_ls_selectedLabSchedule.profName"></span></b></p>
+                                <p>End Date: <b><span ng-bind="view_ls_selectedLabSchedule.endDate"></span></b></p>
+                                <p>Days: <b><span ng-bind="view_ls_selectedLabSchedule.days | json"></span></b></p>
+                                <p>Start Time: <b><span ng-bind="view_ls_selectedLabSchedule.startTime"></span></b></p>
+                                <p>End Time: <b><span ng-bind="view_ls_selectedLabSchedule.endTime"></span></b></p>
+                                <p>Campus Name: <b><span ng-bind="view_ls_selectedLabSchedule.campus"></span></b></p>
+                                <p>Lab Name: <b><span ng-bind="view_ls_selectedLabSchedule.labName"></span></b></p>
+                            </div>
+
+                            <div layout="row" layout-align="center" flex>
+                                <md-button class="md-raised md-default" data-dismiss="modal">close</md-button>
+                            </div>
+                        </md-content>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <!--Modal End-->
+    </div>
+</div>

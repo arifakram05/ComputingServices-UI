@@ -1,0 +1,94 @@
+<!--<div class="col-md-6 col-md-offset-3">
+    <h2>Register</h2>
+    <form name="form" ng-submit="register()" role="form" ng-controller="RegisterCtrl">
+        <div class="form-group" ng-class="{ 'has-error': form.firstName.$dirty && form.firstName.$error.required }">
+            <label for="username">First name</label>
+            <input type="text" name="firstName" id="firstName" class="form-control" ng-model="user.firstName" required />
+            <span ng-show="form.firstName.$dirty && form.firstName.$error.required" class="help-block">First name is required</span>
+        </div>
+        <div class="form-group" ng-class="{ 'has-error': form.lastName.$dirty && form.lastName.$error.required }">
+            <label for="username">Last name</label>
+            <input type="text" name="lastName" id="Text1" class="form-control" ng-model="user.lastName" required />
+            <span ng-show="form.lastName.$dirty && form.lastName.$error.required" class="help-block">Last name is required</span>
+        </div>
+        <div class="form-group" ng-class="{ 'has-error': form.username.$dirty && form.username.$error.required }">
+            <label for="username">Username</label>
+            <input type="text" name="username" id="username" class="form-control" ng-model="user.username" required />
+            <span ng-show="form.username.$dirty && form.username.$error.required" class="help-block">Username is required</span>
+        </div>
+        <div class="form-group" ng-class="{ 'has-error': form.password.$dirty && form.password.$error.required }">
+            <label for="password">Password</label>
+            <input type="password" name="password" id="password" class="form-control" ng-model="user.password" required />
+            <span ng-show="form.password.$dirty && form.password.$error.required" class="help-block">Password is required</span>
+        </div>
+        <div class="form-actions">
+            <button type="submit" ng-disabled="form.$invalid || dataLoading" class="btn btn-primary">Register</button>
+            <img ng-if="dataLoading" src="data:image/gif;base64,R0lGODlhEAAQAPIAAP///wAAAMLCwkJCQgAAAGJiYoKCgpKSkiH/C05FVFNDQVBFMi4wAwEAAAAh/hpDcmVhdGVkIHdpdGggYWpheGxvYWQuaW5mbwAh+QQJCgAAACwAAAAAEAAQAAADMwi63P4wyklrE2MIOggZnAdOmGYJRbExwroUmcG2LmDEwnHQLVsYOd2mBzkYDAdKa+dIAAAh+QQJCgAAACwAAAAAEAAQAAADNAi63P5OjCEgG4QMu7DmikRxQlFUYDEZIGBMRVsaqHwctXXf7WEYB4Ag1xjihkMZsiUkKhIAIfkECQoAAAAsAAAAABAAEAAAAzYIujIjK8pByJDMlFYvBoVjHA70GU7xSUJhmKtwHPAKzLO9HMaoKwJZ7Rf8AYPDDzKpZBqfvwQAIfkECQoAAAAsAAAAABAAEAAAAzMIumIlK8oyhpHsnFZfhYumCYUhDAQxRIdhHBGqRoKw0R8DYlJd8z0fMDgsGo/IpHI5TAAAIfkECQoAAAAsAAAAABAAEAAAAzIIunInK0rnZBTwGPNMgQwmdsNgXGJUlIWEuR5oWUIpz8pAEAMe6TwfwyYsGo/IpFKSAAAh+QQJCgAAACwAAAAAEAAQAAADMwi6IMKQORfjdOe82p4wGccc4CEuQradylesojEMBgsUc2G7sDX3lQGBMLAJibufbSlKAAAh+QQJCgAAACwAAAAAEAAQAAADMgi63P7wCRHZnFVdmgHu2nFwlWCI3WGc3TSWhUFGxTAUkGCbtgENBMJAEJsxgMLWzpEAACH5BAkKAAAALAAAAAAQABAAAAMyCLrc/jDKSatlQtScKdceCAjDII7HcQ4EMTCpyrCuUBjCYRgHVtqlAiB1YhiCnlsRkAAAOwAAAAAAAAAAAA==" />
+            <a href="#!/login" class="btn btn-link">Cancel</a>
+        </div>
+    </form>
+</div>-->
+<div ng-controller="RegisterCtrl">
+    <div class="col-md-8 col-md-offset-2" ng-hide="canUserRegister">
+        <md-content class="md-padding">
+            <md-toolbar class="md-primary">
+                <div class="md-toolbar-tools">
+                    <h2 class="md-flex">Register</h2>
+                </div>
+            </md-toolbar>
+
+            <form name="checkAuthorizationForm" role="form" layout="column" layout-padding ng-cloak>
+
+                <md-content class="md-no-momentum">
+
+                    <md-input-container md-no-float class="md-block">
+                        <input ng-model="idNumber" type="number" placeholder="Id Number" required>
+                        <div ng-messages="checkAuthorizationForm.idNumber.$error">
+                            <div ng-message="required">This is required.</div>
+                        </div>
+                    </md-input-container>
+
+                </md-content>
+
+                <div layout="row" layout-align="center" flex>
+                    <md-button class="md-raised md-default" ng-disabled="!idNumber" ng-click="checkUserValidity(idNumber)">Continue</md-button>
+                </div>
+            </form>
+        </md-content>
+    </div>
+
+    <div class="col-md-6 col-md-offset-3" ng-show="canUserRegister">
+        <md-content class="md-padding">
+            <md-toolbar class="md-primary">
+                <div class="md-toolbar-tools">
+                    <h2 class="md-flex">Register</h2>
+                </div>
+            </md-toolbar>
+
+            <form name="registerForm" role="form" layout="column" layout-padding ng-cloak>
+
+                <md-content class="md-no-momentum">
+
+                    <md-input-container md-no-float class="md-block">
+                        <input name="passcode" ng-model="user.passcode" type="text" placeholder="Passcode" required>
+                    </md-input-container>
+
+                    <md-input-container md-no-float class="md-block">
+                        <input name="userPassword" ng-model="user.password" type="password" placeholder="Password" required>
+                    </md-input-container>
+
+                    <md-input-container md-no-float class="md-block">
+                        <input name="userConfirmPassword" ng-model="user.confirmedPassword" type="password" placeholder="Confirm Password" required>
+                    </md-input-container>
+
+                </md-content> {{user}}|{{registerForm.$valid}}
+
+                <div layout="row" layout-align="center" flex>
+                    <md-button class="md-raised md-primary" ng-click="registerUser(user)">Register</md-button>
+                    <md-button class="md-raised md-default" ng-click="resendPasscode(user)">Resend Passcode</md-button>
+                </div>
+
+            </form>
+        </md-content>
+    </div>
+</div>

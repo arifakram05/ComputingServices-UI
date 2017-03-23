@@ -1,0 +1,47 @@
+<md-list ng-controller="ManageRolesCtrl" ng-cloak>
+    <div class="col-md-8 col-md-offset-2">
+        <md-content class="md-padding">
+            <md-toolbar layout="row">
+                <div class="md-toolbar-tools">
+                    <span>Available Roles</span>
+                </div>
+            </md-toolbar>
+
+            <md-list-item ng-repeat="role in roles">
+                <div flex="15">
+                    <a ng-if="!role.isExpanded" ng-click="expandRoleItem(role); role.isExpanded = true" class="btn btn-default btn-sm">
+                        <i class="fa fa-plus-square"></i>
+                    </a>
+
+                    <a ng-if="role.isExpanded" ng-click="expandRoleItem(role); role.isExpanded = false" class="btn btn-default btn-sm">
+                        <i class="fa fa-minus-square"></i>
+                    </a>
+                </div>
+
+
+                <span ng-if="!role.editing" ng-bind="role.roleName"></span>
+                <md-input-container flex="50" ng-if="role.editing">
+                    <input required name="roleName" type="text" ng-model="role.roleName" required>
+                    <div ng-messages="roleName.$error">
+                        <div ng-message="required">This is required.</div>
+                    </div>
+                </md-input-container>
+
+                <div class="md-secondary" class="btn-group">
+                    <button type="button" class="btn btn-default btn" ng-hide="role.editing" ng-click="editRole(role); role.editing = true"><i class="glyphicon glyphicon-pencil"></i></button>
+
+                    <a class="btn btn-primary" ng-show="role.editing" ng-click="updateRole(role); role.editing = true">
+                        <i class="fa fa-floppy-o fa-lg"></i>
+                    </a>
+
+                    <button type="button" class="btn btn-default btn" ng-show="role.editing" ng-click="cancelRole(role); role.editing = false; role.isExpanded = false"><i class="glyphicon glyphicon-remove"></i></button>
+
+                    <a class="btn btn-danger" ng-click="deleteRole(role)">
+                        <i class="fa fa-trash-o fa-lg"></i>
+                    </a>
+                </div>
+                <md-divider></md-divider>
+            </md-list-item>
+        </md-content>
+    </div>
+</md-list>

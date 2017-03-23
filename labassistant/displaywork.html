@@ -1,0 +1,94 @@
+<div ng-controller="DisplayWorkCtrl" class="recordwork">
+    <div class="col-md-8 col-md-offset-2">
+        <md-content class="md-padding">
+            <md-toolbar class="md-primary">
+                <div class="md-toolbar-tools">
+                    <h2 class="md-flex">Show My Work</h2>
+                    <div layout="row" layout-align="end" flex>
+                        <md-button class="md-raised md-warn" ng-click="print('printableArea')">
+                            <i class="fa fa-print lg"></i> Print
+                        </md-button>
+                    </div>
+                </div>
+            </md-toolbar>
+
+            <md-content class="md-no-momentum">
+
+
+                <form name="showLAWork">
+                    <div layout="row">
+                        <md-input-container flex="50">
+                            <md-datepicker name="startDate" ng-model="rawStartDate" md-placeholder="Start Date" required></md-datepicker>
+                            <input type="hidden" ng-bind="labAsst.startDate = ( rawStartDate | date: 'mediumDate')" />
+                            <div class="validation-messages" ng-messages="showLAWork.startDate.$error">
+                                <div ng-message="required">Required</div>
+                            </div>
+                        </md-input-container>
+
+                        <md-input-container flex="10"></md-input-container>
+
+                        <md-input-container flex="50">
+                            <md-datepicker name="endDate" ng-model="rawEndDate" md-placeholder="End Date" required></md-datepicker>
+                            <input type="hidden" ng-bind="labAsst.endDate = ( rawEndDate | date: 'mediumDate')" />
+                            <div class="validation-messages" ng-messages="showLAWork.endDate.$error">
+                                <div ng-message="required">Required</div>
+                            </div>
+                        </md-input-container>
+                    </div>
+                </form>
+
+                <div id="printableArea">
+
+                    <div class="text-center">
+                        <p ng-if="isDataFetched == true" ng-bind="labAsstDetails.userId"></p>
+                        <p ng-if="isDataFetched == true" ng-bind="labAsstDetails.fullName"></p>
+                    </div>
+
+                    <hr/>
+
+                    <table ng-if="isDataFetched == true" class="table table-bordered" ng-style="{'text-align':'center'}">
+                        <thead>
+                            <tr class="bg-success">
+                                <th ng-style="{'text-align':'center'}">
+                                    <p>Clocked-In Date</p>
+                                </th>
+                                <th ng-style="{'text-align':'center'}">
+                                    <p>Clocked-Out Date</p>
+                                </th>
+                                <th ng-style="{'text-align':'center'}">
+                                    <p>Start Time</p>
+                                </th>
+                                <th ng-style="{'text-align':'center'}">
+                                    <p>End Time</p>
+                                </th>
+                                <th ng-style="{'text-align':'center'}">
+                                    <p>Hours</p>
+                                </th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr ng-repeat="item in labAsstDetails.work">
+                                <td>
+                                    <p>{{item.clockedInDate}}</p>
+                                </td>
+                                <td>
+                                    <p>{{item.clockedOutDate}}</p>
+                                </td>
+                                <td>
+                                    <p>{{item.clockedInTime}}</p>
+                                </td>
+                                <td>
+                                    <p>{{item.clockedOutTime}}</p>
+                                </td>
+                                <td>
+                                    <p>{{item.total}}</p>
+                                </td>
+                            </tr>
+                        </tbody>
+                    </table>
+
+                </div>
+            </md-content>
+        </md-content>
+    </div>
+</div>
