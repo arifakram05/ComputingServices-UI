@@ -10,7 +10,7 @@ angular.module('computingServices.register', ['ngRoute'])
     })
 }])
 
-.controller('RegisterCtrl', ['LocalLoginService', '$location', '$rootScope', '$scope', '$mdDialog', function (LocalLoginService, $location, $rootScope, $scope, $mdDialog) {
+.controller('RegisterCtrl', ['$location', '$rootScope', '$scope', '$mdDialog', function ($location, $rootScope, $scope, $mdDialog) {
 
     //Check if the given user id is authorized to register
     $scope.checkUserValidity = function (id) {
