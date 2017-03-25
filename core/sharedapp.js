@@ -1,6 +1,6 @@
 angular.module('computingServices.shared', ['ngRoute'])
 
-.service('SharedService', ['growl', '$http', '$q', '$window', function (growl, $http, $q, $window) {
+.service('SharedService', ['growl', '$http', '$q', '$window', '$location', function (growl, $http, $q, $window, $location) {
 
     this.userDetails = {};
     this.authToken = '';
@@ -13,7 +13,7 @@ angular.module('computingServices.shared', ['ngRoute'])
         getAuthToken: getAuthToken,
 
         getUserName: getUserName,
-        //getUserId: getUserId,
+        getUserId: getUserId,
         getUserRole: getUserRole,
         getUserTitle: getUserTitle,
         getUserEmail: getUserEmail,
@@ -64,7 +64,7 @@ angular.module('computingServices.shared', ['ngRoute'])
         return this.userDetails.userName;
     }
 
-    function getAssociateId() {
+    function getUserId() {
         return this.userDetails.userId;
     }
 
@@ -109,7 +109,7 @@ angular.module('computingServices.shared', ['ngRoute'])
 
     //logout user
     function logout() {
-        this.associateDetails = undefined;
+        this.userDetails = undefined;
         this.authToken = '';
         $window.localStorage.removeItem('csUserDetails');
         $window.localStorage.removeItem('csAuthToken');

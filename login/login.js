@@ -9,7 +9,7 @@ angular.module('computingServices.login', ['ngRoute'])
     });
 }])
 
-.factory('LoginService', ['$http', '$cookies', '$rootScope', '$timeout', 'LocalLoginService', function ($http, $cookies, $rootScope, $timeout, LocalLoginService) {
+/*.factory('LoginService', ['$http', '$cookies', '$rootScope', '$timeout', 'LocalLoginService', function ($http, $cookies, $rootScope, $timeout, LocalLoginService) {
 
     // Base64 encoding service used by AuthenticationService
     var Base64 = {
@@ -103,8 +103,6 @@ angular.module('computingServices.login', ['ngRoute'])
 
     function Login(username, password, callback) {
 
-        /* Dummy authentication for testing, uses $timeout to simulate api call
-             ----------------------------------------------*/
         $timeout(function () {
             var response;
             //$http.get('/api/users/' + username).then(handleSuccess, handleError('Error getting user by username'));
@@ -124,12 +122,6 @@ angular.module('computingServices.login', ['ngRoute'])
                 });
         }, 1000);
 
-        /* Use this for real authentication
-             ----------------------------------------------*/
-        //$http.post('/api/authenticate', { username: username, password: password })
-        //    .success(function (response) {
-        //        callback(response);
-        //    });
 
     };
 
@@ -154,9 +146,6 @@ angular.module('computingServices.login', ['ngRoute'])
         $cookies['globals'] = angular.toJson($rootScope.globals, {
             expires: cookieExp
         });
-        /*$cookies.putObject('globals', $rootScope.globals, {
-            expires: cookieExp
-        });*///For newer angular version
     };
 
     function isEmpty(obj) {
@@ -170,7 +159,7 @@ angular.module('computingServices.login', ['ngRoute'])
     function ClearCredentials() {
         console.log('implementing logout...');
         $rootScope.globals = {};
-        /*$cookies.remove('globals');*///for new angular version
+
         delete $cookies['globals'];
         $http.defaults.headers.common.Authorization = 'Basic';
         console.log(JSON.stringify($rootScope.globals));
@@ -178,23 +167,127 @@ angular.module('computingServices.login', ['ngRoute'])
         return isEmpty($rootScope.globals);
     };
 
+}])*/
+
+.factory('LoginService', ['$http', '$q', function ($http, $q) {
+
+    var LOGIN_USER_URI = constants.url + 'login/';
+
+    var factory = {
+        loginUser: loginUser,
+    };
+
+    return factory;
+
+    //Login associate
+    function loginUser(user) {
+        console.log('User details for login: ', user);
+        var deferred = $q.defer();
+
+        if (user.username === "1643568") {
+            console.log('control inside testing method : ', user.username);
+            var userDetails = {
+                "authToken": "shfulig{}}#@aelf734769q8rp3278",
+                "name": "Arif Akram",
+                "id": "1643568",
+                "role": "Lab Assistant",
+                "code": 200
+            };
+            deferred.resolve(userDetails);
+            return deferred.promise;
+        } else {
+            deferred.reject("Login call failure");
+            return deferred.promise;
+        }
+
+        // Real http call to server
+        /*$http({
+                method: 'POST',
+                url: LOGIN_USER_URI,
+                headers: {
+                    'Content-Type': undefined
+                },
+
+                transformRequest: function (data) {
+                    var formData = new FormData();
+                    formData.append("userDetails", angular.toJson(associate));
+                    return formData;
+                }
+            })
+            .success(function (data, status, headers, config) {
+                console.log('Login Success ', data);
+                deferred.resolve(data);
+            })
+            .error(function (data, status, headers, config) {
+                console.log('Login Failure ', status);
+                deferred.reject(data);
+            });
+
+        return deferred.promise;*/
+
+    }
+
 }])
 
-.controller('LoginCtrl', ['$scope', 'LoginService', '$location', '$rootScope', function ($scope, LoginService, $location, $rootScope) {
+.controller('LoginCtrl', ['$scope', 'LoginService', '$location', 'SharedService', function ($scope, LoginService, $location, SharedService) {
 
-    $scope.login = login;
-
-    function login() {
-        console.log('Called login function');
+    //responsible for logging in the user
+    $scope.login = function () {
+        console.log('Logging in ', $scope.username);
+        //Start spinner
         $scope.dataLoading = true;
-        LoginService.Login($scope.username, $scope.password, function (response) {
-            if (response.success) {
-                LoginService.SetCredentials($scope.username, $scope.password);
-                $location.path('/home');
-            } else {
+
+        var user = {
+            username: $scope.username,
+            password: $scope.password
+        };
+
+        var promise = LoginService.loginUser(user);
+        promise.then(function (result) {
+                console.log('Login Success, data retrieved :', result);
+
+                if (result.code === 403) {
+                    SharedService.showError(result.message);
+                    $scope.dataLoading = false;
+                    return;
+                }
+
+                if (result.code === 500) {
+                    SharedService.showError('Error occurred while logging you in. Please contact administrator');
+                    $scope.dataLoading = false;
+                    return;
+                }
+
+                //Stop spinner
                 $scope.dataLoading = false;
-            }
-        });
-    };
+
+                //Make the data available to all controllers
+                setApplicationLevelData(result);
+
+                //Clear Form
+                //clearForm();
+
+                //Show success message to the user
+                SharedService.showSuccess('Login Successful');
+
+                //Navigate to home page
+                SharedService.navigateToHome();
+
+            })
+            .catch(function (resError) {
+                console.log('LOGIN FAILURE :: ', resError);
+                //show failure message to the user
+                SharedService.showError('Server Error. System could not log you in.');
+                $scope.dataLoading = false;
+            });
+    }
+
+    //share user details retured from login success call with all controllers
+    function setApplicationLevelData(userDetails) {
+        //set user details
+        SharedService.setUserDetails(userDetails);
+        //set auth token
+        SharedService.setAuthToken(userDetails.authToken);
+    }
 
 }]);
