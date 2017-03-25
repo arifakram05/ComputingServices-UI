@@ -73,26 +73,30 @@ var computingServicesApp = angular.module('computingServices', [
 
 .controller('mainCtrl', ['SharedService', '$scope', function (SharedService, $scope) {
 
-    $scope.userDetails = SharedService.getUserDetails();
-    $scope.isUserLoggedIn = SharedService.isUserAuthenticated();
+    $scope.$watch(function () {
+        $scope.userDetails = SharedService.getUserDetails();
+        $scope.isUserLoggedIn = SharedService.isUserAuthenticated();
 
-    if ($scope.userDetails != null) {
-        $scope.userRole = $scope.userDetails.role;
-    }
+        if ($scope.userDetails != null) {
+            $scope.userRole = $scope.userDetails.role;
+        }
+    }, true);
 
     console.log('user details ',$scope.userDetails);
     console.log('is user logged in : ',$scope.isUserLoggedIn);
     console.log('user role : ',$scope.userRole);
 
+    // user logout
     $scope.logout = function logout() {
         console.log('Logging out...');
+        SharedService.navigateToHome();
         SharedService.logout();
         SharedService.showSuccess("Logged out");
     }
 
-}])
+}]);
 
-.run(['$rootScope', '$location', '$cookies', '$http', function ($rootScope, $location, $cookies, $http) {
+/*.run(['$rootScope', '$location', '$cookies', '$http', function ($rootScope, $location, $cookies, $http) {
 
     //hack for user login
     $rootScope.globals = {
@@ -132,4 +136,4 @@ var computingServicesApp = angular.module('computingServices', [
             $location.path('/login');
         }
     });
-}]);
+}]);*/

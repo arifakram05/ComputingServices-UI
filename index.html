@@ -38,6 +38,8 @@
             </div>
             <div id="navbar" class="navbar-collapse collapse">
                 <ul class="nav navbar-nav navbar-right">
+
+                    <!--General public features-->
                     <li><a href="#/labSchedule">Lab Schedule</a></li>
                     <li><a href="#/staffSchedule">Staff Schedule</a></li>
                     <li><a href="#/staff">Staff</a></li>
@@ -47,39 +49,32 @@
                     <li><a href="#/careers">Apply for a LA Position</a></li>
 
                     <!--Admin only features-->
-                    <!--<li><a href="#/manageJobApplicants">Manage Job Applicants</a></li>
-                    <li><a href="#/manageLabSchedule">Manage Lab Schedule</a></li>
-                    <li><a href="#/manageStaffSchedule">Manage Staff Schedule</a></li>
-                    <li><a href="#/manageRoles">Manage Roles</a></li>
-                    <li><a href="#/authorize">Authorize</a></li>
-                    <li><a href="#/manageLabAssistants">Manage Lab Assistants</a></li>-->
-
-                    <!--Admin only features-->
-                    <li class="dropdown" ng-show="!isEmpty(globals)">
+                    <li class="dropdown" ng-if="isUserLoggedIn && userRole === 'Admin' ">
                         <a class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">Admin <span class="caret"></span></a>
                         <ul class="dropdown-menu">
-                            <li ng-show="!isEmpty(globals)"><a href="#/manageJobApplicants">Job Applicants</a></li>
-                            <li ng-show="!isEmpty(globals)"><a href="#/manageLabAssistants">Lab Assistants</a></li>
-                            <li ng-show="!isEmpty(globals)"><a href="#/manageLabSchedule">Lab Schedule</a></li>
-                            <li ng-show="!isEmpty(globals)"><a href="#/manageStaffSchedule">Staff Schedule</a></li>
-                            <li ng-show="!isEmpty(globals)"><a href="#/manageRoles">Roles</a></li>
-                            <li ng-show="!isEmpty(globals)"><a href="#/authorize">Authorize</a></li>
+                            <li><a href="#/manageJobApplicants">Job Applicants</a></li>
+                            <li><a href="#/manageLabAssistants">Lab Assistants</a></li>
+                            <li><a href="#/manageLabSchedule">Lab Schedule</a></li>
+                            <li><a href="#/manageStaffSchedule">Staff Schedule</a></li>
+                            <li><a href="#/manageRoles">Roles</a></li>
+                            <li><a href="#/authorize">Authorize</a></li>
                         </ul>
                     </li>
 
                     <!--LA only features-->
-                    <li class="dropdown" ng-show="!isEmpty(globals)">
+                    <li class="dropdown" ng-if="isUserLoggedIn && userRole === 'Lab Assistant' ">
                         <a class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">LA <span class="caret"></span></a>
                         <ul class="dropdown-menu">
-                            <li ng-show="!isEmpty(globals)"><a href="#/recordwork">Log Shift</a></li>
-                            <li ng-show="!isEmpty(globals)"><a href="#/displaywork">Show Recorded Work</a></li>
-                            <li ng-show="!isEmpty(globals)"><a href="#/viewworkschedule">Work Schedule</a></li>
-                            <li ng-show="!isEmpty(globals)"><a href="#/manageprofile">Manage Profile</a></li>
+                            <li><a href="#/recordwork">Log Shift</a></li>
+                            <li><a href="#/displaywork">Show Recorded Work</a></li>
+                            <li><a href="#/viewworkschedule">Work Schedule</a></li>
+                            <li><a href="#/manageprofile">Manage Profile</a></li>
                         </ul>
                     </li>
 
-                    <li ng-show="isEmpty(globals)" class="active"><a href="#/login">Login <span class="sr-only">(current)</span></a></li>
-                    <li ng-show="!isEmpty(globals)" ng-click="logout()" class="active"><a>Logout <span class="sr-only">(current)</span></a></li>
+                    <!--Login and Logout-->
+                    <li ng-if="!isUserLoggedIn" class="active"><a href="#/login">Login <span class="sr-only">(current)</span></a></li>
+                    <li ng-if="isUserLoggedIn" ng-click="logout()" class="active"><a>Logout <span class="sr-only">(current)</span></a></li>
                 </ul>
             </div>
             <!--/.nav-collapse -->

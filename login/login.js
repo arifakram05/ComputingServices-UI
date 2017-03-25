@@ -249,7 +249,7 @@ angular.module('computingServices.login', ['ngRoute'])
                 //clearForm();
 
                 //Show success message to the user
-                SharedService.showSuccess('Login Successful');
+                SharedService.showSuccess('Logged In');
 
                 //Navigate to home page
                 SharedService.navigateToHome();
