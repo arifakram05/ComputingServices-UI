@@ -10,7 +10,7 @@ angular.module('computingServices.register', ['ngRoute'])
     })
 }])
 
-.controller('RegisterCtrl', ['LocalLoginService', '$location', '$rootScope', 'FlashService', '$scope', '$mdDialog', function (LocalLoginService, $location, $rootScope, FlashService, $scope, $mdDialog) {
+.controller('RegisterCtrl', ['LocalLoginService', '$location', '$rootScope', '$scope', '$mdDialog', function (LocalLoginService, $location, $rootScope, $scope, $mdDialog) {
 
     //Check if the given user id is authorized to register
     $scope.checkUserValidity = function (id) {
@@ -69,17 +69,4 @@ angular.module('computingServices.register', ['ngRoute'])
         );
     }
 
-    /*function register() {
-        $scope.dataLoading = true;
-        LocalLoginService.Create($scope.user)
-            .then(function (response) {
-                if (response.success) {
-                    FlashService.Success('Registration successful', true);
-                    $location.path('/login');
-                } else {
-                    FlashService.Error(response.message);
-                    $scope.dataLoading = false;
-                }
-            });
-    }*/
 }]);

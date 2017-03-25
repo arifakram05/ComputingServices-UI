@@ -50,6 +50,7 @@ var computingServicesApp = angular.module('computingServices', [
         SharedService.showSuccess("Logged out");
         // clear local storage
     }
+
 }])
 
 .run(['$rootScope', '$location', '$cookies', '$http', function ($rootScope, $location, $cookies, $http) {

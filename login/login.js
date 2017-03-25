@@ -180,10 +180,9 @@ angular.module('computingServices.login', ['ngRoute'])
 
 }])
 
-.controller('LoginCtrl', ['$scope', 'LoginService', '$location', 'FlashService', '$rootScope', function ($scope, LoginService, $location, FlashService, $rootScope) {
+.controller('LoginCtrl', ['$scope', 'LoginService', '$location', '$rootScope', function ($scope, LoginService, $location, $rootScope) {
 
     $scope.login = login;
-    //$scope.logout = logout;
 
     function login() {
         console.log('Called login function');
@@ -193,22 +192,9 @@ angular.module('computingServices.login', ['ngRoute'])
                 LoginService.SetCredentials($scope.username, $scope.password);
                 $location.path('/home');
             } else {
-                FlashService.Error(response.message);
                 $scope.dataLoading = false;
             }
         });
     };
-
-    //logout() functionality moved to app.js
-    /*function logout() {
-        console.log('logging out...');
-        // reset login status
-        if(LoginService.ClearCredentials()) {
-            console.log('successfully logged out...');
-            FlashService.success('Successfully Logged Out');
-        } else {
-            FlashService.Error('Something went wrong. Logout Unsuccessful.');
-        }
-    };*/
 
 }]);
