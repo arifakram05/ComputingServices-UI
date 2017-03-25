@@ -148,25 +148,6 @@ angular.module('computingServices.login', ['ngRoute'])
         });
     };
 
-    function isEmpty(obj) {
-        for(var prop in obj) {
-            if(obj.hasOwnProperty(prop))
-                return false;
-        }
-        return true;
-    };
-
-    function ClearCredentials() {
-        console.log('implementing logout...');
-        $rootScope.globals = {};
-
-        delete $cookies['globals'];
-        $http.defaults.headers.common.Authorization = 'Basic';
-        console.log(JSON.stringify($rootScope.globals));
-
-        return isEmpty($rootScope.globals);
-    };
-
 }])*/
 
 .factory('LoginService', ['$http', '$q', function ($http, $q) {

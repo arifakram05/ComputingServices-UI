@@ -34,7 +34,7 @@ var computingServicesApp = angular.module('computingServices', [
     'computingServices.shared'
 ])
 
-.config(function ($routeProvider, growlProvider) {
+.config(function ($routeProvider, growlProvider, $httpProvider) {
     //handling unknown routes
     $routeProvider.otherwise('/home');
 
@@ -42,13 +42,52 @@ var computingServicesApp = angular.module('computingServices', [
     growlProvider.globalTimeToLive(5000);
     growlProvider.globalPosition('bottom-right');
     growlProvider.globalDisableCountDown(true);
+
+    //interceptor for http calls
+    $httpProvider.interceptors.push('csInterceptor');
+})
+
+//this method will intercept all http calls
+.factory('csInterceptor', function ($q, $window, growl, $injector) {
+
+    return {
+        request: function (config) {
+            var SharedService = $injector.get('SharedService');
+            console.log('auth token : ', SharedService.getAuthToken());
+            console.log('Intercepted Service Call....Adding authToken to request....');
+            config.headers = config.headers || {};
+            if (SharedService.getAuthToken()) {
+                config.headers.Authorization = SharedService.getAuthToken();
+            }
+            return config;
+        },
+        response: function (response) {
+            if (response.status === 401 || response.status === 403) {
+                // handle the case where the user is not authenticated
+                SharedService.showError('This operation cannot be performed as you are not authenticated');
+            }
+            return response || $q.when(response);
+        }
+    };
 })
 
 .controller('mainCtrl', ['SharedService', '$scope', function (SharedService, $scope) {
+
+    $scope.userDetails = SharedService.getUserDetails();
+    $scope.isUserLoggedIn = SharedService.isUserAuthenticated();
+
+    if ($scope.userDetails != null) {
+        $scope.userRole = $scope.userDetails.role;
+    }
+
+    console.log('user details ',$scope.userDetails);
+    console.log('is user logged in : ',$scope.isUserLoggedIn);
+    console.log('user role : ',$scope.userRole);
+
     $scope.logout = function logout() {
         console.log('Logging out...');
+        SharedService.logout();
         SharedService.showSuccess("Logged out");
-        // clear local storage
     }
 
 }])

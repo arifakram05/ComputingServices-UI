@@ -38,7 +38,7 @@ angular.module('computingServices.shared', ['ngRoute'])
 
     function setUserDetails(userDetails) {
         this.userDetails = userDetails;
-        //console.log('User details now set :: ', this.userDetails);
+        console.log('User details now set :: ', this.userDetails);
         $window.localStorage.setItem('csUserDetails', JSON.stringify(userDetails));
     }
 
@@ -52,7 +52,7 @@ angular.module('computingServices.shared', ['ngRoute'])
     function setAuthToken(authToken) {
         this.authToken = authToken;
         //console.log('token set : ', this.authToken);
-        $window.localStorage.setItem('sbAuthToken', authToken);
+        $window.localStorage.setItem('csAuthToken', authToken);
     }
 
     function getAuthToken() {
