@@ -34,17 +34,6 @@ var computingServicesApp = angular.module('computingServices', [
     'computingServices.shared'
 ])
 
-/*.config(['$routeProvider', '$growlProvider', function ($routeProvider, growlProvider) {
-    $routeProvider.otherwise({
-        redirectTo: '/home'
-    });
-
-    //notifications
-    growlProvider.globalTimeToLive(5000);
-    growlProvider.globalPosition('bottom-right');
-    growlProvider.globalDisableCountDown(true);
-}])*/
-
 .config(function ($routeProvider, growlProvider) {
     //handling unknown routes
     $routeProvider.otherwise('/home');
@@ -55,32 +44,11 @@ var computingServicesApp = angular.module('computingServices', [
     growlProvider.globalDisableCountDown(true);
 })
 
-/*.controller('LogoutCtrl', ['LoginService', 'FlashService', '$scope', function (LoginService, FlashService, $scope) {
-
-    $scope.logout = function logout() {
-        console.log('Logging out...');
-        if (LoginService.ClearCredentials()) {
-            console.log('successfully logged out...');
-            FlashService.Success('Successfully Logged Out', false);
-        } else {
-            FlashService.Error('Something went wrong. Logout Unsuccessful.', false);
-        }
-    }
-
-    $scope.isEmpty = function (obj) {
-        for (var prop in obj) {
-            if (obj.hasOwnProperty(prop))
-                return false;
-        }
-        return true;
-    }
-}])*/
-
-// working - to logout
 .controller('mainCtrl', ['SharedService', '$scope', function (SharedService, $scope) {
     $scope.logout = function logout() {
         console.log('Logging out...');
         SharedService.showSuccess("Logged out");
+        // clear local storage
     }
 }])
 
