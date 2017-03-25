@@ -12,9 +12,9 @@ angular.module('computingServices.manageLabSchedule', ['ngRoute'])
 
 .factory('ManageLabScheduleService', ['$http', '$q', '$mdDialog', function ($http, $q, $mdDialog) {
 
-    var SAVE_LAB_SCHEDULE = 'http://127.0.0.1:8080/ComputingServicesApp/admin/saveLabSchedule';
-    var DELETE_LAB_SCHEDULE_URI = 'http://127.0.0.1:8080/ComputingServicesApp/admin/deleteLabSchedule?';
-    var DELETE_ALL_LAB_SCHEDULE_URI = 'http://127.0.0.1:8080/ComputingServicesApp/services/deleteAllLabSchedules?';
+    var SAVE_LAB_SCHEDULE = constants.url + 'admin/saveLabSchedule';
+    var DELETE_LAB_SCHEDULE_URI = constants.url + 'admin/deleteLabSchedule?';
+    var DELETE_ALL_LAB_SCHEDULE_URI = constants.url +  'services/deleteAllLabSchedules?';
 
     //define all factory methods
     var factory = {

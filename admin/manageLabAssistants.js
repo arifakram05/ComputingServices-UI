@@ -13,7 +13,7 @@ angular.module('computingServices.manageLabAssistants', ['ngRoute'])
 .factory('ManageLabAssistantsService', ['$http', '$q', function ($http, $q) {
 
     /*http://127.0.0.1:8080/ComputingServicesApp/home/users*/
-    var REST_SERVICE_URI = 'http://127.0.0.1:8080/ComputingServicesApp/services/viewJobApplicants';
+    var REST_SERVICE_URI = constants.url + 'services/viewJobApplicants';
 
     var factory = {
         fetchAllUsers: fetchAllUsers

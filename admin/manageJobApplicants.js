@@ -11,11 +11,11 @@ angular.module('computingServices.manageJobApplicants', ['ngRoute'])
 
 .factory('ManageJobApplicantsService', ['$http', '$q', function ($http, $q) {
 
-    var GET_JOB_APPLICANTS_URI = 'http://127.0.0.1:8080/ComputingServicesApp/services/viewJobApplicants';
-    var DELETE_JOB_APPLICANT_URI = 'http://127.0.0.1:8080/ComputingServicesApp/services/deleteJobApplicant?';
-    var UPDATE_JOB_APPLICANT_URI = 'http://127.0.0.1:8080/ComputingServicesApp/services/updateJobApplicant';
-    var HIRE_JOB_APPLICANT_URI = 'http://127.0.0.1:8080/ComputingServicesApp/services/hireJobApplicant';
-    var EMAIL_JOB_APPLICANT_URI = 'http://127.0.0.1:8080/ComputingServicesApp/services/emailJobApplicant';
+    var GET_JOB_APPLICANTS_URI = constants.url + 'services/viewJobApplicants';
+    var DELETE_JOB_APPLICANT_URI = constants.url + 'services/deleteJobApplicant?';
+    var UPDATE_JOB_APPLICANT_URI = constants.url + 'services/updateJobApplicant';
+    var HIRE_JOB_APPLICANT_URI = constants.url +  'services/hireJobApplicant';
+    var EMAIL_JOB_APPLICANT_URI = constants.url + 'services/emailJobApplicant';
 
     //define all factory methods
     var factory = {

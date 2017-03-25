@@ -61,7 +61,7 @@ angular.module('computingServices.careers', ['ngRoute'])
         if ($scope.userForm.$valid) {
             console.log($scope.user);
             /*http://127.0.0.1:8080/ComputingServicesApp/home/careers2*/
-            CareersService.post('http://127.0.0.1:8080/ComputingServicesApp/services/applyJob', $scope.user, $scope.files);
+            CareersService.post(constants.url + 'services/applyJob', $scope.user, $scope.files);
             //reset form after receiving response
             $scope.reset();
         }

@@ -12,7 +12,7 @@ angular.module('computingServices.recordwork', ['ngRoute'])
 
 .factory('RecordWorkService', ['$http', function ($http) {
 
-    var CLOCK_IN_CLOCK_OUT = 'http://127.0.0.1:8080/ComputingServicesApp/admin/saveLabSchedule';
+    var CLOCK_IN_CLOCK_OUT = constants.url + 'admin/saveLabSchedule';
 
     //define all factory methods
     var factory = {

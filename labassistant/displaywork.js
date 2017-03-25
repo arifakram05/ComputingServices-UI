@@ -12,7 +12,7 @@ angular.module('computingServices.displaywork', ['ngRoute'])
 
 .factory('DisplayWorkCtrlService', ['$http', function ($http) {
 
-    var GET_LA_WORK_HOURS = 'http://127.0.0.1:8080/ComputingServicesApp/admin/saveLabSchedule';
+    var GET_LA_WORK_HOURS = constants.url + 'admin/saveLabSchedule';
 
     //define all factory methods
     var factory = {

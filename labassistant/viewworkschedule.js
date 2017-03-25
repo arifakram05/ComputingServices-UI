@@ -12,7 +12,7 @@ angular.module('computingServices.viewworkschedule', ['ngRoute'])
 
 .factory('VWSService', ['$http', function ($http) {
 
-    var GET_LA_SHIFT_DETAILS = 'http://127.0.0.1:8080/ComputingServicesApp/admin/saveLabSchedule';
+    var GET_LA_SHIFT_DETAILS = constants.url + 'admin/saveLabSchedule';
 
     //define all factory methods
     var factory = {

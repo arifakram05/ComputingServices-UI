@@ -12,7 +12,7 @@ angular.module('computingServices.manageStaffSchedule', ['ngRoute'])
 
 .factory('ManageStaffScheduleService', ['$timeout', '$filter', '$q', function ($timeout, $filter, $q) {
 
-    var DELETE_LA_SCHEDULE_URI = 'http://127.0.0.1:8080/ComputingServicesApp/services/deleteJobApplicant?';
+    var DELETE_LA_SCHEDULE_URI = constants.url + 'services/deleteJobApplicant?';
 
     //define all factory methods
     var factory = {
