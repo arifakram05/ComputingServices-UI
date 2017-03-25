@@ -12,5 +12,5 @@ angular.module('computingServices.logout', ['ngRoute'])
 
 .controller('LogoutCtrl', ['LoginService', function (LoginService) {
     console.log('Logging out...');
-    LoginService.ClearCredentials();
+    //LoginService.ClearCredentials();
 }]);

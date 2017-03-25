@@ -1,6 +1,6 @@
-angular.module('computingServices.shared', ['ui.router'])
+angular.module('computingServices.shared', ['ngRoute'])
 
-    .service('SharedService', ['$state', 'growl', '$http', '$q', '$window', function ($state, growl, $http, $q, $window) {
+.service('SharedService', ['growl', '$http', '$q', '$window', function (growl, $http, $q, $window) {
 
     this.userDetails = {};
     this.authToken = '';
@@ -13,7 +13,7 @@ angular.module('computingServices.shared', ['ui.router'])
         getAuthToken: getAuthToken,
 
         getUserName: getUserName,
-        getUserId: getUserId,
+        //getUserId: getUserId,
         getUserRole: getUserRole,
         getUserTitle: getUserTitle,
         getUserEmail: getUserEmail,
@@ -82,12 +82,12 @@ angular.module('computingServices.shared', ['ui.router'])
 
     function showLoginPage() {
         //console.log('Inside Shared Controller"s showLoginPage method');
-        $state.go('login');
+        $location.path('/login');
     }
 
     function navigateToHome() {
         //console.log('Inside Shared Controller"s NavigateToScurmBoard method');
-        $state.go('home');
+        $location.path('/home');
     }
 
     function isUserAuthenticated() {
@@ -143,4 +143,4 @@ angular.module('computingServices.shared', ['ui.router'])
     //Common service calls
 
 
-    }]);
+}]);

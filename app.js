@@ -1,8 +1,7 @@
 'use strict';
 
-// Declare app level module which depends on views, and components
 var computingServicesApp = angular.module('computingServices', [
-    'ngRoute', 'ngCookies', 'ngMaterial', 'ngMessages',
+    'ngRoute', 'ngCookies', 'ngMaterial', 'ngMessages', 'angular-growl',
     'computingServices.login',
     'computingServices.home',
     'computingServices.careers',
@@ -29,17 +28,34 @@ var computingServicesApp = angular.module('computingServices', [
     'computingServices.manageprofile',
 
     /*'computingServices.logout',*/
-    'angularUtils.directives.dirPagination'
+    'angularUtils.directives.dirPagination',
+
+    /*shared module*/
+    'computingServices.shared'
 ])
 
-.config(['$routeProvider', function ($routeProvider) {
-
+/*.config(['$routeProvider', '$growlProvider', function ($routeProvider, growlProvider) {
     $routeProvider.otherwise({
         redirectTo: '/home'
     });
-}])
 
-.controller('LogoutCtrl', ['LoginService', 'FlashService', '$scope', function (LoginService, FlashService, $scope) {
+    //notifications
+    growlProvider.globalTimeToLive(5000);
+    growlProvider.globalPosition('bottom-right');
+    growlProvider.globalDisableCountDown(true);
+}])*/
+
+.config(function ($routeProvider, growlProvider) {
+    //handling unknown routes
+    $routeProvider.otherwise('/home');
+
+    //notifications
+    growlProvider.globalTimeToLive(5000);
+    growlProvider.globalPosition('bottom-right');
+    growlProvider.globalDisableCountDown(true);
+})
+
+/*.controller('LogoutCtrl', ['LoginService', 'FlashService', '$scope', function (LoginService, FlashService, $scope) {
 
     $scope.logout = function logout() {
         console.log('Logging out...');
@@ -57,6 +73,14 @@ var computingServicesApp = angular.module('computingServices', [
                 return false;
         }
         return true;
+    }
+}])*/
+
+// working - to logout
+.controller('mainCtrl', ['SharedService', '$scope', function (SharedService, $scope) {
+    $scope.logout = function logout() {
+        console.log('Logging out...');
+        SharedService.showSuccess("Logged out");
     }
 }])
 
