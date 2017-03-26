@@ -5,7 +5,7 @@ angular.module('computingServices.authorize', ['ngRoute'])
 .config(['$routeProvider', function ($routeProvider) {
     $routeProvider.
     when('/authorize', {
-        templateUrl: 'admin/authorize.html',
+        templateUrl: 'templates/admin/authorize.html',
         controller: 'AuthorizeCtrl'
     })
 }])
