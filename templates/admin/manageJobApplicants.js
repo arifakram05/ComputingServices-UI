@@ -4,7 +4,7 @@ angular.module('computingServices.manageJobApplicants', ['ngRoute'])
 
 .config(['$routeProvider', function ($routeProvider) {
     $routeProvider.when('/manageJobApplicants', {
-        templateUrl: 'admin/manageJobApplicants.html',
+        templateUrl: 'templates/admin/manageJobApplicants.html',
         controller: 'ManageJobApplicantsCtrl'
     });
 }])

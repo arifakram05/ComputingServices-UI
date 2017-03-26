@@ -5,7 +5,7 @@ angular.module('computingServices.recordwork', ['ngRoute'])
 .config(['$routeProvider', function ($routeProvider) {
     $routeProvider.
     when('/recordwork', {
-        templateUrl: 'labassistant/recordwork.html',
+        templateUrl: 'templates/labassistant/recordwork.html',
         controller: 'RecordWorkCtrl'
     })
     }])

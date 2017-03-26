@@ -5,7 +5,7 @@ angular.module('computingServices.manageStaffSchedule', ['ngRoute'])
 .config(['$routeProvider', function ($routeProvider) {
     $routeProvider.
     when('/manageStaffSchedule', {
-        templateUrl: 'admin/manageStaffSchedule.html',
+        templateUrl: 'templates/admin/manageStaffSchedule.html',
         controller: 'ManageStaffScheduleCtrl'
     })
 }])

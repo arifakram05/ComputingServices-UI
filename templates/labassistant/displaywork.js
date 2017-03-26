@@ -5,7 +5,7 @@ angular.module('computingServices.displaywork', ['ngRoute'])
 .config(['$routeProvider', function ($routeProvider) {
     $routeProvider.
     when('/displaywork', {
-        templateUrl: 'labassistant/displaywork.html',
+        templateUrl: 'templates/labassistant/displaywork.html',
         controller: 'DisplayWorkCtrl'
     })
 }])

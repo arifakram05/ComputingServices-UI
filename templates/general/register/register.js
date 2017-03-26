@@ -5,7 +5,7 @@ angular.module('computingServices.register', ['ngRoute'])
 .config(['$routeProvider', function ($routeProvider) {
     $routeProvider.
     when('/register', {
-        templateUrl: 'register/register.html',
+        templateUrl: 'templates/general/register/register.html',
         controller: 'RegisterCtrl'
     })
 }])

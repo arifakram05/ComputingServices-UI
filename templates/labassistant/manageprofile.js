@@ -5,7 +5,7 @@ angular.module('computingServices.manageprofile', ['ngRoute'])
 .config(['$routeProvider', function ($routeProvider) {
     $routeProvider.
     when('/manageprofile', {
-        templateUrl: 'labassistant/manageprofile.html',
+        templateUrl: 'templates/labassistant/manageprofile.html',
         controller: 'ManageProfileCtrl'
     })
 }])
@@ -73,8 +73,8 @@ angular.module('computingServices.manageprofile', ['ngRoute'])
         });
     });*/
 
-    $scope.change = function(fileName) {
-        console.log('file being uploaded is ',fileName);
+    $scope.change = function (fileName) {
+        console.log('file being uploaded is ', fileName);
     };
 
     //update form
@@ -82,8 +82,8 @@ angular.module('computingServices.manageprofile', ['ngRoute'])
 
         $scope.laProfileForm.$setSubmitted();
 
-        console.log('resume ',$scope.files_resume);
-        console.log('photo ',$scope.files_photo);
+        console.log('resume ', $scope.files_resume);
+        console.log('photo ', $scope.files_photo);
 
         console.log('profile to be saved is ', labAsst, $scope.files_resume, $scope.files_photo);
 

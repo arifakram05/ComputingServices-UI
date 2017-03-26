@@ -2,23 +2,25 @@
 
 angular.module('computingServices.careers', ['ngRoute'])
 
-.config(['$routeProvider', function($routeProvider) {
-  $routeProvider.when('/careers', {
-    templateUrl: 'careers/careers.html',
-    controller: 'CareersCtrl'
-  });
+.config(['$routeProvider', function ($routeProvider) {
+    $routeProvider.when('/careers', {
+        templateUrl: 'templates/general/careers/careers.html',
+        controller: 'CareersCtrl'
+    });
 }])
 
-.service('CareersService', ['$http', function($http){
-    this.post = function(uploadUrl, submittedData, submittedFile){
+.service('CareersService', ['$http', function ($http) {
+    this.post = function (uploadUrl, submittedData, submittedFile) {
 
-        console.log('Data to be sent to the server (Raw): ',submittedData);
-        console.log('Just the file data: ',submittedFile);
+        console.log('Data to be sent to the server (Raw): ', submittedData);
+        console.log('Just the file data: ', submittedFile);
 
         $http({
             method: 'POST',
             url: uploadUrl,
-            headers: { 'Content-Type': undefined },
+            headers: {
+                'Content-Type': undefined
+            },
 
             transformRequest: function (data) {
                 var formData = new FormData();
@@ -26,10 +28,13 @@ angular.module('computingServices.careers', ['ngRoute'])
                 formData.append("file", data.files);
                 /*for (var i = 0; i < data.files.length; i++) {
                     formData.append("file" + i, data.files[i]);
-                }*///for multiple files
+                }*/ //for multiple files
                 return formData;
             },
-            data: { model: submittedData, files: submittedFile }
+            data: {
+                model: submittedData,
+                files: submittedFile
+            }
         }).
         success(function (data, status, headers, config) {
             alert("success!");
@@ -41,7 +46,7 @@ angular.module('computingServices.careers', ['ngRoute'])
     }
 }])
 
-.controller('CareersCtrl', ['$scope', 'CareersService', function($scope, CareersService) {
+.controller('CareersCtrl', ['$scope', 'CareersService', function ($scope, CareersService) {
 
     $scope.user = {};
 
@@ -50,12 +55,12 @@ angular.module('computingServices.careers', ['ngRoute'])
     $scope.$on("seletedFile", function (event, args) {
         $scope.$apply(function () {
             //add the file object to the scope's files collection
-            console.log('pushing files: ',args);
+            console.log('pushing files: ', args);
             $scope.files.push(args.file);
         });
     });
 
-    $scope.save = function() {
+    $scope.save = function () {
         $scope.$broadcast('show-errors-check-validity');
 
         if ($scope.userForm.$valid) {
@@ -67,12 +72,12 @@ angular.module('computingServices.careers', ['ngRoute'])
         }
     };
 
-    $scope.change = function(fileName) {
-        console.log('file being uploaded is ',fileName);
+    $scope.change = function (fileName) {
+        console.log('file being uploaded is ', fileName);
         angular.element('#uploadFile').val(fileName);
     };
 
-    $scope.reset = function() {
+    $scope.reset = function () {
         $scope.$broadcast('show-errors-reset');
         $scope.user = {};
         angular.element('#uploadBtn').val('');

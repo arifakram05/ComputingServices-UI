@@ -5,7 +5,7 @@ angular.module('computingServices.viewworkschedule', ['ngRoute'])
 .config(['$routeProvider', function ($routeProvider) {
     $routeProvider.
     when('/viewworkschedule', {
-        templateUrl: 'labassistant/viewworkschedule.html',
+        templateUrl: 'templates/labassistant/viewworkschedule.html',
         controller: 'VWSCtrl'
     })
 }])

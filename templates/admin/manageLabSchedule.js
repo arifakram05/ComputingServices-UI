@@ -4,7 +4,7 @@ angular.module('computingServices.manageLabSchedule', ['ngRoute'])
 
 .config(['$routeProvider', function ($routeProvider) {
     $routeProvider.when('/manageLabSchedule', {
-        templateUrl: 'admin/manageLabSchedule.html',
+        templateUrl: 'templates/admin/manageLabSchedule.html',
         controller: 'ManageLabScheduleCtrl'
     });
 
