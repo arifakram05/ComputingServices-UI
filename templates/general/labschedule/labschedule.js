@@ -16,7 +16,6 @@ angular.module('computingServices.labSchedule', ['ngRoute'])
     });*/
 
     console.log('lab schedule ' + $scope);
-    $scope.endDate = $filter('date')(new Date(), 'mediumDate');
 
     $scope.events = [{
         title: 'Event Title',
@@ -40,6 +39,29 @@ angular.module('computingServices.labSchedule', ['ngRoute'])
         professor: "Shawn Reynolds",
         start: new Date('2017-03-26T15:00:30Z'),
         end: new Date('2017-03-26T16:30:30Z'),
+        allDay: false
+    },{
+        title: 'Economics',
+        start: new Date('2017-03-16T10:20:30Z'),
+        end: new Date('2017-03-16T15:20:30Z'),
+        allDay: false
+    }, {
+        title: "Computer Architecture 2",
+        professor: "Linda Cook",
+        start: new Date('2017-03-16T12:00:30Z'),
+        end: new Date('2017-03-16T13:30:30Z'),
+        allDay: false
+    }, {
+        title: "Adv Operating Systems",
+        professor: "Betty Moore",
+        start: new Date('2017-03-16T14:00:30Z'),
+        end: new Date('2017-03-16T16:30:30Z'),
+        allDay: false
+    }, {
+        title: "Adv Database Systems",
+        professor: "Shawn Reynolds",
+        start: new Date('2017-03-16T15:00:30Z'),
+        end: new Date('2017-03-16T16:30:30Z'),
         allDay: false
     }]
 
