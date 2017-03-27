@@ -1,7 +1,7 @@
 'use strict';
 
 var computingServicesApp = angular.module('computingServices', [
-    'ngRoute', 'ngCookies', 'ngMaterial', 'ngMessages', 'angular-growl',
+    'ngRoute', 'ngCookies', 'ngMaterial', 'ngMessages', 'angular-growl', 'material.components.eventCalendar',
     'computingServices.login',
     'computingServices.home',
     'computingServices.careers',

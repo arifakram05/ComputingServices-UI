@@ -10,9 +10,40 @@ angular.module('computingServices.labSchedule', ['ngRoute'])
     })
 }])
 
-.controller('labScheduleCtrl', ['$scope', function ($scope) {
+.controller('labScheduleCtrl', ['$scope', '$filter', function ($scope, $filter) {
     /*$http.get('json/templates.json').success(function(data){
         $scope.templates = data;
     });*/
+
     console.log('lab schedule ' + $scope);
+    $scope.endDate = $filter('date')(new Date(), 'mediumDate');
+
+    $scope.events = [{
+        title: 'Event Title',
+        start: new Date('2017-03-26T10:20:30Z'),
+        end: new Date('2017-03-26T15:20:30Z'),
+        allDay: false
+    }, {
+        title: "Computer Architecture",
+        professor: "Linda Cook",
+        start: new Date('2017-03-26T12:00:30Z'),
+        end: new Date('2017-03-26T13:30:30Z'),
+        allDay: false
+    }, {
+        title: "Operating Systems",
+        professor: "Betty Moore",
+        start: new Date('2017-03-26T14:00:30Z'),
+        end: new Date('2017-03-26T16:30:30Z'),
+        allDay: false
+    }, {
+        title: "Database Systems",
+        professor: "Shawn Reynolds",
+        start: new Date('2017-03-26T15:00:30Z'),
+        end: new Date('2017-03-26T16:30:30Z'),
+        allDay: false
+    }]
+
+    $scope.eventClicked = function($selectedEvent) {
+        console.log('selected: ',$selectedEvent);
+    }
 }]);

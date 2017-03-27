@@ -171,7 +171,8 @@ angular.module('computingServices.login', ['ngRoute'])
                 "authToken": "shfulig{}}#@aelf734769q8rp3278",
                 "name": "Arif Akram",
                 "id": "1643568",
-                "role": "Lab Assistant",
+                //"role": "Lab Assistant",
+                "role": "Admin",
                 "code": 200
             };
             deferred.resolve(userDetails);
