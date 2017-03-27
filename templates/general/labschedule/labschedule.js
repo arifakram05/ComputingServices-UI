@@ -10,10 +10,15 @@ angular.module('computingServices.labSchedule', ['ngRoute'])
     })
 }])
 
-.controller('labScheduleCtrl', ['$scope', '$filter', function ($scope, $filter) {
+.controller('labScheduleCtrl', ['$scope', '$filter', '$timeout', function ($scope, $filter, $timeout) {
     /*$http.get('json/templates.json').success(function(data){
         $scope.templates = data;
     });*/
+
+    // This is necessary in order to properly fit the events of a day inside a cell
+    $timeout(function () {
+        angular.element(window).triggerHandler('resize');
+    });
 
     console.log('lab schedule ' + $scope);
 
@@ -40,7 +45,7 @@ angular.module('computingServices.labSchedule', ['ngRoute'])
         start: new Date('2017-03-26T15:00:30Z'),
         end: new Date('2017-03-26T16:30:30Z'),
         allDay: false
-    },{
+    }, {
         title: 'Economics',
         start: new Date('2017-03-16T10:20:30Z'),
         end: new Date('2017-03-16T15:20:30Z'),
@@ -65,7 +70,7 @@ angular.module('computingServices.labSchedule', ['ngRoute'])
         allDay: false
     }]
 
-    $scope.eventClicked = function($selectedEvent) {
-        console.log('selected: ',$selectedEvent);
+    $scope.eventClicked = function ($selectedEvent) {
+        console.log('selected: ', $selectedEvent);
     }
 }]);
