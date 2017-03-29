@@ -24,8 +24,8 @@ angular.module('computingServices.careers', ['ngRoute'])
 
             transformRequest: function (data) {
                 var formData = new FormData();
-                formData.append("model", angular.toJson(data.model));
-                formData.append("file", data.files);
+                formData.append("application", angular.toJson(data.model));
+                formData.append("resume", data.files);
                 /*for (var i = 0; i < data.files.length; i++) {
                     formData.append("file" + i, data.files[i]);
                 }*/ //for multiple files
@@ -66,7 +66,7 @@ angular.module('computingServices.careers', ['ngRoute'])
         if ($scope.userForm.$valid) {
             console.log($scope.user);
             /*http://127.0.0.1:8080/ComputingServicesApp/home/careers2*/
-            CareersService.post(constants.url + 'services/applyJob', $scope.user, $scope.files);
+            CareersService.post(constants.url + 'general/careers', $scope.user, $scope.files);
             //reset form after receiving response
             $scope.reset();
         }
