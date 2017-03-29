@@ -1,164 +1,88 @@
 <div class="comptingServices">
-    <div class="generic-container" ng-controller="CareersCtrl">
-        <div class="panel panel-default">
-            <div class="panel-heading"><span class="lead">Apply for a Lab Assistant position</span></div>
-            <div class="formcontainer">
-                <!--<form ng-submit="ctrl.submit()" name="myForm" class="form-horizontal">
+    <div class="col-md-8 col-md-offset-2">
+        <div ng-controller="CareersCtrl">
+            <div class="panel panel-default">
+                <div class="panel-heading"><span class="lead">Apply for a Lab Assistant position</span></div>
+                <div class="formcontainer">
+                    <form name="userForm" novalidate>
+                        <div class="row">
+                            <div class="form-group col-xs-12" show-errors='{showSuccess: true}'>
+                                <label class="col-xs-4 control-label rightAlign" for="firstName">First Name</label>
+                                <div class="col-xs-6">
+                                    <input type="text" name="firstName" id="firstName" ng-model="user.firstName" class="form-control" placeholder="Your First Name" required ng-minlength="2" />
+                                </div>
+                            </div>
+                        </div>
 
-                        <input type="hidden" ng-model="ctrl.user.id" />
+                        <div class="row">
+                            <div class="form-group col-xs-12" show-errors='{showSuccess: true}'>
+                                <label class="col-xs-4 control-label rightAlign" for="lastName">Last Name</label>
+                                <div class="col-xs-6">
+                                    <input type="text" name="lastName" id="lastName" ng-model="user.lastName" class="form-control" placeholder="Your Last Name" required ng-minlength="1" />
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="row">
+                            <div class="form-group col-xs-12" show-errors='{showSuccess: true}'>
+                                <label class="col-xs-4 control-label rightAlign" for="studentId">Student ID</label>
+                                <div class="col-xs-6">
+                                    <input type="text" name="studentId" id="studentId" ng-model="user.studentId" class="form-control" placeholder="Your ID Number" required />
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="row">
+                            <div class="form-group col-xs-12" show-errors='{showSuccess: true}'>
+                                <label class="col-xs-4 control-label rightAlign" for="email">Email</label>
+                                <div class="col-xs-6">
+                                    <input type="email" name="email" id="email" ng-model="user.email" class="form-control" placeholder="Your Email" required />
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="row">
+                            <div class="form-group col-xs-12" show-errors='{showSuccess: true}'>
+                                <label class="col-xs-4 control-label rightAlign" for="phone">Phone</label>
+                                <div class="col-xs-6">
+                                    <input type="number" name="phone" id="phone" ng-model="user.phone" class="form-control" placeholder="Your Phone Number" required />
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="row">
+                            <div class="form-group col-xs-12" show-errors='{showSuccess: true}'>
+                                <label class="col-xs-4 control-label rightAlign" for="education">Education</label>
+                                <div class="col-xs-6">
+                                    <select class="form-control" name="education" id="education" ng-model="user.education">
+                                        <option value="">Your Degree</option>
+                                        <option value="UNDERGRAD">Under Grad</option>
+                                        <option value="GRAD">Graduate</option>
+                                        <option value="POSTGRAD">Post Grad</option>
+                                    </select>
+                                </div>
+                            </div>
+                        </div>
 
                         <div class="row">
                             <div class="form-group col-md-12">
-                                <label class="col-md-3 control-lable" for="uname">Name</label>
-                                <div class="col-md-7">
-                                    <input type="text" ng-model="ctrl.user.username" id="uname" class="username form-control input-sm" placeholder="Enter your name" required ng-minlength="3" />
-                                    <div class="has-error" ng-show="myForm.$dirty">
-                                        <span ng-show="myForm.uname.$error.required">This is a required field</span>
-                                        <span ng-show="myForm.uname.$error.minlength">Minimum length required is 3</span>
-                                        <span ng-show="myForm.uname.$invalid">This field is invalid </span>
+                                <label class="col-xs-4 control-label rightAlign" for="resume">Resume</label>
+                                <div class="col-xs-6">
+                                    <input id="uploadFile" placeholder="Choose File" disabled="disabled" />
+                                    <div class="fileUpload btn btn-primary">
+                                        <span>Upload Resume</span>
+                                        <input id="uploadBtn" name="file" type="file" class="upload" file-model="files" onchange="angular.element(this).scope().change(this.value)" />
                                     </div>
                                 </div>
                             </div>
                         </div>
 
                         <div class="row">
-                            <div class="form-group col-md-12" ng-class="{ 'has-error': myForm.email.$invalid && myForm.email.$dirty }" >
-                                <label class="col-md-3 control-lable" for="email">Personal Email</label>
-                                <div class="col-md-7">
-                                    <input type="email" class="form-control" name="pemail" ng-model="ctrl.user.pemail" required />
-                                </div>
-                            </div>
+                            <button class="btn btn-primary centWidth" ng-click="save()">Save</button>
+                            <button class="btn btn-warning centWidth" ng-click="reset()">Reset</button>
                         </div>
-
-
-                        <div class="row">
-                            <div class="form-group col-md-12">
-                                <label class="col-md-3 control-lable" for="address">Address</label>
-                                <div class="col-md-7">
-                                    <input type="text" ng-model="ctrl.user.address" id="address" class="form-control input-sm" placeholder="Enter your Address. [This field is validation free]" />
-                                </div>
-                            </div>
-                        </div>
-
-                        <div class="row">
-                            <div class="form-group col-md-12">
-                                <label class="col-md-3 control-lable" for="email">Email</label>
-                                <div class="col-md-7">
-                                    <input type="email" ng-model="ctrl.user.email" id="email" class="email form-control input-sm" placeholder="Enter your Email" required/>
-                                    <div class="has-error" ng-show="myForm.$dirty">
-                                        <span ng-show="myForm.email.$error.required">This is a required field</span>
-                                        <span ng-show="myForm.email.$invalid">This field is invalid </span>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-
-                        <div class="row">
-                            <div class="form-actions floatRight">
-                                <input type="submit" value="{{!ctrl.user.id ? 'Add' : 'Update'}}" class="btn btn-primary btn-sm" ng-disabled="myForm.$invalid">
-                                <button type="submit" class="btn btn-primary" ng-disabled="userForm.$invalid">Save</button>
-                                <button type="button" ng-click="ctrl.reset()" class="btn btn-warning btn-sm" ng-disabled="myForm.$pristine">Reset</button>
-                            </div>
-                        </div>
-
-                    </form>-->
-
-                <form name="userForm" novalidate>
-                    <div class="row">
-                        <div class="form-group col-xs-12" show-errors='{showSuccess: true}'>
-                            <label class="col-xs-3 control-label" for="firstName">First Name</label>
-                            <div class="col-xs-5">
-                                <input type="text" name="firstName" id="firstName" ng-model="user.firstName" class="form-control" placeholder="Enter your first name" required ng-minlength="3" />
-                            </div>
-                            <div class="col-xs-2">
-                                <p class="help-block" ng-if="userForm.firstName.$error.required">Required</p>
-                                <p class="help-block" ng-if="userForm.firstName.$error.minlength">3 characters minimum</p>
-                            </div>
-                        </div>
-                    </div>
-
-                    <div class="row">
-                        <div class="form-group col-xs-12" show-errors='{showSuccess: true}'>
-                            <label class="col-xs-3 control-label" for="lastName">Last Name</label>
-                            <div class="col-xs-5">
-                                <input type="text" name="lastName" id="lastName" ng-model="user.lastName" class="form-control" placeholder="Enter your last name" required ng-minlength="3" />
-                            </div>
-                            <div class="col-xs-2">
-                                <p class="help-block" ng-if="userForm.lastName.$error.required">Required</p>
-                                <p class="help-block" ng-if="userForm.lastName.$error.minlength">3 characters minimum</p>
-                            </div>
-                        </div>
-                    </div>
-
-                    <div class="row">
-                        <div class="form-group col-xs-12" show-errors='{showSuccess: true}'>
-                            <label class="col-xs-3 control-label" for="studentId">Student ID</label>
-                            <div class="col-xs-5">
-                                <input type="text" name="studentId" id="studentId" ng-model="user.studentId" class="form-control" placeholder="Enter your Student ID #" required />
-                            </div>
-                            <div class="col-xs-2">
-                                <p class="help-block" ng-if="userForm.lastName.$error.required">Required</p>
-                            </div>
-                        </div>
-                    </div>
-
-                    <div class="row">
-                        <div class="form-group col-xs-12" show-errors='{showSuccess: true}'>
-                            <label class="col-xs-3 control-label" for="email">Email</label>
-                            <div class="col-xs-5">
-                                <input type="email" name="email" id="email" ng-model="user.email" class="form-control" placeholder="Email" required />
-                            </div>
-                            <div class="col-xs-2">
-                                <p class="help-block" ng-if="userForm.email.$error.required">Required</p>
-                                <p class="help-block" ng-if="userForm.email.$error.email">Invalid Email</p>
-                            </div>
-                        </div>
-                    </div>
-
-                    <div class="row">
-                        <div class="form-group col-xs-12" show-errors='{showSuccess: true}'>
-                            <label class="col-xs-3 control-label" for="phone">Phone</label>
-                            <div class="col-xs-5">
-                                <input type="number" name="phone" id="phone" ng-model="user.phone" class="form-control" placeholder="Phone Number" required />
-                            </div>
-                            <div class="col-xs-2">
-                                <p class="help-block" ng-if="userForm.phone.$error.required">Required</p>
-                            </div>
-                        </div>
-                    </div>
-
-                    <div class="row">
-                        <div class="form-group col-xs-12" show-errors='{showSuccess: true}'>
-                            <label class="col-xs-3 control-label" for="education">Education</label>
-                            <div class="col-xs-5 ">
-                                <select class="form-control" name="education" id="education" ng-model="user.education">
-                                    <option value="">Education Level</option>
-                                    <option value="UNDERGRAD">Bachelors</option>
-                                    <option value="GRAD">Masters</option>
-                                    <option value="POSTGRAD">Postgrad</option>
-                                </select>
-                            </div>
-                        </div>
-                    </div>
-
-                    <div class="row">
-                        <div class="form-group col-md-12">
-                            <label class="col-xs-3 control-label" for="resume">Resume</label>
-                            <div class="col-xs-5">
-                                <input id="uploadFile" placeholder="Choose File" disabled="disabled" />
-                                <div class="fileUpload btn btn-primary">
-                                    <span>Upload Resume</span>
-                                    <input id="uploadBtn" name="file" type="file" class="upload" file-model="files" onchange="angular.element(this).scope().change(this.value)" />
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-
-                    <div class="row">
-                        <button class="btn btn-primary" ng-click="save()">Save</button>
-                        <button class="btn btn-warning" ng-click="reset()">Reset</button>
-                    </div>
-                </form>
+                    </form>
+                </div>
             </div>
         </div>
     </div>

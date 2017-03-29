@@ -5,6 +5,7 @@
 /*    background-image: url('../images/hero_image.jpg');*/
     margin-top: 35px;
     margin-bottom: 30px;
+    font-family: "Helvetica Neue",Helvetica,Arial,sans-serif;
 }
 /*.navbar {
     background-color: black;
@@ -111,8 +112,9 @@ hr {
 
 /*Manage Job Applicants*/
 .formcontainer{
-    background-color: #DAE8E8;
+    background-color: #fff;
     padding: 20px;
+    border: 1px solid #d8dee2;
 }
 
 .tablecontainer{
@@ -170,3 +172,10 @@ hr {
 .recordwork md-content {
     padding: 24px; }
 
+.rightAlign {
+    text-align: right;
+}
+
+.centWidth {
+    width: 100px;
+}
