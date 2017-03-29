@@ -11,7 +11,6 @@ var computingServicesApp = angular.module('computingServices', [
     'computingServices.labSchedule',
     'computingServices.staff',
     'computingServices.staffSchedule',
-    'computingServices.register',
 
     /*admin modules*/
     'computingServices.manageLabAssistants',

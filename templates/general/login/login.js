@@ -101,12 +101,12 @@ angular.module('computingServices.login', ['ngRoute'])
 
     return service;
 
-    function Login(username, password, callback) {
+    function Login(userId, password, callback) {
 
         $timeout(function () {
             var response;
-            //$http.get('/api/users/' + username).then(handleSuccess, handleError('Error getting user by username'));
-            LocalLoginService.GetByUsername(username)
+            //$http.get('/api/users/' + userId).then(handleSuccess, handleError('Error getting user by userId'));
+            LocalLoginService.GetByuserId(userId)
                 .then(function (user) {
                     if (user !== null && user.password === password) {
                         response = {
@@ -115,7 +115,7 @@ angular.module('computingServices.login', ['ngRoute'])
                     } else {
                         response = {
                             success: false,
-                            message: 'Username or password is incorrect'
+                            message: 'userId or password is incorrect'
                         };
                     }
                     callback(response);
@@ -125,14 +125,14 @@ angular.module('computingServices.login', ['ngRoute'])
 
     };
 
-    function SetCredentials(username, password) {
+    function SetCredentials(userId, password) {
 
-        var authdata = Base64.encode(username + ':' + password);
+        var authdata = Base64.encode(userId + ':' + password);
 
         console.log('Base64: '+JSON.stringify(authdata));
         $rootScope.globals = {
             currentUser: {
-                username: username,
+                userId: userId,
                 authdata: authdata
             }
         };
@@ -153,9 +153,13 @@ angular.module('computingServices.login', ['ngRoute'])
 .factory('LoginService', ['$http', '$q', function ($http, $q) {
 
     var LOGIN_USER_URI = constants.url + 'login/';
+    var REGISTER_CHECK_URI = constants.url + 'registrationCheck/';
+    var REGISTER_USER_URI = constants.url + 'register/';
 
     var factory = {
         loginUser: loginUser,
+        canUserRegister: canUserRegister,
+        registerUser: registerUser
     };
 
     return factory;
@@ -165,8 +169,8 @@ angular.module('computingServices.login', ['ngRoute'])
         console.log('User details for login: ', user);
         var deferred = $q.defer();
 
-        if (user.username === "1643568") {
-            console.log('control inside testing method : ', user.username);
+        if (user.userId === 1643568) {
+            console.log('control inside testing method : ', user.userId);
             var userDetails = {
                 "authToken": "shfulig{}}#@aelf734769q8rp3278",
                 "name": "Arif Akram",
@@ -175,12 +179,14 @@ angular.module('computingServices.login', ['ngRoute'])
                 "role": "Admin",
                 "code": 200
             };
-            deferred.resolve(userDetails);
-            return deferred.promise;
         } else {
-            deferred.reject("Login call failure");
-            return deferred.promise;
+            var userDetails = {
+                "message": "Either the ID or Password is incorrect",
+                "code": 403
+            };
         }
+        deferred.resolve(userDetails);
+        return deferred.promise;
 
         // Real http call to server
         /*$http({
@@ -209,20 +215,93 @@ angular.module('computingServices.login', ['ngRoute'])
 
     }
 
+    //Check if user can register
+    function canUserRegister(userId) {
+        console.log('User to verify registration for is : ', userId);
+        var deferred = $q.defer();
+
+        if (userId === 1) {
+            console.log('control inside testing method : ', userId);
+            var result = {
+                "code": 200
+            };
+        } else {
+            var result = {
+                "code": 403
+            };
+        }
+        deferred.resolve(result);
+        return deferred.promise;
+
+        //Real Server Call
+        /*$http({
+                method: 'POST',
+                url: REGISTER_CHECK_URI,
+                headers: {
+                    'Content-Type': undefined
+                },
+                params: {
+                    userId: userId
+                }
+            })
+            .success(function (data, status, headers, config) {
+                deferred.resolve(data);
+            })
+            .error(function (data, status, headers, config) {
+                console.log('Registration check Failure ', status);
+                deferred.reject(data);
+            });
+        return deferred.promise;*/
+    }
+
+    //Register new user
+    function registerUser(user) {
+        console.log('User to register : ', user);
+        var deferred = $q.defer();
+
+        $http({
+                method: 'POST',
+                url: REGISTER_USER_URI,
+                headers: {
+                    'Content-Type': undefined
+                },
+
+                transformRequest: function (data) {
+                    var formData = new FormData();
+                    formData.append("userDetails", angular.toJson(user));
+                    return formData;
+                }
+            })
+            .success(function (data, status, headers, config) {
+                console.log('Registration Success ', data);
+                deferred.resolve(data);
+            })
+            .error(function (data, status, headers, config) {
+                console.log('Registration Failure ', status);
+                deferred.reject(data);
+            });
+        return deferred.promise;
+    }
 }])
 
-.controller('LoginCtrl', ['$scope', 'LoginService', '$location', 'SharedService', function ($scope, LoginService, $location, SharedService) {
+.controller('LoginCtrl', ['$scope', 'LoginService', '$location', 'SharedService', '$mdDialog', function ($scope, LoginService, $location, SharedService, $mdDialog) {
+
+    navigateToHomeIfAlreadyLoggedIn();
+
+    //function to redirect user to home page if logged in
+    function navigateToHomeIfAlreadyLoggedIn() {
+        if (SharedService.isUserAuthenticated()) {
+            console.log("Navigating to home page as user is already logged in : ", SharedService.isUserAuthenticated());
+            SharedService.navigateToHome();
+            return;
+        }
+    }
 
     //responsible for logging in the user
-    $scope.login = function () {
-        console.log('Logging in ', $scope.username);
+    $scope.login = function (user) {
+        console.log('Logging in ', $scope.user);
         //Start spinner
         $scope.dataLoading = true;
-
-        var user = {
-            username: $scope.username,
-            password: $scope.password
-        };
 
         var promise = LoginService.loginUser(user);
         promise.then(function (result) {
@@ -272,4 +351,125 @@ angular.module('computingServices.login', ['ngRoute'])
         SharedService.setAuthToken(userDetails.authToken);
     }
 
+    //Clear login form
+    $scope.clearLoginForm = function () {
+        $scope.user = undefined;
+        $scope.loginForm.$setPristine();
+        $scope.loginForm.$setUntouched();
+    }
+
+    //Check if the given user id is authorized to register
+    $scope.checkUserValidity = function (user) {
+
+        var promise = LoginService.canUserRegister(user.userId);
+        promise.then(function (result) {
+                console.log('Login Success, data retrieved :', result);
+
+                if (result.code === 500) {
+                    SharedService.showError('Error occurred while registering you. Please contact Lab Assistant or Lab Manager');
+                    return;
+                }
+
+                if (result.code === 200) {
+                    $scope.canUserRegister = true;
+                } else {
+                    notifyUser('This ID is not authorized for registration. Please contact Lab Assistant or Lab Manager.');
+                    return;
+                }
+            })
+            .catch(function (resError) {
+                console.log('FAILURE :: ', resError);
+                //show failure message to the user
+                SharedService.showError('Server Error. System could not process your request');
+            });
+    }
+
+    //Register the user such that he can login
+    $scope.register = function (user) {
+        console.log('user to be registerd is ', user);
+        if ($scope.registerForm.$valid) {
+
+            if (user.password !== user.confirmedPassword) {
+                notifyUser('Passwords do not match. Please verify and re-submit.');
+                return;
+            }
+
+            //remove the below property before calling server
+            delete user.confirmedPassword;
+            //remove secret key before calling server
+            delete user.secretKey;
+
+            //call server to register new user
+            var promise = LoginService.registerUser(user);
+            promise.then(function (result) {
+                    console.log('Registration Success, data retrieved :', result);
+
+                    if (result.code === 404) {
+                        SharedService.showWarning(result.message);
+                        return;
+                    }
+                    if (result.code === 403) {
+                        SharedService.showError(result.message);
+                        return;
+                    }
+
+                    if (result.code === 500) {
+                        SharedService.showError('Error occurred while registering. Please contact administrator');
+                        return;
+                    }
+
+                    //Show success message to the user
+                    SharedService.showSuccess(result.message + '. You can now login');
+
+                    //show first tab
+                    $scope.showTab(1);
+
+                    //clear register form
+                    $scope.clearRegisterForm();
+                })
+                .catch(function (resError) {
+                    console.log('FAILURE :: ', resError);
+                    //show failure message to the user
+                    SharedService.showError('Server Error. System could not register you.');
+                });
+
+        } else {
+            console.log('form is invalid');
+            //notify user to correct the form data before submitting
+            notifyUser('Please fill in all the fields to register.');
+            return;
+        }
+    }
+
+    //Clear registerForm fields
+    $scope.clearRegisterForm = function () {
+        $scope.user = undefined;
+        $scope.registerForm.$setPristine();
+        $scope.registerForm.$setUntouched();
+    }
+
+    //Start ID validity check again
+    $scope.startRegistration = function () {
+        $scope.canUserRegister = false;
+    }
+
+    $scope.showTab = function (index) {
+        if (index === 1) {
+            $scope.isFirstTabActive = true;
+            $scope.isSecondTabActive = false;
+        } else if (index === 2) {
+            $scope.isFirstTabActive = false;
+            $scope.isSecondTabActive = true;
+        }
+    }
+
+    //alerts to user
+    function notifyUser(message) {
+        $mdDialog.show(
+            $mdDialog.alert()
+            .clickOutsideToClose(true)
+            .textContent(message)
+            .ok('Got it!')
+        );
+    }
 }]);

@@ -1,3 +1,4 @@
+<!--
 <div class="col-md-6 col-md-offset-3">
     <h2>Login</h2>
     <form name="form" ng-submit="login()" role="form" ng-controller="LoginCtrl">
@@ -18,3 +19,103 @@
         </div>
     </form>
 </div>
+-->
+<br/>
+<br/>
+<div ng-controller="LoginCtrl">
+    <div class="col-md-8 col-md-offset-2">
+        <md-content class="md-padding">
+            <md-tabs md-dynamic-height md-border-bottom>
+
+                <!--Login Tab-->
+                <md-tab label="Login" md-on-select="showTab(1)" md-active="isFirstTabActive">
+                    <md-toolbar class="md-primary">
+                        <div class="md-toolbar-tools">
+                            <h2 class="md-flex">Login</h2>
+                        </div>
+                    </md-toolbar>
+
+                    <form name="loginForm" role="form" layout-layout-padding ng-cloak>
+                        <div layout="row">
+                            <md-input-container flex="" md-no-float class="md-block">
+                                <label>User ID</label>
+                                <input name="userId" ng-model="user.userId" type="number" required>
+                            </md-input-container>
+
+                            <md-input-container flex="5" md-no-float class="md-block">
+                            </md-input-container>
+
+                            <md-input-container flex="" md-no-float class="md-block">
+                                <label>Password</label>
+                                <input name="password" ng-model="user.password" type="password" required>
+                            </md-input-container>
+                        </div>
+
+                        <div layout="row" layout-align="center" flex>
+                            <md-button class="md-raised md-primary" ng-disabled="!loginForm.$valid" ng-click="login(user)">Login</md-button>
+                            <md-button class="md-raised md-default" ng-click="clearLoginForm()">Clear</md-button>
+                        </div>
+                    </form>
+                </md-tab>
+
+                <!--Register Tab-->
+                <md-tab label="Register" md-active="showTab(2)" md-active="isSecondTabActive">
+                    <md-toolbar class="md-primary">
+                        <div class="md-toolbar-tools">
+                            <h2 class="md-flex">Register</h2>
+                        </div>
+                    </md-toolbar>
+
+                    <!--Check if user can register-->
+                    <form name="checkAuthorizationForm" role="form" layout="column" ng-hide="canUserRegister" layout-padding ng-cloak>
+                        <md-content class="md-no-momentum">
+                            <md-input-container md-no-float class="md-block">
+                                <input ng-model="user.userId" type="number" placeholder="Id Number" required>
+                                <div ng-messages="checkAuthorizationForm.idNumber.$error">
+                                    <div ng-message="required">This is required.</div>
+                                </div>
+                            </md-input-container>
+                        </md-content>
+
+                        <div layout="row" layout-align="center" flex>
+                            <md-button class="md-raised md-default" ng-disabled="!user.userId" ng-click="checkUserValidity(user)">Continue</md-button>
+                        </div>
+                    </form>
+
+                    <form name="registerForm" role="form" ng-show="canUserRegister" layout-padding ng-cloak>
+                        <div layout="row">
+                            <md-input-container flex="" md-no-float class="md-block">
+                                <label>Password</label>
+                                <input name="password" ng-model="user.password" type="password" required>
+                            </md-input-container>
+
+                            <md-input-container flex="5" md-no-float class="md-block">
+                            </md-input-container>
+
+                            <md-input-container flex="" md-no-float class="md-block">
+                                <label>Confirm Password</label>
+                                <input name="confirmedPassword" ng-model="user.confirmedPassword" type="password" required>
+                            </md-input-container>
+
+                            <md-input-container flex="5" md-no-float class="md-block">
+                            </md-input-container>
+
+                            <md-input-container flex="" md-no-float class="md-block">
+                                <label>Secret Key</label>
+                                <input name="email" ng-model="user.secretKey" type="text" required>
+                            </md-input-container>
+                        </div>
+
+                        <div layout="row" layout-align="center" flex>
+                            <md-button class="md-raised md-primary" ng-disabled="!registerForm.$valid" ng-click="register(user)">Register</md-button>
+                            <md-button class="md-raised md-default" ng-click="clearRegisterForm()">Clear</md-button>
+                            <md-button class="md-raised md-default" ng-click="startRegistration()">Start Over</md-button>
+                        </div>
+                    </form>
+                </md-tab>
+
+            </md-tabs>
+        </md-content>
+    </div>
+</div>
+
