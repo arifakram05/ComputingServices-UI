@@ -1,90 +1,86 @@
-<div layout="column" ng-cloak ng-controller="ManageJobApplicantsCtrl">
+<br/><br/>
+<div layout="column" class="col-md-10 col-md-offset-1" ng-cloak ng-controller="ManageJobApplicantsCtrl">
     <div id="viewJobApplicantsDiv">
-        <md-tabs md-dynamic-height md-border-bottom>
 
-            <!--beginning of first tab-->
-            <md-tab label="View Job Applicants">
-                <md-content class="md-padding">
-                    <md-toolbar class="md-primary">
-                        <div class="md-toolbar-tools">
-                            <h2 class="md-flex">Job Applicants</h2>
-                        </div>
-                    </md-toolbar>
-                    <md-content layout-padding>
+        <md-content class="md-padding">
+            <md-toolbar class="md-primary">
+                <div class="md-toolbar-tools">
+                    <h2 class="md-flex">Job Applicants</h2>
+                </div>
+            </md-toolbar>
+            <md-content layout-padding>
 
-                        <div layout="row" layout-align="center" md-no-float class="md-block">
-                            <md-input-container flex="50">
-                                <input ng-model="search" id="search" placeholder="Search Job Applicants">
-                            </md-input-container>
-                        </div>
+                <div layout="row" layout-align="center" md-no-float class="md-block">
+                    <md-input-container flex="50" ng-style="{'height':'20px'}">
+                        <input ng-model="search" id="search" placeholder="Search Job Applicants">
+                    </md-input-container>
+                </div>
 
-                        <div flex="75" ng-style="{'text-align':'left', 'margin':'0 auto'}">
-                            <table class="table borderless" >
-                                <thead>
-                                    <tr>
-                                        <th ng-style="{'text-align':'left'}">First Name</th>
-                                        <th ng-style="{'text-align':'left'}">Last Name</th>
-                                        <th ng-style="{'text-align':'left'}">Education</th>
-                                        <th ng-style="{'text-align':'left'}">Resume</th>
-                                        <th ng-style="{'text-align':'left'}">Actions</th>
-                                    </tr>
-                                </thead>
-                                <tbody dir-paginate="applicant in jobApplicants | filter : search | itemsPerPage : pageSize">
-                                    <form name="vjaform">
-                                        <tr>
-                                            <td>
-                                                <span ng-bind="applicant.firstName"></span>
-                                            </td>
+                <div flex="90" ng-style="{'text-align':'left', 'margin':'0 auto'}">
+                    <table class="table borderless">
+                        <thead>
+                            <tr>
+                                <th ng-style="{'text-align':'left'}">First Name</th>
+                                <th ng-style="{'text-align':'left'}">Last Name</th>
+                                <th ng-style="{'text-align':'left'}">Education</th>
+                                <th ng-style="{'text-align':'left'}">Resume</th>
+                                <th ng-style="{'text-align':'left', 'width':'170px'}">Actions</th>
+                            </tr>
+                        </thead>
+                        <tbody dir-paginate="applicant in jobApplicants | filter : search | itemsPerPage : pageSize">
+                            <form name="vjaform">
+                                <tr>
+                                    <td>
+                                        <span ng-bind="applicant.firstName"></span>
+                                    </td>
 
-                                            <td>
-                                                <span ng-bind="applicant.lastName"></span>
-                                            </td>
+                                    <td>
+                                        <span ng-bind="applicant.lastName"></span>
+                                    </td>
 
-                                            <td>
-                                                <span ng-bind="applicant.education"></span>
-                                            </td>
+                                    <td>
+                                        <span ng-bind="applicant.education"></span>
+                                    </td>
 
-                                            <td>
-                                                <a class="btn btn-default btn">
-                                                    <i class="glyphicon glyphicon-save-file"></i>
-                                                </a>
-                                            </td>
+                                    <td>
+                                        <a class="btn btn-default btn">
+                                            <i class="glyphicon glyphicon-save-file"></i>
+                                        </a>
+                                    </td>
 
-                                            <td>
-                                                <div class="btn-group">
-                                                    <button type="button" class="btn btn-danger btn" ng-click="delete(applicant.studentId)">
-                                                        <i class="glyphicon glyphicon-trash"></i>
-                                                    </button>
+                                    <td>
+                                        <div class="btn-group">
+                                            <button type="button" class="btn btn-danger btn" ng-click="delete(applicant.studentId)">
+                                                <i class="glyphicon glyphicon-trash"></i>
+                                            </button>
 
-                                                    <button type="button" class="btn btn-default btn" ng-click="email(applicant)">
-                                                        <i class="glyphicon glyphicon-envelope"></i>
-                                                    </button>
+                                            <button type="button" class="btn btn-default btn" ng-click="email(applicant)">
+                                                <i class="glyphicon glyphicon-envelope"></i>
+                                            </button>
 
-                                                    <button type="button" class="btn btn-primary btn" ng-click="hire(applicant)">
-                                                        <i class="glyphicon glyphicon-star"></i>
-                                                    </button>
+                                            <button type="button" class="btn btn-primary btn" ng-click="hire(applicant)">
+                                                <i class="glyphicon glyphicon-star"></i>
+                                            </button>
 
-                                                    <button type="button" class="btn btn-default btn" ng-click="edit(applicant); showDetails(applicant)">
-                                                        <i class="fa fa-binoculars"></i>
-                                                    </button>
-                                                </div>
-                                            </td>
-                                        </tr>
-                                    </form>
-                                </tbody>
-                            </table>
-                        </div>
+                                            <button type="button" class="btn btn-default btn" ng-click="edit(applicant); showDetails(applicant)">
+                                                <i class="fa fa-binoculars"></i>
+                                            </button>
+                                        </div>
+                                    </td>
+                                </tr>
+                            </form>
+                        </tbody>
+                    </table>
+                </div>
 
-                        <div>
-                            <div class="text-center">
-                                <dir-pagination-controls max-size="5" boundary-links="true" direction-links="true" on-page-change="pageChangeHandler(newPageNumber)" template-url="core/dirPagination.tpl.html"></dir-pagination-controls>
-                            </div>
-                        </div>
-                    </md-content>
-                </md-content>
-            </md-tab>
+                <div>
+                    <div class="text-center">
+                        <dir-pagination-controls max-size="5" boundary-links="true" direction-links="true" on-page-change="pageChangeHandler(newPageNumber)" template-url="core/dirPagination.tpl.html"></dir-pagination-controls>
+                    </div>
+                </div>
+            </md-content>
+        </md-content>
 
-        </md-tabs>
     </div>
 
     <div class="modal fade" id="jadModal" tabindex="-1" role="dialog" aria-labelledby="jadeModal" aria-hidden="true">
@@ -188,7 +184,6 @@
         </div>
     </div>
 </div>
-
 
 
 <!--<div class="comptingServices">
