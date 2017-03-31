@@ -12,8 +12,7 @@ angular.module('computingServices.manageLabAssistants', ['ngRoute'])
 
 .factory('ManageLabAssistantsService', ['$http', '$q', function ($http, $q) {
 
-    /*http://127.0.0.1:8080/ComputingServicesApp/home/users*/
-    var REST_SERVICE_URI = constants.url + 'services/viewJobApplicants';
+    var GET_LAB_ASSISTANTS_URI = constants.url + 'admin/viewLabAssistants';
 
     var factory = {
         fetchAllUsers: fetchAllUsers
@@ -29,12 +28,12 @@ angular.module('computingServices.manageLabAssistants', ['ngRoute'])
         var deferred = $q.defer();
         $http({
                 method: 'GET',
-                url: REST_SERVICE_URI
+                url: GET_LAB_ASSISTANTS_URI
             })
             .then(
                 function (response) {
                     console.log('data from web service: ', response);
-                    deferred.resolve(response.data);
+                    deferred.resolve(response.data.response);
                 },
                 function (errResponse) {
                     console.error('Error while making service call to fetch Users');
