@@ -46,7 +46,7 @@ angular.module('computingServices.careers', ['ngRoute'])
     }
 }])
 
-.controller('CareersCtrl', ['$scope', 'CareersService', function ($scope, CareersService) {
+.controller('CareersCtrl', ['$scope', 'CareersService', '$filter', function ($scope, CareersService, $filter) {
 
     $scope.user = {};
 
@@ -65,6 +65,7 @@ angular.module('computingServices.careers', ['ngRoute'])
 
         if ($scope.userForm.$valid) {
             console.log($scope.user);
+            $scope.user.dateApplied = $filter('date')(new Date(), 'd MMM, yyyy');
             /*http://127.0.0.1:8080/ComputingServicesApp/home/careers2*/
             CareersService.post(constants.url + 'general/careers', $scope.user, $scope.files);
             //reset form after receiving response

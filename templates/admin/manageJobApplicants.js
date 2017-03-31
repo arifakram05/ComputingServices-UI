@@ -11,7 +11,7 @@ angular.module('computingServices.manageJobApplicants', ['ngRoute'])
 
 .factory('ManageJobApplicantsService', ['$http', '$q', function ($http, $q) {
 
-    var GET_JOB_APPLICANTS_URI = constants.url + 'services/viewJobApplicants';
+    var GET_JOB_APPLICANTS_URI = constants.url + 'admin/viewJobApplicants';
     var DELETE_JOB_APPLICANT_URI = constants.url + 'services/deleteJobApplicant?';
     var UPDATE_JOB_APPLICANT_URI = constants.url + 'services/updateJobApplicant';
     var HIRE_JOB_APPLICANT_URI = constants.url +  'services/hireJobApplicant';
@@ -37,7 +37,7 @@ angular.module('computingServices.manageJobApplicants', ['ngRoute'])
             .then(
                 function success(response) {
                     console.log('data from web service: ', response);
-                    deferred.resolve(response.data);
+                    deferred.resolve(response.data.response);
                 },
                 function error(errResponse) {
                     console.error('Error while making service call to fetch Users ', errResponse);
