@@ -176,6 +176,14 @@ hr {
     text-align: right;
 }
 
+.centerAlign {
+    text-align: center;
+}
+
+.zeroBottomMargin {
+    margin-bottom: 0px;
+}
+
 .centWidth {
     width: 100px;
 }
