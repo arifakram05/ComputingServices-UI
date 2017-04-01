@@ -100,20 +100,32 @@ angular.module('computingServices.manageJobApplicants', ['ngRoute'])
         return deferred.promise;
     }
 
-    function hireJobApplicant(jobApplicant) {
+    function hireJobApplicant(labAssistant) {
+        console.log('lab assistant details : ', labAssistant);
         var deferred = $q.defer();
 
-        $http.post(HIRE_JOB_APPLICANT_URI, JSON.stringify(jobApplicant))
-            .success(
-                function (data, status, headers, config) {
-                    console.log('Hire operation success', data);
-                    deferred.resolve(data.resposne);
-                })
-            .error(
-                function (data, status, header, config) {
-                    console.log('Hire operation failed ', status);
-                    deferred.reject(data);
-                });
+        $http({
+            method: 'POST',
+            url: HIRE_JOB_APPLICANT_URI,
+            headers: {
+                'Content-Type': undefined
+            },
+
+            transformRequest: function (data) {
+                var formData = new FormData();
+                formData.append("labAssistant", angular.toJson(labAssistant));
+                return formData;
+            }
+        }).
+        success(function (data, status, headers, config) {
+            console.log('Hire operation success', data);
+            deferred.resolve(data);
+        }).
+        error(function (data, status, headers, config) {
+            console.log('Hire operation failed ', status);
+            deferred.reject(data);
+        });
+
         return deferred.promise;
     }
 
@@ -136,7 +148,7 @@ angular.module('computingServices.manageJobApplicants', ['ngRoute'])
 
 }])
 
-.controller('ManageJobApplicantsCtrl', ['$scope', 'ManageJobApplicantsService', 'SharedService', function ($scope, ManageJobApplicantsService, SharedService) {
+.controller('ManageJobApplicantsCtrl', ['$scope', 'ManageJobApplicantsService', 'SharedService', '$filter', function ($scope, ManageJobApplicantsService, SharedService, $filter) {
     console.log('clicked on manage job applicants');
 
     $scope.jobApplicants = [];
@@ -231,13 +243,13 @@ angular.module('computingServices.manageJobApplicants', ['ngRoute'])
         promise.then(function (result) {
 
                 if (result.statusCode === 200) {
-                    SharedService.showSuccess('Successfully deleted job applicant - ' + studentId);
+                    SharedService.showSuccess(result.message);
                     //refresh table contents
                     fetchAllJobApplicants();
                     console.log('Delete Operation success, refershing job applicants table');
                     return;
                 } else {
-                    SharedService.showError('Could not delete job applicant - ' + studentId);
+                    SharedService.showError(result.message);
                 }
             })
             .catch(function (resError) {
@@ -248,19 +260,21 @@ angular.module('computingServices.manageJobApplicants', ['ngRoute'])
     }
 
     //Hire the job applicant
-    $scope.hire = function (jobApplicant) {
-        console.log('Hiring applicant', jobApplicant);
+    $scope.hire = function (labAssistant) {
+        console.log('Hiring applicant', labAssistant);
 
-        var promise = ManageJobApplicantsService.hireJobApplicant(jobApplicant);
+        labAssistant.dateHired = $filter('date')(new Date(), 'mediumDate');
+
+        var promise = ManageJobApplicantsService.hireJobApplicant(labAssistant);
         promise.then(function (result) {
                 if (result.statusCode === 200) {
-                    SharedService.showSuccess('Successfully hired job applicant - ' + studentId + '. You can find this candidate in lab assistants list');
+                    SharedService.showSuccess(result.message);
                     //refresh table contents
                     fetchAllJobApplicants();
                     console.log('Hiring operation success, refershing job applicants table');
                     return;
                 } else {
-                    SharedService.showError('Could not hire job applicant - ' + studentId);
+                    SharedService.showError(result.message);
                 }
             })
             .catch(function (resError) {
