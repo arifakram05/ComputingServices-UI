@@ -12,9 +12,9 @@ angular.module('computingServices.manageJobApplicants', ['ngRoute'])
 .factory('ManageJobApplicantsService', ['$http', '$q', function ($http, $q) {
 
     var GET_JOB_APPLICANTS_URI = constants.url + 'admin/viewJobApplicants';
-    var DELETE_JOB_APPLICANT_URI = constants.url + 'services/deleteJobApplicant?';
-    var UPDATE_JOB_APPLICANT_URI = constants.url + 'services/updateJobApplicant';
-    var HIRE_JOB_APPLICANT_URI = constants.url +  'services/hireJobApplicant';
+    var DELETE_JOB_APPLICANT_URI = constants.url + 'admin/deleteJobApplicant';
+    var UPDATE_JOB_APPLICANT_URI = constants.url + 'admin/updateJobApplicant';
+    var HIRE_JOB_APPLICANT_URI = constants.url + 'admin/hireJobApplicant';
     var EMAIL_JOB_APPLICANT_URI = constants.url + 'services/emailJobApplicant';
 
     //define all factory methods
@@ -50,20 +50,23 @@ angular.module('computingServices.manageJobApplicants', ['ngRoute'])
     function deleteJobApplicant(studentId) {
         var deferred = $q.defer();
 
-        var data = $.param({
-            studentId: studentId
-        });
-
-        $http.delete(DELETE_JOB_APPLICANT_URI + data)
-            .success(
-                function (response) {
-                    console.log('record deleted ', response);
+        $http({
+                method: 'DELETE',
+                url: DELETE_JOB_APPLICANT_URI,
+                params: {
+                    studentId: studentId
+                }
+            })
+            .then(
+                function success(response) {
+                    console.log('record deleted: ', response);
                     deferred.resolve(response.data);
-                })
-            .error(function (resError) {
-                console.log('error while deleting ', resError);
-                deferred.reject(errResponse);
-            });
+                },
+                function error(errResponse) {
+                    console.error('Error while deleting ', errResponse);
+                    deferred.reject(errResponse);
+                }
+            );
         return deferred.promise;
     }
 
@@ -104,7 +107,7 @@ angular.module('computingServices.manageJobApplicants', ['ngRoute'])
             .success(
                 function (data, status, headers, config) {
                     console.log('Hire operation success', data);
-                    deferred.resolve(data);
+                    deferred.resolve(data.resposne);
                 })
             .error(
                 function (data, status, header, config) {
@@ -133,7 +136,7 @@ angular.module('computingServices.manageJobApplicants', ['ngRoute'])
 
 }])
 
-.controller('ManageJobApplicantsCtrl', ['$scope', 'ManageJobApplicantsService', function ($scope, ManageJobApplicantsService) {
+.controller('ManageJobApplicantsCtrl', ['$scope', 'ManageJobApplicantsService', 'SharedService', function ($scope, ManageJobApplicantsService, SharedService) {
     console.log('clicked on manage job applicants');
 
     $scope.jobApplicants = [];
@@ -164,11 +167,11 @@ angular.module('computingServices.manageJobApplicants', ['ngRoute'])
     $scope.showDetails = function (applicant) {
         $scope.selectedApplicant = applicant;
         $('#jadModal').modal('show');
-        console.log('preparing to show detail in modal ',$scope.selectedApplicant);
+        console.log('preparing to show detail in modal ', $scope.selectedApplicant);
     }
 
     //Create backup
-    function createBackup (jobApplicant) {
+    function createBackup(jobApplicant) {
         jobApplicant.backupFirstName = angular.copy(jobApplicant.firstName);
         jobApplicant.backupLastName = angular.copy(jobApplicant.lastName);
         jobApplicant.backupPhone = angular.copy(jobApplicant.phone);
@@ -177,7 +180,7 @@ angular.module('computingServices.manageJobApplicants', ['ngRoute'])
     }
 
     //Restore backup
-    function restore (jobApplicant) {
+    function restore(jobApplicant) {
         jobApplicant.firstName = angular.copy(jobApplicant.backupFirstName);
         jobApplicant.lastName = angular.copy(jobApplicant.backupLastName);
         jobApplicant.phone = angular.copy(jobApplicant.backupPhone);
@@ -186,7 +189,7 @@ angular.module('computingServices.manageJobApplicants', ['ngRoute'])
     }
 
     //Delete backup fields
-    function deleteBackup (jobApplicant) {
+    function deleteBackup(jobApplicant) {
         delete jobApplicant.backupFirstName;
         delete jobApplicant.backupLastName;
         delete jobApplicant.backupPhone;
@@ -226,11 +229,22 @@ angular.module('computingServices.manageJobApplicants', ['ngRoute'])
 
         var promise = ManageJobApplicantsService.deleteJobApplicant(studentId);
         promise.then(function (result) {
-            console.log('Operation success, refershing job applicants table');
-            //refresh table contents
-            fetchAllJobApplicants();
-        });
 
+                if (result.statusCode === 200) {
+                    SharedService.showSuccess('Successfully deleted job applicant - ' + studentId);
+                    //refresh table contents
+                    fetchAllJobApplicants();
+                    console.log('Delete Operation success, refershing job applicants table');
+                    return;
+                } else {
+                    SharedService.showError('Could not delete job applicant - ' + studentId);
+                }
+            })
+            .catch(function (resError) {
+                console.log('DELETE FAILURE :: ', resError);
+                //show failure message to the user
+                SharedService.showError('Failed to delete job applicant');
+            });
     }
 
     //Hire the job applicant
@@ -239,10 +253,21 @@ angular.module('computingServices.manageJobApplicants', ['ngRoute'])
 
         var promise = ManageJobApplicantsService.hireJobApplicant(jobApplicant);
         promise.then(function (result) {
-            console.log('Hiring operation success, refershing job applicants table');
-            //refresh table contents
-            fetchAllJobApplicants();
-        });
+                if (result.statusCode === 200) {
+                    SharedService.showSuccess('Successfully hired job applicant - ' + studentId + '. You can find this candidate in lab assistants list');
+                    //refresh table contents
+                    fetchAllJobApplicants();
+                    console.log('Hiring operation success, refershing job applicants table');
+                    return;
+                } else {
+                    SharedService.showError('Could not hire job applicant - ' + studentId);
+                }
+            })
+            .catch(function (resError) {
+                console.log('HIRING CALL FAILURE :: ', resError);
+                //show failure message to the user
+                SharedService.showError('Failed to hire job applicant');
+            });
     }
 
     $scope.email = function (jobApplicant) {
