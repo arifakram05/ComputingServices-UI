@@ -45,26 +45,31 @@
 
                                     <td>
                                         <a class="btn btn-default btn">
-                                            <i class="glyphicon glyphicon-save-file"></i>
+                                            <i class="fa fa-download"></i>
+                                            <md-tooltip>Download Resume</md-tooltip>
                                         </a>
                                     </td>
 
                                     <td>
                                         <div class="btn-group">
                                             <button type="button" class="btn btn-danger btn" ng-click="delete(applicant.studentId)">
-                                                <i class="glyphicon glyphicon-trash"></i>
+                                                <i class="fa fa-trash-o"></i>
+                                                <md-tooltip>Delete Applicant</md-tooltip>
                                             </button>
 
                                             <button type="button" class="btn btn-default btn" ng-click="email(applicant)">
-                                                <i class="glyphicon glyphicon-envelope"></i>
+                                                <i class="fa fa-envelope-o"></i>
+                                                <md-tooltip>Email Applicant</md-tooltip>
                                             </button>
 
                                             <button type="button" class="btn btn-primary btn" ng-click="hire(applicant)">
-                                                <i class="glyphicon glyphicon-star"></i>
+                                                <i class="fa fa-star-o"></i>
+                                                <md-tooltip>Hire Applicant</md-tooltip>
                                             </button>
 
                                             <button type="button" class="btn btn-default btn" ng-click="edit(applicant); showDetails(applicant)">
                                                 <i class="fa fa-binoculars"></i>
+                                                <md-tooltip>Details</md-tooltip>
                                             </button>
                                         </div>
                                     </td>
