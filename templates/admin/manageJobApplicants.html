@@ -1,4 +1,5 @@
-<br/><br/>
+<br/>
+<br/>
 <div layout="column" class="col-md-10 col-md-offset-1" ng-cloak ng-controller="ManageJobApplicantsCtrl">
     <div id="viewJobApplicantsDiv">
 
@@ -190,91 +191,3 @@
         </div>
     </div>
 </div>
-
-
-<!--<div class="comptingServices">
-    <div class="generic-container">
-        <div class="panel panel-primary" ng-controller="ManageJobApplicantsCtrl">
-            <div class="panel-heading">Job Applicants</div>
-            <div class="panel-body">
-                <div class="col-xs-4">
-                    <h3>Page: {{ currentPage }}</h3>
-                </div>
-                <div class="col-xs-4">
-                    <label for="search">Search:</label>
-                    <input ng-model="search" id="search" class="form-control" placeholder="Search Job Applicants">
-                </div>
-                <div class="col-xs-4">
-                    <h3>Items Per Page: {{ pageSize }}</h3>
-                </div>
-                <table class="table table-striped table-hover">
-                    <thead>
-                        <tr>
-                            <th ng-click="sort('studentId')">Student Id <span class="glyphicon sort-icon" ng-show="sortKey=='studentId'" ng-class="{'glyphicon-chevron-up':!reverse,'glyphicon-chevron-down':reverse}"></span></th>
-                            <th ng-click="sort('firstName')">First Name <span class="glyphicon sort-icon" ng-show="sortKey=='firstName'" ng-class="{'glyphicon-chevron-up':!reverse,'glyphicon-chevron-down':reverse}"></span></th>
-                            <th ng-click="sort('lastName')">Last Name <span class="glyphicon sort-icon" ng-show="sortKey=='lastName'" ng-class="{'glyphicon-chevron-up':!reverse,'glyphicon-chevron-down':reverse}"></span></th>
-                            <th>Email</th>
-                            <th>Phone</th>
-                            <th ng-click="sort('dateApplied')">Applied On <span class="glyphicon sort-icon" ng-show="sortKey=='dateApplied'" ng-class="{'glyphicon-chevron-up':!reverse,'glyphicon-chevron-down':reverse}"></span></th>
-                            <th ng-click="sort('education')">Degree <span class="glyphicon sort-icon" ng-show="sortKey=='education'" ng-class="{'glyphicon-chevron-up':!reverse,'glyphicon-chevron-down':reverse}"></span></th>
-                            <th>Resume</th>
-                            <th width="20%">Actions</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        <tr dir-paginate="applicant in jobApplicants | orderBy:sortKey: reverse | filter:search | itemsPerPage: pageSize">
-                            <td><span ng-bind="applicant.studentId"></span></td>
-                            <td>
-                                <span ng-hide="applicant.editing" ng-bind="applicant.firstName"></span>
-                                <input ng-show="applicant.editing" type="text" ng-model="applicant.firstName" ng-required/>
-                            </td>
-                            <td>
-                                <span ng-hide="applicant.editing" ng-bind="applicant.lastName"></span>
-                                <input ng-show="applicant.editing" type="text" ng-model="applicant.lastName" ng-required/>
-                            </td>
-                            <td>
-                                <span ng-hide="applicant.editing" ng-bind="applicant.email"></span>
-                                <input ng-show="applicant.editing" type="email" ng-model="applicant.email" ng-required/>
-                            </td>
-                            <td>
-                                <span ng-hide="applicant.editing" ng-bind="applicant.phone"></span>
-                                <input ng-show="applicant.editing" type="text" ng-model="applicant.phone" ng-required/>
-                            </td>
-                            <td>{{applicant.dateApplied}}</td>
-                            <td>
-                                <span ng-hide="applicant.editing" ng-bind="applicant.education"></span>
-                                <select class="form-control" name="education" id="education" ng-show="applicant.editing" ng-model="applicant.education">
-                                    <option value="UNDERGRAD">UNDERGRAD</option>
-                                    <option value="GRAD">GRAD</option>
-                                    <option value="POSTGRAD">POSTGRAD</option>
-                                </select>
-                            </td>
-                            <td>
-                                <div class="btn-group">
-                                    <button type="button" class="btn btn-default btn"><i class="    glyphicon glyphicon-save-file"></i></button>
-                                </div>
-                            </td>
-                            <td>
-                                <div class="btn-group">
-
-                                    <button type="button" class="btn btn-default btn" ng-hide="applicant.editing" ng-click="edit(applicant); applicant.editing = true"><i class="glyphicon glyphicon-pencil"></i></button>
-                                    <button type="button" class="btn btn-default btn" ng-show="applicant.editing" ng-click="update(applicant); applicant.editing = true"><i class="glyphicon glyphicon-floppy-disk"></i></button>
-                                    <button type="button" class="btn btn-default btn" ng-show="applicant.editing" ng-click="cancel(applicant); applicant.editing = false"><i class="glyphicon glyphicon-remove"></i></button>
-
-                                    <button type="button" class="btn btn-default btn" ng-click="delete(applicant.studentId)"><i class="glyphicon glyphicon-trash"></i></button>
-                                    <button type="button" class="btn btn-default btn" ng-hide="applicant.editing" ng-click="email(applicant)"><i class="glyphicon glyphicon-envelope"></i></button>
-                                    <button type="button" class="btn btn-default btn" ng-hide="applicant.editing" ng-click="hire(applicant)"><i class="glyphicon glyphicon-star"></i></button>
-                                </div>
-                            </td>
-                        </tr>
-                    </tbody>
-                </table>
-                <div>
-                    <div class="text-center">
-                        <dir-pagination-controls max-size="5" boundary-links="true" direction-links="true" on-page-change="pageChangeHandler(newPageNumber)" template-url="core/dirPagination.tpl.html"></dir-pagination-controls>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </div>
-</div>-->

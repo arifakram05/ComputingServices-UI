@@ -187,3 +187,7 @@ hr {
 .centWidth {
     width: 100px;
 }
+
+.toolbar {
+    background-color: rgb(16,108,200);
+}

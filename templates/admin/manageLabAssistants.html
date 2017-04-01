@@ -1,13 +1,20 @@
-<br/><br/>
+<br/>
+<br/>
 <div class="comptingServices" ng-controller="ManageLabAssistantsCtrl">
-    <div class="panel panel-default">
-        <!-- Default panel contents -->
-        <div class="panel-heading"><span class="lead">Lab Assistants</span></div>
+    <md-toolbar class="md-primary">
+        <div class="toolbar">
+            <div class="md-toolbar-tools">
+                <h2 class="md-flex">Lab Assistants</h2>
+            </div>
+        </div>
+    </md-toolbar>
+
+    <md-content flex layout-padding>
         <div class="tablecontainer" ng-style="{'overflow':'auto'}">
-            <table class="table table-hover">
+            <table class="table borderless">
                 <thead>
                     <tr>
-                        <th>ID</th>
+                        <th ng-style="{'text-align':'left'}">ID</th>
                         <th>First Name</th>
                         <th>Last Name</th>
                         <th>Email</th>
@@ -19,7 +26,7 @@
                         <th>Resume</th>
                         <th>Profile</th>
                         <th>Address</th>
-                        <th width="30%"></th>
+                        <th ng-style="{'text-align':'left', 'width':'170px'}"></th>
                     </tr>
                 </thead>
                 <tbody>
@@ -46,20 +53,32 @@
                         <td><span ng-bind="u.address"></span></td>
                         <td>
                             <div class="btn-group">
-                                <button type="button" ng-hide="u.editing" ng-click="edit(u); u.editing = true" class="btn btn-success custom-width">Edit</button>
-                                <button type="button" ng-show="u.editing" ng-click="u.editing = false" class="btn btn-success custom-width">Update</button>
-                                <button type="button" ng-show="u.editing" ng-click="cancel(u); u.editing = false" class="btn btn-warning custom-width">Cancel</button>
-                                <button type="button" ng-click="removeditinge(u.id)" class="btn btn-danger custom-width">Remove</button>
-                                <button type="button" ng-click="makeActiveOrInactive(u.id,u.buttonText)" class="btn btn-default custom-width" ng-init="u.buttonText = 'Do It'">
-                                    <span ng-if="u.status == 'ACTIVE'" ng-init="u.buttonText = 'makeInActive'">Make Inactive</span>
-                                    <span ng-if="u.status == 'INACTIVE'" ng-init="u.buttonText = 'makeActive'">Make Active</span>
-                                    <span ng-if="u.status == null" ng-init="u.buttonText = 'makeWhatever'">whatever</span>
+                                <button type="button" class="btn btn-default btn" ng-hide="u.editing" ng-click="edit(u); u.editing = true">
+                                    <i class="fa fa-pencil"></i>
+                                    <md-tooltip>Edit</md-tooltip>
                                 </button>
+                                <button type="button" class="btn btn-warn btn" ng-show="u.editing" ng-click="u.editing = false">
+                                    <i class="fa fa-wrench"></i>
+                                    <md-tooltip>Update</md-tooltip>
+                                </button>
+                                <button type="button" class="btn btn-default btn" ng-show="u.editing" ng-click="cancel(u); u.editing = false">
+                                    <i class="fa fa-ban"></i>
+                                    <md-tooltip>Cancel</md-tooltip>
+                                </button>
+                                <button type="button" class="btn btn-danger btn" ng-click="removeditinge(u.id)">
+                                    <i class="fa fa-trash-o"></i>
+                                    <md-tooltip>Remove</md-tooltip>
+                                </button>
+                                <!--<button type="button" ng-click="makeActiveOrInactive(u.id,u.buttonText)" class="btn btn-default custom-width" ng-init="u.buttonText = 'Do It'">
+<span ng-if="u.status == 'ACTIVE'" ng-init="u.buttonText = 'makeInActive'">Make Inactive</span>
+<span ng-if="u.status == 'INACTIVE'" ng-init="u.buttonText = 'makeActive'">Make Active</span>
+<span ng-if="u.status == null" ng-init="u.buttonText = 'makeWhatever'">whatever</span>
+</button>-->
                             </div>
                         </td>
                     </tr>
                 </tbody>
             </table>
         </div>
-    </div>
+    </md-content>
 </div>
