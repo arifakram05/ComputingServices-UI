@@ -67,16 +67,21 @@ angular.module('computingServices.authorize', ['ngRoute'])
                     }
                 })
                 .catch(function (resError) {
-                    console.log('AUTHORIZE FAILURE :: ', resError);
-                    //show failure message to the user
-                    SharedService.showError('Failed to authorize the user for registration');
+                    if (resError.statusCode === 404) {
+                        SharedService.showInfo(resError.message);
+                        $scope.clearForm();
+                    } else {
+                        console.log('AUTHORIZE FAILURE :: ', resError);
+                        //show failure message to the user
+                        SharedService.showError('Failed to authorize the user for registration');
+                    }
                 });
         }
     }
 
     //Clear form fields
     $scope.clearForm = function () {
-        $scope.idNumber = undefined;
+        $scope.user = undefined;
         $scope.authorizeAUserForm.$setPristine();
         $scope.authorizeAUserForm.$setUntouched();
     }
