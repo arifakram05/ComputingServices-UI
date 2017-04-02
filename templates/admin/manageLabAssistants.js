@@ -215,8 +215,8 @@ angular.module('computingServices.manageLabAssistants', ['ngRoute'])
     $scope.deleteLA = function (laId) {
 
         var confirm = $mdDialog.confirm()
-            .title('Are you sure you want to delete?')
-            .textContent('You cannot retrieve the data once it is delted. Continue?')
+            .title('Are you sure you want to delete LA with ID '+laId+'?')
+            .textContent('You cannot retrieve the data once it is deleted. Continue?')
             .ok('Yes')
             .cancel('No');
 
