@@ -14,14 +14,17 @@ angular.module('computingServices.manageLabAssistants', ['ngRoute'])
 
     var GET_LAB_ASSISTANTS_URI = constants.url + 'admin/viewLabAssistants';
     var DELETE_LAB_ASSISTANT_URI = constants.url + 'admin/deleteLabAssistant';
+    var UPDATE_LAB_ASSISTANT_URI = constants.url + 'admin/updateLabAssistant';
 
     var factory = {
         getAllLabAssistants: getAllLabAssistants,
-        deleteLabAssistant: deleteLabAssistant
+        deleteLabAssistant: deleteLabAssistant,
+        updateLabAssistant: updateLabAssistant
     };
 
     return factory;
 
+    // get all lab assistants
     function getAllLabAssistants() {
         var deferred = $q.defer();
         $http({
@@ -41,6 +44,7 @@ angular.module('computingServices.manageLabAssistants', ['ngRoute'])
         return deferred.promise;
     }
 
+    // delete a lab assistant
     function deleteLabAssistant(laId) {
         var deferred = $q.defer();
 
@@ -61,6 +65,34 @@ angular.module('computingServices.manageLabAssistants', ['ngRoute'])
                     deferred.reject(errResponse);
                 }
             );
+        return deferred.promise;
+    }
+
+    // update a lab assistant
+    function updateLabAssistant(la) {
+        var deferred = $q.defer();
+
+        $http({
+                method: 'POST',
+                url: UPDATE_LAB_ASSISTANT_URI,
+                headers: {
+                    'Content-Type': undefined
+                },
+
+                transformRequest: function (data) {
+                    var formData = new FormData();
+                    formData.append("labAssistant", angular.toJson(la));
+                    return formData;
+                }
+            })
+            .success(function (data, status, headers, config) {
+                console.log('Update operation success');
+                deferred.resolve(data);
+            })
+            .error(function (data, status, headers, config) {
+                console.log('Update operation failed ', status);
+                deferred.reject(data);
+            });
         return deferred.promise;
     }
 
@@ -135,21 +167,48 @@ angular.module('computingServices.manageLabAssistants', ['ngRoute'])
             );
     }
 
-    $scope.edit = function edit(la) {
-        console.log('id to be edited', la.studentId);
-        /*for(var i = 0; i < $scope.users.length; i++){
-            if($scope.users[i].id === id) {
-                $scope.user = angular.copy($scope.users[i]);
-                break;
-            }
-        }*/
-    }
-
     //show LA details in a modal
     $scope.showDetails = function (la) {
         $scope.selectedLA = la;
         $('#ladModal').modal('show');
         console.log('preparing to show detail in modal ', $scope.selectedLA);
+    }
+
+    //Edit lab assistant
+    $scope.edit = function edit(la) {
+        console.log('id to be edited', la.studentId);
+        createBackup(la);
+    }
+
+    //Cancel the edit operation
+    $scope.cancel = function (la) {
+        console.log('Cancelling edit operation for ', la);
+        restore(la);
+        deleteBackup(la);
+    }
+
+    //Update lab assistant
+    $scope.update = function (la) {
+        console.log('Updating details for lab assistant ', la);
+        deleteBackup(la);
+        //call service method to update edited details
+        var promise = ManageLabAssistantsService.updateLabAssistant(la);
+        promise.then(function (result) {
+                if (result.statusCode === 200) {
+                    SharedService.showSuccess(result.message);
+                    //refresh table contents
+                    fetchAllUsers();
+                    console.log('Operation success, refershing lab assistants table');
+                    return;
+                } else {
+                    SharedService.showError(result.message);
+                }
+            })
+            .catch(function (resError) {
+                console.log('UPDATE FAILURE :: ', resError);
+                //show failure message to the user
+                SharedService.showError('Failed to update lab assistant');
+            });
     }
 
     //Delete a LA
@@ -185,5 +244,23 @@ angular.module('computingServices.manageLabAssistants', ['ngRoute'])
 
         });
     };
+
+    //Create backup
+    function createBackup(la) {
+        la.backupStatus = angular.copy(la.status);
+        la.backupComments = angular.copy(la.comments);
+    }
+
+    //Restore backup
+    function restore(la) {
+        la.status = angular.copy(la.backupStatus);
+        la.comments = angular.copy(la.backupStatus);
+    }
+
+    //Delete backup fields
+    function deleteBackup(la) {
+        delete la.backupStatus;
+        delete la.backupStatus;
+    }
 
 }]);
