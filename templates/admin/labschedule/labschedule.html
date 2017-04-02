@@ -1,0 +1,17 @@
+<br/>
+<br/>
+<div ng-controller="managelabschedulectrl">
+    <div layout="row" layout-align="center center" flex>
+        <div ng-show="SelectedEvent" class="alert alert-success">
+            <p style="color:#A9A50E">{{SelectedEvent.title}}</p>
+            <span>{{SelectedEvent.start}}</span> - <span>{{SelectedEvent.end}}</span>
+            <span>{{SelectedEvent.description}}</span>
+        </div>
+    </div>
+
+    <div class="row styleCal">
+        <div class="col-md-12">
+            <div id="calendar" ui-calendar="uiConfig.calendar" ng-model="eventSources" calendar="myCalendar"></div>
+        </div>
+    </div>
+</div>

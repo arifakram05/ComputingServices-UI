@@ -14,6 +14,8 @@
     <link rel="stylesheet" href="css/angular-material.min.css">
     <!-- Angular Material Calendar -->
     <link rel="stylesheet" href="lib/material-calendar/angular-material-event-calendar.css">
+    <!--UI Calendar-->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/fullcalendar/3.3.1/fullcalendar.min.css">
     <!--Angular growl 2-->
     <link rel="stylesheet" media="screen" href="css/angular-growl.min.css">
     <!--font awesome-->
@@ -56,7 +58,7 @@
                         <ul class="dropdown-menu">
                             <li><a href="#/manageJobApplicants">Job Applicants</a></li>
                             <li><a href="#/manageLabAssistants">Lab Assistants</a></li>
-                            <li><a href="#/manageLabSchedule">Lab Schedule</a></li>
+                            <li><a href="#/managelabschedule">Lab Schedule</a></li>
                             <li><a href="#/manageStaffSchedule">Staff Schedule</a></li>
                             <li><a href="#/manageRoles">Roles</a></li>
                             <li><a href="#/authorize">Authorize</a></li>
@@ -120,6 +122,10 @@
     <script src="lib/angular-growl.min.js"></script>
     <!--Material Calendar-->
     <script src="lib/material-calendar/angular-material-event-calendar.js"></script>
+    <!--UI calendar-->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.18.1/moment.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/angular-ui-calendar/1.0.0/calendar.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/fullcalendar/3.3.1/fullcalendar.min.js"></script>
 
     <script src="core/constants.js"></script>
     <script src="core/app.js"></script>
@@ -136,7 +142,7 @@
 
     <script src="templates/admin/manageLabAssistants.js"></script>
     <script src="templates/admin/manageJobApplicants.js"></script>
-    <script src="templates/admin/manageLabSchedule.js"></script>
+    <script src="templates/admin/labschedule/labschedule.js"></script>
     <script src="templates/admin/manageRoles.js"></script>
     <script src="templates/admin/manageStaffSchedule.js"></script>
     <script src="templates/admin/authorize.js"></script>

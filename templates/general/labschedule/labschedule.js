@@ -1,6 +1,6 @@
 'use strict';
 
-angular.module('computingServices.labSchedule', ['ngRoute'])
+angular.module('computingServices.labSchedule', ['ngRoute', 'material.components.eventCalendar'])
 
 .config(['$routeProvider', function ($routeProvider) {
     $routeProvider.
@@ -10,7 +10,7 @@ angular.module('computingServices.labSchedule', ['ngRoute'])
     })
 }])
 
-.controller('labScheduleCtrl', ['$scope', '$filter', '$timeout', function ($scope, $filter, $timeout) {
+    .controller('labScheduleCtrl', ['$scope', '$filter', '$timeout', 'SharedService', '$injector', function ($scope, $filter, $timeout, SharedService, $injector) {
     /*$http.get('json/templates.json').success(function(data){
         $scope.templates = data;
     });*/
@@ -73,4 +73,9 @@ angular.module('computingServices.labSchedule', ['ngRoute'])
     $scope.eventClicked = function ($selectedEvent) {
         console.log('selected: ', $selectedEvent);
     }
+
+    $scope.createEvent = function (date) {
+        console.log('creating event on ', date);
+    }
+
 }]);

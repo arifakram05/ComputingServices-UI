@@ -201,3 +201,8 @@ hr {
 .toolbar {
     background-color: rgb(16,108,200);
 }
+
+.styleCal {
+    background-color: #FFF;
+    padding: 20px;
+}

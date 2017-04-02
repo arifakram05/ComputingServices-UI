@@ -1,7 +1,7 @@
 'use strict';
 
 var computingServicesApp = angular.module('computingServices', [
-    'ngRoute', 'ngCookies', 'ngMaterial', 'ngMessages', 'angular-growl', 'material.components.eventCalendar',
+    'ngRoute', 'ngCookies', 'ngMaterial', 'ngMessages', 'angular-growl',
     'computingServices.login',
     'computingServices.home',
     'computingServices.careers',
@@ -15,10 +15,10 @@ var computingServicesApp = angular.module('computingServices', [
     /*admin modules*/
     'computingServices.manageLabAssistants',
     'computingServices.manageJobApplicants',
-    'computingServices.manageLabSchedule',
     'computingServices.manageRoles',
     'computingServices.authorize',
     'computingServices.manageStaffSchedule',
+    'computingServices.managelabschedule',
 
     /*lab assistant modules*/
     'computingServices.recordwork',
