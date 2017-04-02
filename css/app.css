@@ -140,12 +140,22 @@ hr {
 
 #statusActive {
     color: white;
-    background:green;
+    background: green;
 }
 
 #statusInActive {
     color: white;
-    background:red;
+    background: red;
+}
+
+#statusAlumni {
+    color: black;
+    background: yellow;
+}
+
+#statusNew {
+    color: antiquewhite;
+    background: blue;
 }
 
 .viewJobApplicantsSearchBar {

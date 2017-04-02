@@ -54,8 +54,10 @@
                             <span ng-bind="u.education"></span>
                         </td>
                         <td>
-                            <span id="statusActive" ng-if="u.status == 'ACTIVE'" ng-bind="u.status"></span>
-                            <span id="statusInActive" ng-if="u.status == 'INACTIVE'" ng-bind="u.status"></span>
+                            <span id="statusActive" ng-if="u.status == 'Active'" ng-bind="u.status"></span>
+                            <span id="statusInActive" ng-if="u.status == 'InActive'" ng-bind="u.status"></span>
+                            <span id="statusAlumni" ng-if="u.status == 'Alumni'" ng-bind="u.status"></span>
+                            <span id="statusNew" ng-if="u.status == 'New'" ng-bind="u.status"></span>
                             <span id="statusNull" ng-if="u.status == null">N/A</span>
                         </td>
                         <td>
