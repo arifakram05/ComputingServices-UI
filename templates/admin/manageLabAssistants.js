@@ -13,18 +13,16 @@ angular.module('computingServices.manageLabAssistants', ['ngRoute'])
 .factory('ManageLabAssistantsService', ['$http', '$q', function ($http, $q) {
 
     var GET_LAB_ASSISTANTS_URI = constants.url + 'admin/viewLabAssistants';
+    var DELETE_LAB_ASSISTANT_URI = constants.url + 'admin/deleteLabAssistant';
 
     var factory = {
-        fetchAllUsers: fetchAllUsers
-            /*,
-            createUser: createUser,
-            updateUser:updateUser,
-            deleteUser:deleteUser*/
+        getAllLabAssistants: getAllLabAssistants,
+        deleteLabAssistant: deleteLabAssistant
     };
 
     return factory;
 
-    function fetchAllUsers() {
+    function getAllLabAssistants() {
         var deferred = $q.defer();
         $http({
                 method: 'GET',
@@ -37,6 +35,29 @@ angular.module('computingServices.manageLabAssistants', ['ngRoute'])
                 },
                 function (errResponse) {
                     console.error('Error while making service call to fetch Users');
+                    deferred.reject(errResponse);
+                }
+            );
+        return deferred.promise;
+    }
+
+    function deleteLabAssistant(laId) {
+        var deferred = $q.defer();
+
+        $http({
+                method: 'DELETE',
+                url: DELETE_LAB_ASSISTANT_URI,
+                params: {
+                    studentId: laId
+                }
+            })
+            .then(
+                function success(response) {
+                    console.log('record deleted: ', response);
+                    deferred.resolve(response.data);
+                },
+                function error(errResponse) {
+                    console.error('Error while deleting ', errResponse);
                     deferred.reject(errResponse);
                 }
             );
@@ -91,23 +112,25 @@ angular.module('computingServices.manageLabAssistants', ['ngRoute'])
 
 }])
 
-.controller('ManageLabAssistantsCtrl', ['$scope', 'ManageLabAssistantsService', function ($scope, ManageLabAssistantsService) {
+.controller('ManageLabAssistantsCtrl', ['$scope', 'ManageLabAssistantsService', 'SharedService', '$filter', '$mdDialog', function ($scope, ManageLabAssistantsService, SharedService, $filter, $mdDialog) {
 
     $scope.user = {};
     $scope.las = [];
     $scope.currentPage = 1;
-    $scope.pageSize = 10
+    $scope.pageSize = 10;
+    $scope.deleteConfirm = false;
 
     fetchAllUsers();
 
     function fetchAllUsers() {
-        ManageLabAssistantsService.fetchAllUsers()
+        ManageLabAssistantsService.getAllLabAssistants()
             .then(
                 function (data) {
                     $scope.las = data;
                 },
                 function (errResponse) {
                     console.error('Error while fetching Users');
+                    SharedService.showError('Failed to load lab assistants');
                 }
             );
     }
@@ -129,59 +152,38 @@ angular.module('computingServices.manageLabAssistants', ['ngRoute'])
         console.log('preparing to show detail in modal ', $scope.selectedLA);
     }
 
-    /*function createUser(user){
-        ManageCareersService.createUser(user)
-            .then(
-            fetchAllUsers,
-            function(errResponse){
-                console.error('Error while creating User');
-            }
-        );
-    }
+    //Delete a LA
+    $scope.deleteLA = function (laId) {
 
-    function updateUser(user, id){
-        ManageCareersService.updateUser(user, id)
-            .then(
-            fetchAllUsers,
-            function(errResponse){
-                console.error('Error while updating User');
-            }
-        );
-    }
+        var confirm = $mdDialog.confirm()
+            .title('Are you sure you want to delete?')
+            .textContent('You cannot retrieve the data once it is delted. Continue?')
+            .ok('Yes')
+            .cancel('No');
 
-    function deleteUser(id){
-        ManageCareersService.deleteUser(id)
-            .then(
-            fetchAllUsers,
-            function(errResponse){
-                console.error('Error while deleting User');
-            }
-        );
-    }
+        $mdDialog.show(confirm).then(function () {
+            console.log('this shows up because user clicked YES');
 
-    function submit() {
-        if(self.user.id===null){
-            console.log('Saving New User', self.user);
-            createUser(self.user);
-        }else{
-            updateUser(self.user, self.user.id);
-            console.log('User updated with id ', self.user.id);
-        }
-        reset();
-    }
+            var promise = ManageLabAssistantsService.deleteLabAssistant(laId);
+            promise.then(function (result) {
 
-    function remove(id){
-        console.log('id to be deleted', id);
-        if(self.user.id === id) {//clean form if the user to be deleted is shown there.
-            reset();
-        }
-        deleteUser(id);
-    }
+                    if (result.statusCode === 200) {
+                        SharedService.showSuccess(result.message);
+                        //refresh table contents
+                        fetchAllUsers();
+                        console.log('Delete Operation success, refershing lab assistants table');
+                        return;
+                    } else {
+                        SharedService.showError(result.message);
+                    }
+                })
+                .catch(function (resError) {
+                    console.log('DELETE FAILURE :: ', resError);
+                    //show failure message to the user
+                    SharedService.showError('Failed to delete lab assistant');
+                });
 
-
-    function reset(){
-        self.user={id:null,username:'',address:'',email:''};
-        $scope.myForm.$setPristine(); //reset Form
-    }*/
+        });
+    };
 
 }]);
