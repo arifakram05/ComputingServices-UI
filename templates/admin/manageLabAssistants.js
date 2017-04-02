@@ -94,11 +94,9 @@ angular.module('computingServices.manageLabAssistants', ['ngRoute'])
 .controller('ManageLabAssistantsCtrl', ['$scope', 'ManageLabAssistantsService', function ($scope, ManageLabAssistantsService) {
 
     $scope.user = {};
-    $scope.users = [];
-
-    $scope.makeActiveOrInactive = function (id, value) {
-        alert(id + ' ' + value);
-    }
+    $scope.las = [];
+    $scope.currentPage = 1;
+    $scope.pageSize = 10
 
     fetchAllUsers();
 
@@ -106,7 +104,7 @@ angular.module('computingServices.manageLabAssistants', ['ngRoute'])
         ManageLabAssistantsService.fetchAllUsers()
             .then(
                 function (data) {
-                    $scope.users = data;
+                    $scope.las = data;
                 },
                 function (errResponse) {
                     console.error('Error while fetching Users');
@@ -114,9 +112,8 @@ angular.module('computingServices.manageLabAssistants', ['ngRoute'])
             );
     }
 
-    $scope.edit = function edit(user) {
-        console.log('id to be edited', user.id);
-        user.backupFirstName = angular.copy(user.firstName);
+    $scope.edit = function edit(la) {
+        console.log('id to be edited', la.studentId);
         /*for(var i = 0; i < $scope.users.length; i++){
             if($scope.users[i].id === id) {
                 $scope.user = angular.copy($scope.users[i]);
@@ -125,10 +122,11 @@ angular.module('computingServices.manageLabAssistants', ['ngRoute'])
         }*/
     }
 
-    $scope.cancel = function cancel(user) {
-        console.log('id to be cancelled', user.id);
-        user.firstName = angular.copy(user.backupFirstName);
-        delete user.backupFirstName;
+    //show LA details in a modal
+    $scope.showDetails = function (la) {
+        $scope.selectedLA = la;
+        $('#ladModal').modal('show');
+        console.log('preparing to show detail in modal ', $scope.selectedLA);
     }
 
     /*function createUser(user){

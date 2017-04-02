@@ -10,75 +10,174 @@
     </md-toolbar>
 
     <md-content flex layout-padding>
+
+        <div layout="row" layout-align="center" md-no-float class="md-block">
+            <md-input-container flex="50" ng-style="{'height':'20px'}">
+                <input ng-model="search" id="search" placeholder="Search Lab Assistants">
+            </md-input-container>
+        </div>
+
         <div class="tablecontainer" ng-style="{'overflow':'auto'}">
             <table class="table borderless">
                 <thead>
                     <tr>
-                        <th ng-style="{'text-align':'left'}">ID</th>
-                        <th>First Name</th>
-                        <th>Last Name</th>
-                        <th>Email</th>
-                        <th>Mobile</th>
-                        <th>Education</th>
-                        <th>Specialization</th>
-                        <th>Status</th>
-                        <th>Comments</th>
-                        <th>Resume</th>
-                        <th>Profile</th>
-                        <th>Address</th>
-                        <th ng-style="{'text-align':'left', 'width':'170px'}"></th>
+                        <th ng-style="{'text-align':'center', 'width':'10%'}">ID</th>
+                        <th ng-style="{'text-align':'center', 'width':'10%'}">First Name</th>
+                        <th ng-style="{'text-align':'center', 'width':'10%'}">Last Name</th>
+                        <th ng-style="{'text-align':'center', 'width':'10%'}">Email</th>
+                        <th ng-style="{'text-align':'center', 'width':'10%'}">Mobile</th>
+                        <th ng-style="{'text-align':'center', 'width':'10%'}">Education</th>
+                        <th ng-style="{'text-align':'center', 'width':'10%'}">Status</th>
+                        <th ng-style="{'text-align':'center', 'width':'20%'}">Actions</th>
                     </tr>
                 </thead>
-                <tbody>
-                    <tr ng-repeat="u in users">
-                        <td><span ng-bind="u.studentId"></span></td>
+
+                <tbody dir-paginate="u in las | filter : search | itemsPerPage : pageSize">
+                    <tr ng-style="{'text-align':'center'}">
                         <td>
-                            <span ng-hide="u.editing" ng-bind="u.firstName"></span>
-                            <input ng-show="u.editing" type="text" ng-model="u.firstName" ng-required/>
+                            <span ng-bind="u.studentId"></span>
                         </td>
-                        <td><span ng-bind="u.lastName"></span></td>
-                        <td><span ng-bind="u.email"></span></td>
-                        <td><span ng-bind="u.phone"></span></td>
-                        <td><span ng-bind="u.education"></span></td>
-                        <td><span ng-bind="u.specialization"></span></td>
                         <td>
-                            <!--<span ng-bind="u.status"></span>-->
+                            <span ng-bind="u.firstName"></span>
+
+                        </td>
+                        <td>
+                            <span ng-bind="u.lastName"></span>
+                        </td>
+                        <td>
+                            <span ng-bind="u.email"></span>
+                        </td>
+                        <td>
+                            <span ng-bind="u.phone"></span>
+                        </td>
+                        <td>
+                            <span ng-bind="u.education"></span>
+                        </td>
+                        <td>
                             <span id="statusActive" ng-if="u.status == 'ACTIVE'" ng-bind="u.status"></span>
                             <span id="statusInActive" ng-if="u.status == 'INACTIVE'" ng-bind="u.status"></span>
-                            <span id="statusNull" ng-if="u.status == null">Null</span>
+                            <span id="statusNull" ng-if="u.status == null">N/A</span>
                         </td>
-                        <td><span ng-bind="u.comments"></span></td>
-                        <td><span ng-bind="u.resume"></span></td>
-                        <td><span ng-bind="u.profile"></span></td>
-                        <td><span ng-bind="u.address"></span></td>
                         <td>
                             <div class="btn-group">
-                                <button type="button" class="btn btn-default btn" ng-hide="u.editing" ng-click="edit(u); u.editing = true">
-                                    <i class="fa fa-pencil"></i>
-                                    <md-tooltip>Edit</md-tooltip>
+                                <button type="button" class="btn btn-primary btn" ng-click="download(u.id)">
+                                    <i class="fa fa-download"></i>
+                                    <md-tooltip>Download Resume</md-tooltip>
                                 </button>
-                                <button type="button" class="btn btn-warn btn" ng-show="u.editing" ng-click="u.editing = false">
-                                    <i class="fa fa-wrench"></i>
-                                    <md-tooltip>Update</md-tooltip>
+
+                                <button type="button" class="btn btn-default btn" ng-click="email(u)">
+                                    <i class="fa fa-envelope-o"></i>
+                                    <md-tooltip>Email Lab Assistant</md-tooltip>
                                 </button>
-                                <button type="button" class="btn btn-default btn" ng-show="u.editing" ng-click="cancel(u); u.editing = false">
-                                    <i class="fa fa-ban"></i>
-                                    <md-tooltip>Cancel</md-tooltip>
-                                </button>
+
                                 <button type="button" class="btn btn-danger btn" ng-click="removeditinge(u.id)">
                                     <i class="fa fa-trash-o"></i>
-                                    <md-tooltip>Remove</md-tooltip>
+                                    <md-tooltip>Delete from records</md-tooltip>
                                 </button>
-                                <!--<button type="button" ng-click="makeActiveOrInactive(u.id,u.buttonText)" class="btn btn-default custom-width" ng-init="u.buttonText = 'Do It'">
-<span ng-if="u.status == 'ACTIVE'" ng-init="u.buttonText = 'makeInActive'">Make Inactive</span>
-<span ng-if="u.status == 'INACTIVE'" ng-init="u.buttonText = 'makeActive'">Make Active</span>
-<span ng-if="u.status == null" ng-init="u.buttonText = 'makeWhatever'">whatever</span>
-</button>-->
+
+                                <button type="button" class="btn btn-default btn" ng-click="edit(u); showDetails(u)">
+                                    <i class="fa fa-binoculars"></i>
+                                    <md-tooltip>Details</md-tooltip>
+                                </button>
                             </div>
                         </td>
                     </tr>
                 </tbody>
             </table>
+            <div>
+                <div class="text-center">
+                    <dir-pagination-controls max-size="5" boundary-links="true" direction-links="true" on-page-change="pageChangeHandler(newPageNumber)" template-url="core/dirPagination.tpl.html"></dir-pagination-controls>
+                </div>
+            </div>
         </div>
     </md-content>
+
+    <div class="modal fade" id="ladModal" tabindex="-1" role="dialog" aria-labelledby="ladeModal" aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+
+                <div class="modal-body">
+                    <md-toolbar class="md-primary">
+                        <div class="md-toolbar-tools">
+                            <h2 class="md-flex">Details of {{selectedLA.lastName}},{{selectedLA.firstName}}. ID# {{selectedLA.studentId}}</h2>
+                        </div>
+                    </md-toolbar>
+
+                    <md-content class="md-no-momentum">
+
+                        <form name="editlaForm" role="form" layout="column" layout-padding ng-cloak>
+
+                            <!--Student ID# and Applied Date, both disabled-->
+                            <div layout="row">
+                                <md-input-container flex="50">
+                                    <label>Applied Job On</label>
+                                    <input name="dateApplied" ng-model="selectedLA.dateApplied" disabled/>
+                                </md-input-container>
+
+                                <md-input-container flex="5"></md-input-container>
+
+                                <md-input-container flex="50">
+                                    <label>Hired On</label>
+                                    <input name="dateHired" ng-model="selectedLA.dateHired" disabled/>
+                                </md-input-container>
+                            </div>
+
+                            <!--Education details-->
+                            <div layout="row">
+                                <md-input-container flex="50">
+                                    <label>Education</label>
+                                    <input name="education" ng-model="selectedLA.education" disabled/>
+                                </md-input-container>
+
+                                <md-input-container flex="10"></md-input-container>
+
+                                <md-input-container flex="50">
+                                    <label>Specialization</label>
+                                    <input name="specialization" ng-model="selectedLA.specialization" disabled/>
+                                </md-input-container>
+                            </div>
+
+                            <!--Status-->
+                            <div layout="row">
+                                <md-input-container flex="50">
+                                    <div layout="row">
+                                        <span><b>Status</b></span>
+                                        <md-input-container flex="10"></md-input-container>
+                                        <select flex="100" class="form-control" name="status" ng-model="selectedLA.status">
+                                            <option value="New">New</option>
+                                            <option value="Active">Active</option>
+                                            <option value="InActive">InActive</option>
+                                            <option value="Alumni">Alumni</option>
+                                        </select>
+                                    </div>
+                                </md-input-container>
+
+                                <md-input-container flex="10"></md-input-container>
+
+                                <md-input-container flex="50">
+                                    <label>Professional Profile Page</label>
+                                    <input name="linkedInProfile" ng-model="selectedLA.profileLink" type="url" disabled>
+                                </md-input-container>
+                            </div>
+
+                            <!--Comments-->
+                            <div layout="row">
+                                <md-input-container flex>
+                                    <label>Comments</label>
+                                    <textarea name="comments" ng-model="selectedLA.comments" md-maxlength="150" rows="3" max-rows="3" md-select-on-focus></textarea>
+                                </md-input-container>
+                            </div>
+
+                            <!--Buttons-->
+                            <div layout="row" layout-align="center" flex>
+                                <md-button class="md-raised md-default" ng-click="cancel(selectedApplicant)" data-dismiss="modal">close</md-button>
+                                <md-button class="md-raised md-primary" ng-click="update(selectedApplicant)">Submit</md-button>
+                            </div>
+
+                        </form>
+                    </md-content>
+                </div>
+            </div>
+        </div>
+    </div>
 </div>
