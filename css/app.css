@@ -194,6 +194,10 @@ hr {
     margin-bottom: 0px;
 }
 
+.topPadding30 {
+    padding-top: 30px;
+}
+
 .centWidth {
     width: 100px;
 }
