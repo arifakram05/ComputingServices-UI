@@ -210,3 +210,7 @@ hr {
     background-color: #FFF;
     padding: 20px;
 }
+
+.selected {
+    border-left: 4px solid #73C20E !important;
+}

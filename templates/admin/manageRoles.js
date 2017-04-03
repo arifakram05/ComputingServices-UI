@@ -20,19 +20,19 @@ angular.module('computingServices.manageRoles', ['ngRoute'])
         var deferred = $q.defer();
 
         $http({
-            method: 'GET',
-            url: GET_JOB_APPLICANTS_URI
-        })
+                method: 'GET',
+                url: GET_JOB_APPLICANTS_URI
+            })
             .then(
-            function success(response) {
-                console.log('data from web service: ', response);
-                deferred.resolve(response.data);
-            },
-            function error(errResponse) {
-                console.error('Error while making service call to fetch roles ', errResponse);
-                deferred.reject(errResponse);
-            }
-        );
+                function success(response) {
+                    console.log('data from web service: ', response);
+                    deferred.resolve(response.data);
+                },
+                function error(errResponse) {
+                    console.error('Error while making service call to fetch roles ', errResponse);
+                    deferred.reject(errResponse);
+                }
+            );
         return deferred.promise;
     }
 }])
@@ -44,18 +44,51 @@ angular.module('computingServices.manageRoles', ['ngRoute'])
         console.log('detailing role: ',role);
     }*/
 
+    getRoles();
+
+    function getRoles() {
+        console.log('making a server call to get all roles and privs', $scope.roles);
+        $scope.roles = [
+            {
+                roleName: 'Admin',
+                availablePrivs: ["/getA", "/getB", "/getC"],
+                assignedPrivs: ["/getD", "/getE"]
+            }, {
+                roleName: 'Lab Assistant',
+                availablePrivs: ["/getD", "/getB", "/getC"],
+                assignedPrivs: ["/getD", "/getA"]
+            }, {
+                roleName: 'Professor',
+                availablePrivs: ["/getD", "/getE", "/getC"],
+                assignedPrivs: ["/getA", "/getB"]
+            }, {
+                roleName: 'Student',
+                availablePrivs: ["/getA", "/getB"],
+                assignedPrivs: ["/getD", "/getE", "/getC"]
+            }
+        ];
+        loadPrivsForAdminRole();
+    }
+
+    function loadPrivsForAdminRole() {
+        $scope.selRoleToShow = $scope.roles[0];
+        console.log('seleted role to show is ', $scope.selRoleToShow);
+        $scope.canShowPrivs = true;
+    }
+
+
     //Create backup
-    function createBackup (role) {
+    function createBackup(role) {
         role.backupRoleName = angular.copy(role.roleName);
     }
 
     //Restore backup
-    function restore (role) {
+    function restore(role) {
         role.roleName = angular.copy(role.backupRoleName);
     }
 
     //Delete backup fields
-    function deleteBackup (role) {
+    function deleteBackup(role) {
         delete role.backupRoleName;
     }
 
@@ -96,22 +129,56 @@ angular.module('computingServices.manageRoles', ['ngRoute'])
             //refresh table contents
             fetchAllJobApplicants();
         });*/
-
     }
 
-    $scope.roles = [{
-        roleId : '1',
-        roleName: 'Admin'
-    },{
-        roleId : '2',
-        roleName : 'Lab Assistant'
-    },{
-        roleId : '3',
-        roleName : 'Professor'
-    }, {
-        roleId : '4',
-        roleName : 'Student'
-    }]
+    // when selected a role
+    $scope.selectRole = function (role) {
+        $scope.selRoleToShow = role;
+        $scope.canShowPrivs = true;
+    }
+
+    //borrowed - START
+    $scope.moveItem = function (item, from, to) {
+
+        console.log('Move item   Item: ' + item + ' From:: ' + from + ' To:: ' + to);
+        //Here from is returned as blank and to as undefined
+
+        angular.forEach(item, function (item2) {
+            var idx = from.indexOf(item2);
+            if (idx != -1) {
+                from.splice(idx, 1);
+                to.push(item2);
+            }
+        });
+    };
+    $scope.moveAll = function (from, to) {
+
+        console.log('Move all  From:: ' + from + ' To:: ' + to);
+        //Here from is returned as blank and to as undefined
+
+        angular.forEach(from, function (item) {
+            to.push(item);
+        });
+        from.length = 0;
+    };
+
+    /*$scope.assignedPrivs = [];
+
+    $scope.availablePrivs = [
+        {
+            id: 1,
+            name: 'foo'
+        },
+        {
+            id: 2,
+            name: 'bar'
+        },
+        {
+            id: 3,
+            name: 'baz'
+        }
+    ];*/
+    //borrowed - END
 
     /*var myDataPromise = ManageRolesService.getRoles();
     myDataPromise.then(function (result) {

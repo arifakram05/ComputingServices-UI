@@ -1,47 +1,89 @@
-<md-list ng-controller="ManageRolesCtrl" ng-cloak>
-    <div class="col-md-8 col-md-offset-2">
-        <md-content class="md-padding">
-            <md-toolbar layout="row">
+<md-list class="computingSerivces topPadding30" ng-controller="ManageRolesCtrl" ng-cloak>
+
+        <md-toolbar class="md-primary">
+            <div class="toolbar">
                 <div class="md-toolbar-tools">
-                    <span>Available Roles</span>
+                    <h2 class="md-flex">Manage Roles and Privileges</h2>
                 </div>
-            </md-toolbar>
+            </div>
+        </md-toolbar>
 
-            <md-list-item ng-repeat="role in roles">
-                <div flex="15">
-                    <a ng-if="!role.isExpanded" ng-click="expandRoleItem(role); role.isExpanded = true" class="btn btn-default btn-sm">
-                        <i class="fa fa-plus-square"></i>
-                    </a>
+        <div layout="row">
 
-                    <a ng-if="role.isExpanded" ng-click="expandRoleItem(role); role.isExpanded = false" class="btn btn-default btn-sm">
-                        <i class="fa fa-minus-square"></i>
-                    </a>
-                </div>
+            <!--ROLES SPACE-->
+            <md-content class="md-padding" ng-style="{'width': '40%'}">
+                <md-list-item ng-repeat="role in roles" ng-click="selectRole(role)"  ng-class="{selected : role === selRoleToShow}">
+                    <span ng-if="!role.editing" ng-bind="role.roleName"></span>
 
+                    <md-input-container flex="50" ng-if="role.editing">
+                        <input required name="roleName" type="text" ng-model="role.roleName" required>
+                    </md-input-container>
 
-                <span ng-if="!role.editing" ng-bind="role.roleName"></span>
-                <md-input-container flex="50" ng-if="role.editing">
-                    <input required name="roleName" type="text" ng-model="role.roleName" required>
-                    <div ng-messages="roleName.$error">
-                        <div ng-message="required">This is required.</div>
+                    <div class="md-secondary" class="btn-group">
+                        <button type="button" class="btn btn-default btn" ng-hide="role.editing" ng-click="editRole(role); role.editing = true"><i class="glyphicon glyphicon-pencil"></i></button>
+
+                        <a class="btn btn-primary" ng-show="role.editing" ng-click="updateRole(role); role.editing = true">
+                            <i class="fa fa-floppy-o fa-lg"></i>
+                        </a>
+
+                        <button type="button" class="btn btn-default btn" ng-show="role.editing" ng-click="cancelRole(role); role.editing = false; role.isExpanded = false"><i class="glyphicon glyphicon-remove"></i></button>
+
+                        <a class="btn btn-danger" ng-click="deleteRole(role)">
+                            <i class="fa fa-trash-o fa-lg"></i>
+                        </a>
                     </div>
-                </md-input-container>
+                    <md-divider></md-divider>
+                </md-list-item>
 
-                <div class="md-secondary" class="btn-group">
-                    <button type="button" class="btn btn-default btn" ng-hide="role.editing" ng-click="editRole(role); role.editing = true"><i class="glyphicon glyphicon-pencil"></i></button>
+                <md-input-container flex="5"></md-input-container>
 
-                    <a class="btn btn-primary" ng-show="role.editing" ng-click="updateRole(role); role.editing = true">
-                        <i class="fa fa-floppy-o fa-lg"></i>
-                    </a>
+            </md-content>
 
-                    <button type="button" class="btn btn-default btn" ng-show="role.editing" ng-click="cancelRole(role); role.editing = false; role.isExpanded = false"><i class="glyphicon glyphicon-remove"></i></button>
+            <!--PRIVILEGES SPACE-->
+            <md-content class="md-padding" ng-style="{'width': '60%'}" ng-if="canShowPrivs === true">
+                <p>Showing privileges for the role - {{selRoleToShow.roleName}}</p>
+                <div layout="row">
 
-                    <a class="btn btn-danger" ng-click="deleteRole(role)">
-                        <i class="fa fa-trash-o fa-lg"></i>
-                    </a>
+                    <div layout="column" ng-style="{'width': '40%'}">
+                        <span>Available Privileges</span>
+                        <select size="10" multiple ng-model="available" ng-options="priv as priv.name for priv in availablePrivs" ></select>
+                    </div>
+
+                    <md-input-container flex="5"></md-input-container>
+
+                    <div ng-style="{'width': '15%'}" layout="column">
+                        <md-input-container flex="10"></md-input-container>
+
+                        <a class="btn btn-primary" ng-click="moveItem(available, availablePrivs,assignedPrivs)">
+                            Add <i class="fa fa-arrow-right fa-lg"></i>
+                        </a>
+
+                        <md-input-container flex="5"></md-input-container>
+
+                        <a class="btn btn-danger" ng-click="moveItem(selected, assignedPrivs,availablePrivs)">
+                            Remove <i class="fa fa-arrow-left fa-lg"></i>
+                        </a>
+                    </div>
+
+                    <md-input-container flex="5"></md-input-container>
+
+                    <div layout="column" ng-style="{'width': '40%'}">
+                        <span>Assigned Privileges</span>
+                        <select size="10" multiple ng-model="selected" ng-options="priv as priv.name for priv in assignedPrivs" ></select>
+                    </div>
+
                 </div>
-                <md-divider></md-divider>
-            </md-list-item>
-        </md-content>
-    </div>
+            </md-content>
+        </div>
+
+        <!-- UNCOMMENT FOR DEV PURPOSE ONLY
+        <br/>
+        <md-content class="md-padding">
+            <div>Selected Clients: {{assignedPrivs}}</div>
+            <div>Available Clients: {{availablePrivs}}</div>
+            <div>Selected: {{selected}}</div>
+            <div>Available: {{available}}</div>
+        </md-content>-->
+
+
 </md-list>
