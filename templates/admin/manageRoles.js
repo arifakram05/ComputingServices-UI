@@ -44,6 +44,8 @@ angular.module('computingServices.manageRoles', ['ngRoute'])
         console.log('detailing role: ',role);
     }*/
 
+    $scope.editingRole = false;
+
     getRoles();
 
     function getRoles() {
@@ -151,7 +153,6 @@ angular.module('computingServices.manageRoles', ['ngRoute'])
 
     $scope.moveItem = function (item, from, to) {
         console.log('Move item   Item: ', item, ' From:: ', from, ' To:: ', to);
-        //Here from is returned as blank and to as undefined
         angular.forEach(item, function (item2) {
             var idx = from.indexOf(item2);
             if (idx != -1) {
@@ -168,38 +169,29 @@ angular.module('computingServices.manageRoles', ['ngRoute'])
         loadPrivsForAdminRole();
     }
 
-    //Create backup
-    function createBackup(role) {
-        role.backupRoleName = angular.copy(role.roleName);
-    }
-
-    //Restore backup
-    function restore(role) {
-        role.roleName = angular.copy(role.backupRoleName);
-    }
-
-    //Delete backup fields
-    function deleteBackup(role) {
-        delete role.backupRoleName;
-    }
-
-    //Edit role details
-    $scope.editRole = function (role) {
-        console.log('clicked on edit role', role);
+    //Edit role name
+    $scope.editRoleName = function (role) {
+        console.log('clicked on edit role name', role);
+        $scope.editingRole = true;
         createBackup(role);
     }
 
-    //Cancel edit operation
-    $scope.cancelRole = function (role) {
-        console.log('Cancelling edit operation for ', role);
+    //Cancel editing role name
+    $scope.cancelRoleNameEdit = function (role) {
+        console.log('Cancelling editing role name ', role);
         restore(role);
         deleteBackup(role);
+        $scope.editingRole = false;
+        console.log('After cancellation ',role);
     }
 
-    //Save update job applicant details
-    $scope.updateRole = function (role) {
-        console.log('Updating details for role ', role);
+    //Save role details
+    $scope.savePrivs = function (role) {
         deleteBackup(role);
+        console.log('saving role details ', role);
+        $scope.editingRole = false;
+        // reload roles and privs
+        getRoles();
 
         //call service method to update edited details
         /*var promise = ManageJobApplicantsService.updateJobApplicant(jobApplicantToUpdate);
@@ -220,6 +212,21 @@ angular.module('computingServices.manageRoles', ['ngRoute'])
             //refresh table contents
             fetchAllJobApplicants();
         });*/
+    }
+
+    //Create backup
+    function createBackup(role) {
+        role.backupRoleName = angular.copy(role.roleName);
+    }
+
+    //Restore backup
+    function restore(role) {
+        role.roleName = angular.copy(role.backupRoleName);
+    }
+
+    //Delete backup
+    function deleteBackup(role) {
+        delete role.backupRoleName;
     }
 
 }]);

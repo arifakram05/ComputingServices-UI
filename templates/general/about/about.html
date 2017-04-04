@@ -1,9 +1,7 @@
 <div class="comptingServices">
-        <div ng-repeat="data in pageData">
-            <h3>{{data.name}}</h3>
-            <p>{{data.description}}</p>
-            <img ng-src="img/{{data.images[0].name}}">
-        </div>
-
-        <div ui-calendar="uiConfig.calendar" class="span8 calendar" ng-model="eventSources"></div>
+    <div ng-repeat="data in pageData">
+        <h3>{{data.name}}</h3>
+        <p>{{data.description}}</p>
+        <img ng-src="img/{{data.images[0].name}}">
+    </div>
 </div>
