@@ -37,7 +37,7 @@ angular.module('computingServices.manageRoles', ['ngRoute'])
     }
 }])
 
-.controller('ManageRolesCtrl', ['$scope', 'ManageRolesService', function ($scope, ManageRolesService) {
+.controller('ManageRolesCtrl', ['$scope', 'ManageRolesService', '$filter', function ($scope, ManageRolesService, $filter) {
     console.log('clicked on manage roles');
 
     /*$scope.expandRoleItem(role) {
@@ -51,23 +51,84 @@ angular.module('computingServices.manageRoles', ['ngRoute'])
         $scope.roles = [
             {
                 roleName: 'Admin',
-                availablePrivs: ["/getA", "/getB", "/getC"],
-                assignedPrivs: ["/getD", "/getE"]
+                availablePrivs: [{
+                    name: '/getA',
+                    description: ''
+                }, {
+                    name: '/getB',
+                    description: ''
+                }, {
+                    name: '/getC',
+                    description: ''
+                }],
+                assignedPrivs: [{
+                    name: '/getD',
+                    description: ''
+                }, {
+                    name: '/getE',
+                    description: ''
+                }]
             }, {
                 roleName: 'Lab Assistant',
-                availablePrivs: ["/getD", "/getB", "/getC"],
-                assignedPrivs: ["/getD", "/getA"]
+                availablePrivs: [{
+                    name: '/getD',
+                    description: ''
+                }, {
+                    name: '/getB',
+                    description: ''
+                }, {
+                    name: '/getC',
+                    description: ''
+                }],
+                assignedPrivs: [{
+                    name: '/getD',
+                    description: ''
+                }, {
+                    name: '/getA',
+                    description: ''
+                }]
             }, {
                 roleName: 'Professor',
-                availablePrivs: ["/getD", "/getE", "/getC"],
-                assignedPrivs: ["/getA", "/getB"]
+                availablePrivs: [{
+                    name: '/getD',
+                    description: ''
+                }, {
+                    name: '/getE',
+                    description: ''
+                }, {
+                    name: '/getC',
+                    description: ''
+                }],
+                assignedPrivs: [{
+                    name: '/getA',
+                    description: ''
+                }, {
+                    name: '/getB',
+                    description: ''
+                }]
             }, {
                 roleName: 'Student',
-                availablePrivs: ["/getA", "/getB"],
-                assignedPrivs: ["/getD", "/getE", "/getC"]
+                availablePrivs: [{
+                    name: '/getA',
+                    description: ''
+                }, {
+                    name: '/getB',
+                    description: ''
+                }],
+                assignedPrivs: [{
+                    name: '/getD',
+                    description: ''
+                }, {
+                    name: '/getE',
+                    description: ''
+                }, {
+                    name: '/getC',
+                    description: ''
+                }]
             }
         ];
         loadPrivsForAdminRole();
+        backupOriginalRoles();
     }
 
     function loadPrivsForAdminRole() {
@@ -76,6 +137,36 @@ angular.module('computingServices.manageRoles', ['ngRoute'])
         $scope.canShowPrivs = true;
     }
 
+    function backupOriginalRoles() {
+        $scope.backupRoles = [];
+        angular.copy($scope.roles, $scope.backupRoles);
+        console.log('After adding backups ', $scope.backupRoles);
+    }
+
+    // when selected a role
+    $scope.selectRole = function (role) {
+        $scope.selRoleToShow = role;
+        $scope.canShowPrivs = true;
+    }
+
+    $scope.moveItem = function (item, from, to) {
+        console.log('Move item   Item: ', item, ' From:: ', from, ' To:: ', to);
+        //Here from is returned as blank and to as undefined
+        angular.forEach(item, function (item2) {
+            var idx = from.indexOf(item2);
+            if (idx != -1) {
+                from.splice(idx, 1);
+                to.push(item2);
+            }
+        });
+        console.log('After moving ', $scope.roles);
+        console.log('After moving ', $scope.backupRoles);
+    };
+
+    $scope.resetPrivs = function (selRole) {
+        angular.copy($scope.backupRoles, $scope.roles);
+        loadPrivsForAdminRole();
+    }
 
     //Create backup
     function createBackup(role) {
@@ -92,7 +183,7 @@ angular.module('computingServices.manageRoles', ['ngRoute'])
         delete role.backupRoleName;
     }
 
-    //Edit job applicant details
+    //Edit role details
     $scope.editRole = function (role) {
         console.log('clicked on edit role', role);
         createBackup(role);
@@ -130,60 +221,5 @@ angular.module('computingServices.manageRoles', ['ngRoute'])
             fetchAllJobApplicants();
         });*/
     }
-
-    // when selected a role
-    $scope.selectRole = function (role) {
-        $scope.selRoleToShow = role;
-        $scope.canShowPrivs = true;
-    }
-
-    //borrowed - START
-    $scope.moveItem = function (item, from, to) {
-
-        console.log('Move item   Item: ' + item + ' From:: ' + from + ' To:: ' + to);
-        //Here from is returned as blank and to as undefined
-
-        angular.forEach(item, function (item2) {
-            var idx = from.indexOf(item2);
-            if (idx != -1) {
-                from.splice(idx, 1);
-                to.push(item2);
-            }
-        });
-    };
-    $scope.moveAll = function (from, to) {
-
-        console.log('Move all  From:: ' + from + ' To:: ' + to);
-        //Here from is returned as blank and to as undefined
-
-        angular.forEach(from, function (item) {
-            to.push(item);
-        });
-        from.length = 0;
-    };
-
-    /*$scope.assignedPrivs = [];
-
-    $scope.availablePrivs = [
-        {
-            id: 1,
-            name: 'foo'
-        },
-        {
-            id: 2,
-            name: 'bar'
-        },
-        {
-            id: 3,
-            name: 'baz'
-        }
-    ];*/
-    //borrowed - END
-
-    /*var myDataPromise = ManageRolesService.getRoles();
-    myDataPromise.then(function (result) {
-        $scope.roles = result;
-        console.log('Roles:' + $scope.roles);
-    });*/
 
 }]);
