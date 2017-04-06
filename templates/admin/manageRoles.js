@@ -29,19 +29,18 @@ angular.module('computingServices.manageRoles', ['ngRoute'])
         var deferred = $q.defer();
 
         $http({
-                method: 'GET',
-                url: GET_ROLES_URI
-            })
-            .then(
-                function success(response) {
-                    console.log('data from web service: ', response);
-                    deferred.resolve(response.data);
-                },
-                function error(errResponse) {
-                    console.error('Error while making service call to fetch roles ', errResponse);
-                    deferred.reject(errResponse);
-                }
-            );
+            method: 'GET',
+            url: GET_ROLES_URI
+        }).then(
+            function success(response) {
+                console.log('data from web service: ', response.data);
+                deferred.resolve(response.data);
+            },
+            function error(errResponse) {
+                console.error('Error while making service call to fetch roles ', errResponse);
+                deferred.reject(errResponse);
+            }
+        );
         return deferred.promise;
     }
 
@@ -61,12 +60,10 @@ angular.module('computingServices.manageRoles', ['ngRoute'])
                 formData.append("role", angular.toJson(role));
                 return formData;
             }
-        }).
-        success(function (data, status, headers, config) {
+        }).success(function (data, status, headers, config) {
             console.log('Updated role: ', data);
             deferred.resolve(data);
-        }).
-        error(function (data, status, headers, config) {
+        }).error(function (data, status, headers, config) {
             console.log('Failed to update the role: ', status);
             deferred.reject(data);
         });
@@ -111,8 +108,16 @@ angular.module('computingServices.manageRoles', ['ngRoute'])
     getRoles();
 
     function getRoles() {
-        console.log('making a server call to get all roles and privs', $scope.roles);
-        $scope.roles = [
+        console.log('making a server call to get all roles and privs');
+        var promise = ManageRolesService.getRoles();
+        promise.then(function (result) {
+            $scope.roles = result.response;
+            console.log('all roles fetched :', $scope.roles);
+            loadPrivsForAdminRole();
+            backupOriginalRoles();
+        });
+        //For testing
+        /*$scope.roles = [
             {
                 roleName: 'Admin',
                 availablePrivs: [{
@@ -190,9 +195,7 @@ angular.module('computingServices.manageRoles', ['ngRoute'])
                     description: ''
                 }]
             }
-        ];
-        loadPrivsForAdminRole();
-        backupOriginalRoles();
+        ];*/
     }
 
     function loadPrivsForAdminRole() {
@@ -250,7 +253,8 @@ angular.module('computingServices.manageRoles', ['ngRoute'])
     //update role details
     $scope.updateRole = function (role) {
         deleteBackup(role);
-        role._id = "58e5cb737205d5669ea48a06";
+        //role._id = "58e5cb737205d5669ea48a06";
+        role._id = role._id.$oid;
         console.log('updating role details ', role);
         $scope.editingRole = false;
 
