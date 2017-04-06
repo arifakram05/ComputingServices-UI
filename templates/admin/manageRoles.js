@@ -10,9 +10,18 @@ angular.module('computingServices.manageRoles', ['ngRoute'])
     })
 }])
 
-.factory('ManageRolesService', ['$http', function ($http) {
+.factory('ManageRolesService', ['$http', '$q', function ($http, $q) {
 
-    var factory = {};
+    var GET_ROLES_URI = constants.url + 'admin/roles';
+    var UPDATE_ROLES_URI = constants.url + 'admin/updateRole';
+    var DELETE_ROLE_URI = constants.url + 'admin/deleteRole';
+
+    //define all factory methods
+    var factory = {
+        getRoles: getRoles,
+        updateRole: updateRole,
+        deleteRole: deleteRole
+    };
 
     return factory;
 
@@ -21,7 +30,7 @@ angular.module('computingServices.manageRoles', ['ngRoute'])
 
         $http({
                 method: 'GET',
-                url: GET_JOB_APPLICANTS_URI
+                url: GET_ROLES_URI
             })
             .then(
                 function success(response) {
@@ -35,9 +44,62 @@ angular.module('computingServices.manageRoles', ['ngRoute'])
             );
         return deferred.promise;
     }
+
+    function updateRole(role) {
+        console.log('role details to update : ', role);
+        var deferred = $q.defer();
+
+        $http({
+            method: 'POST',
+            url: UPDATE_ROLES_URI,
+            headers: {
+                'Content-Type': undefined
+            },
+
+            transformRequest: function (data) {
+                var formData = new FormData();
+                formData.append("role", angular.toJson(role));
+                return formData;
+            }
+        }).
+        success(function (data, status, headers, config) {
+            console.log('Updated role: ', data);
+            deferred.resolve(data);
+        }).
+        error(function (data, status, headers, config) {
+            console.log('Failed to update the role: ', status);
+            deferred.reject(data);
+        });
+
+        return deferred.promise;
+    }
+
+    function deleteRole(roleName) {
+        var deferred = $q.defer();
+
+        $http({
+                method: 'DELETE',
+                url: DELETE_ROLE_URI,
+                params: {
+                    roleName: roleName
+                }
+            })
+            .then(
+                function success(response) {
+                    console.log('record deleted: ', response);
+                    deferred.resolve(response.data);
+                },
+                function error(errResponse) {
+                    console.error('Error while deleting ', errResponse);
+                    deferred.reject(errResponse);
+                }
+            );
+        return deferred.promise;
+    }
+
 }])
 
-.controller('ManageRolesCtrl', ['$scope', 'ManageRolesService', '$filter', function ($scope, ManageRolesService, $filter) {
+.controller('ManageRolesCtrl', ['$scope', 'ManageRolesService', '$filter', 'SharedService', function ($scope, ManageRolesService, $filter, SharedService) {
     console.log('clicked on manage roles');
 
     /*$scope.expandRoleItem(role) {
@@ -182,36 +244,56 @@ angular.module('computingServices.manageRoles', ['ngRoute'])
         restore(role);
         deleteBackup(role);
         $scope.editingRole = false;
-        console.log('After cancellation ',role);
+        console.log('After cancellation ', role);
     }
 
-    //Save role details
-    $scope.savePrivs = function (role) {
+    //update role details
+    $scope.updateRole = function (role) {
         deleteBackup(role);
-        console.log('saving role details ', role);
+        role._id = "58e5cb737205d5669ea48a06";
+        console.log('updating role details ', role);
         $scope.editingRole = false;
-        // reload roles and privs
-        getRoles();
 
-        //call service method to update edited details
-        /*var promise = ManageJobApplicantsService.updateJobApplicant(jobApplicantToUpdate);
+        //call service method to save roles and privs
+        var promise = ManageRolesService.updateRole(role);
         promise.then(function (result) {
-            console.log('Operation success, refershing job applicants table');
-            //refresh table contents
-            fetchAllJobApplicants();
-        });*/
+                if (result.statusCode === 200) {
+                    SharedService.showSuccess(result.message);
+                    // reload roles and privs
+                    getRoles();
+                    return;
+                } else {
+                    SharedService.showError(result.message);
+                }
+            })
+            .catch(function (resError) {
+                console.log('UPDATE ROLE CALL FAILURE :: ', resError);
+                //show failure message to the user
+                SharedService.showError('Failed to update the role and privileges');
+            });
     }
 
     //Delete a job applicant
     $scope.deleteRole = function (role) {
         console.log('Deleting role ', role);
 
-        /*var promise = ManageJobApplicantsService.deleteJobApplicant(studentId);
+        var promise = ManageRolesService.deleteRole(role.roleName);
         promise.then(function (result) {
-            console.log('Operation success, refershing job applicants table');
-            //refresh table contents
-            fetchAllJobApplicants();
-        });*/
+
+                if (result.statusCode === 200) {
+                    SharedService.showSuccess(result.message);
+                    // reload roles and privs
+                    getRoles();
+                    return;
+                } else {
+                    SharedService.showError(result.message);
+                }
+            })
+            .catch(function (resError) {
+                console.log('DELETE ROLE CALL FAILURE :: ', resError);
+                //show failure message to the user
+                SharedService.showError('Failed to delete the role');
+            });
     }
 
     //Create backup
