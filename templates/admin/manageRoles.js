@@ -13,18 +13,21 @@ angular.module('computingServices.manageRoles', ['ngRoute'])
 .factory('ManageRolesService', ['$http', '$q', function ($http, $q) {
 
     var GET_ROLES_URI = constants.url + 'admin/roles';
+    var SAVE_ROLES_URI = constants.url + 'admin/saveRole';
     var UPDATE_ROLES_URI = constants.url + 'admin/updateRole';
     var DELETE_ROLE_URI = constants.url + 'admin/deleteRole';
 
     //define all factory methods
     var factory = {
         getRoles: getRoles,
+        saveRole: saveRole,
         updateRole: updateRole,
         deleteRole: deleteRole
     };
 
     return factory;
 
+    //fetch all roles
     function getRoles() {
         var deferred = $q.defer();
 
@@ -44,6 +47,35 @@ angular.module('computingServices.manageRoles', ['ngRoute'])
         return deferred.promise;
     }
 
+    //create new role
+    function saveRole(role) {
+        console.log('role details to create : ', role);
+        var deferred = $q.defer();
+
+        $http({
+            method: 'POST',
+            url: SAVE_ROLES_URI,
+            headers: {
+                'Content-Type': undefined
+            },
+
+            transformRequest: function (data) {
+                var formData = new FormData();
+                formData.append("role", angular.toJson(role));
+                return formData;
+            }
+        }).success(function (data, status, headers, config) {
+            console.log('Saved role: ', data);
+            deferred.resolve(data);
+        }).error(function (data, status, headers, config) {
+            console.log('Failed to save the role: ', status);
+            deferred.reject(data);
+        });
+
+        return deferred.promise;
+    }
+
+    //update existing role
     function updateRole(role) {
         console.log('role details to update : ', role);
         var deferred = $q.defer();
@@ -71,6 +103,7 @@ angular.module('computingServices.manageRoles', ['ngRoute'])
         return deferred.promise;
     }
 
+    //delete existing role
     function deleteRole(roleName) {
         var deferred = $q.defer();
 
@@ -96,7 +129,7 @@ angular.module('computingServices.manageRoles', ['ngRoute'])
 
 }])
 
-.controller('ManageRolesCtrl', ['$scope', 'ManageRolesService', '$filter', 'SharedService', function ($scope, ManageRolesService, $filter, SharedService) {
+.controller('ManageRolesCtrl', ['$scope', 'ManageRolesService', '$filter', 'SharedService', '$mdDialog', function ($scope, ManageRolesService, $filter, SharedService, $mdDialog) {
     console.log('clicked on manage roles');
 
     /*$scope.expandRoleItem(role) {
@@ -104,6 +137,7 @@ angular.module('computingServices.manageRoles', ['ngRoute'])
     }*/
 
     $scope.editingRole = false;
+    $scope.creatingRole = false;
 
     getRoles();
 
@@ -230,8 +264,14 @@ angular.module('computingServices.manageRoles', ['ngRoute'])
     };
 
     $scope.resetPrivs = function (selRole) {
+        $scope.creatingRole = false;
         angular.copy($scope.backupRoles, $scope.roles);
         loadPrivsForAdminRole();
+    }
+
+    $scope.changeTab = function (selRole) {
+        $scope.creatingRole = false;
+        angular.copy($scope.backupRoles, $scope.roles);
     }
 
     //Edit role name
@@ -252,6 +292,10 @@ angular.module('computingServices.manageRoles', ['ngRoute'])
 
     //update role details
     $scope.updateRole = function (role) {
+        if(role.roleName === 'New Role') {
+            notifyUser('Please rename the role to continue');
+            return;
+        }
         deleteBackup(role);
         //role._id = "58e5cb737205d5669ea48a06";
         role._id = role._id.$oid;
@@ -300,6 +344,50 @@ angular.module('computingServices.manageRoles', ['ngRoute'])
             });
     }
 
+    //Create a new role
+    $scope.createRole = function () {
+        $scope.creatingRole = true;
+        //push a new role into existing roles
+        var allPrivs;
+        allPrivs = $scope.roles[0].availablePrivs.concat($scope.roles[0].assignedPrivs);
+        console.log('new set of avail roles : ', allPrivs);
+
+        var newRole = {
+            roleName: 'New Role',
+            availablePrivs: allPrivs,
+            assignedPrivs: []
+        };
+        $scope.roles.push(newRole);
+        $scope.selRoleToShow = $scope.roles[$scope.roles.length-1];
+    }
+
+    //Save a new role
+    $scope.saveRole = function (role) {
+        if(role.roleName === 'New Role') {
+            notifyUser('Please rename the role to continue');
+            return;
+        }
+        delete role.available;
+        delete role.backupRoleName;
+        //call service method to save roles and privs
+        var promise = ManageRolesService.saveRole(role);
+        promise.then(function (result) {
+                if (result.statusCode === 200) {
+                    SharedService.showSuccess(result.message);
+                    // reload roles and privs
+                    getRoles();
+                    return;
+                } else {
+                    SharedService.showError(result.message);
+                }
+            })
+            .catch(function (resError) {
+                console.log('SAVE ROLE CALL FAILURE :: ', resError);
+                //show failure message to the user
+                SharedService.showError('Failed to save the role and privileges');
+            });
+    }
+
     //Create backup
     function createBackup(role) {
         role.backupRoleName = angular.copy(role.roleName);
@@ -307,12 +395,24 @@ angular.module('computingServices.manageRoles', ['ngRoute'])
 
     //Restore backup
     function restore(role) {
-        role.roleName = angular.copy(role.backupRoleName);
+        if(role.backupRoleName != null) {
+            role.roleName = angular.copy(role.backupRoleName);
+        }
     }
 
     //Delete backup
     function deleteBackup(role) {
         delete role.backupRoleName;
+    }
+
+    //alerts to user
+    function notifyUser(message) {
+        $mdDialog.show(
+            $mdDialog.alert()
+            .clickOutsideToClose(true)
+            .textContent(message)
+            .ok('Got it!')
+        );
     }
 
 }]);

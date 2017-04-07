@@ -11,7 +11,7 @@
 
         <!--ROLES SPACE-->
         <md-content class="md-padding" ng-style="{'width': '30%'}">
-            <md-list-item ng-repeat="role in roles" ng-click="selectRole(role)" ng-class="{selected : role === selRoleToShow}">
+            <md-list-item ng-repeat="role in roles" ng-click="selectRole(role);changeTab(role);" ng-class="{selected : role.roleName === selRoleToShow.roleName}">
                 <span ng-bind="role.roleName"></span>
                 <div class="md-secondary" class="btn-group">
                     <a class="btn btn-danger" ng-click="deleteRole(role)">
@@ -53,9 +53,23 @@
 
                     <md-input-container flex="1"></md-input-container>
 
-                    <a class="btn" ng-click="updateRole(selRoleToShow)">
+                    <a class="btn" ng-if="creatingRole === false" ng-click="updateRole(selRoleToShow)">
+                        <i class="fa fa-wrench fa-lg"></i>
+                        <md-tooltip>Update Role and Privileges</md-tooltip>
+                    </a>
+
+                    <md-input-container flex="1"></md-input-container>
+
+                    <a class="btn" ng-if="creatingRole === true" ng-click="saveRole(selRoleToShow)">
                         <i class="fa fa-floppy-o fa-lg"></i>
-                        <md-tooltip>Save Role Name and Privileges</md-tooltip>
+                        <md-tooltip>Save Role</md-tooltip>
+                    </a>
+
+                    <md-input-container flex="1"></md-input-container>
+
+                    <a class="btn" ng-if="creatingRole === false" ng-click="createRole()">
+                        <i class="fa fa-plus fa-lg"></i>
+                        <md-tooltip>Create Role</md-tooltip>
                     </a>
                 </div>
             </div>
