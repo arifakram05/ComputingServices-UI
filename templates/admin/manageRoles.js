@@ -104,14 +104,14 @@ angular.module('computingServices.manageRoles', ['ngRoute'])
     }
 
     //delete existing role
-    function deleteRole(roleName) {
+    function deleteRole(roleId) {
         var deferred = $q.defer();
 
         $http({
                 method: 'DELETE',
                 url: DELETE_ROLE_URI,
                 params: {
-                    roleName: roleName
+                    roleId: roleId
                 }
             })
             .then(
@@ -292,7 +292,7 @@ angular.module('computingServices.manageRoles', ['ngRoute'])
 
     //update role details
     $scope.updateRole = function (role) {
-        if(role.roleName === 'New Role') {
+        if (role.roleName === 'New Role') {
             notifyUser('Please rename the role to continue');
             return;
         }
@@ -321,28 +321,38 @@ angular.module('computingServices.manageRoles', ['ngRoute'])
             });
     }
 
-    //Delete a job applicant
+    //Delete role
     $scope.deleteRole = function (role) {
-        console.log('Deleting role ', role);
 
-        var promise = ManageRolesService.deleteRole(role.roleName);
-        promise.then(function (result) {
+        var confirm = $mdDialog.confirm()
+            .title('Are you sure you want to delete the role - ' + role.roleName + '?')
+            .textContent('You cannot retrieve the data once it is deleted. Continue?')
+            .ok('Yes')
+            .cancel('No');
 
-                if (result.statusCode === 200) {
-                    SharedService.showSuccess(result.message);
-                    // reload roles and privs
-                    getRoles();
-                    return;
-                } else {
-                    SharedService.showError(result.message);
-                }
-            })
-            .catch(function (resError) {
-                console.log('DELETE ROLE CALL FAILURE :: ', resError);
-                //show failure message to the user
-                SharedService.showError('Failed to delete the role');
-            });
-    }
+        $mdDialog.show(confirm).then(function () {
+            console.log('this shows up because user clicked YES');
+
+            var promise = ManageRolesService.deleteRole(role._id.$oid);
+            promise.then(function (result) {
+
+                    if (result.statusCode === 200) {
+                        SharedService.showSuccess(result.message);
+                        // reload roles and privs
+                        getRoles();
+                        return;
+                    } else {
+                        SharedService.showError(result.message);
+                    }
+                })
+                .catch(function (resError) {
+                    console.log('DELETE ROLE CALL FAILURE :: ', resError);
+                    //show failure message to the user
+                    SharedService.showError('Failed to delete the role');
+                });
+
+        });
+    };
 
     //Create a new role
     $scope.createRole = function () {
@@ -358,12 +368,12 @@ angular.module('computingServices.manageRoles', ['ngRoute'])
             assignedPrivs: []
         };
         $scope.roles.push(newRole);
-        $scope.selRoleToShow = $scope.roles[$scope.roles.length-1];
+        $scope.selRoleToShow = $scope.roles[$scope.roles.length - 1];
     }
 
     //Save a new role
     $scope.saveRole = function (role) {
-        if(role.roleName === 'New Role') {
+        if (role.roleName === 'New Role') {
             notifyUser('Please rename the role to continue');
             return;
         }
@@ -395,7 +405,7 @@ angular.module('computingServices.manageRoles', ['ngRoute'])
 
     //Restore backup
     function restore(role) {
-        if(role.backupRoleName != null) {
+        if (role.backupRoleName != null) {
             role.roleName = angular.copy(role.backupRoleName);
         }
     }
