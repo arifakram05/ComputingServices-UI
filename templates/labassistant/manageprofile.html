@@ -1,98 +1,101 @@
-<div ng-controller="ManageProfileCtrl" class="recordwork">
+<div ng-controller="ManageProfileCtrl" class="recordwork comptingServices">
     <div class="col-md-8 col-md-offset-2">
-        <md-content class="md-padding">
-            <md-toolbar class="md-primary">
+        <md-toolbar class="md-primary">
+            <div class="toolbar">
                 <div class="md-toolbar-tools">
-                    <h2 class="md-flex">Manage Profile</h2>
+                    <h2 class="md-flex">Job Applicants</h2>
                 </div>
-            </md-toolbar>
+            </div>
+        </md-toolbar>
 
-            <md-content class="md-no-momentum">
+        <md-content class="md-no-momentum">
 
-                <form name="laProfileForm" role="form" layout="column" layout-padding ng-cloak>
+            <form name="laProfileForm" role="form" layout="column" layout-padding>
 
-                    <!--upload photo and resume-->
-                    <div layout="row">
+                <!--upload photo and resume-->
+                <div layout="row">
+                    <div class="fileUpload md-button md-raised md-default" flex="50">
+                        <span ng-hide="files_resume">Upload Resume</span>
+                        <span ng-show="files_resume" ng-style="{'color':'green'}">Uploaded Resume</span>
+                        <input flex="50" id="resume" name="resume" type="file" class="upload" file-model="files_resume" onchange="angular.element(this).scope().change(this.value)" />
+                    </div>
 
-                        <div class="fileUpload md-button md-raised md-default" flex="50">
-                            <span ng-hide="files_resume">Upload Resume</span>
-                            <span ng-show="files_resume" ng-style="{'color':'green'}">Uploaded Resume</span>
-                            <input flex="50" id="resume" name="resume" type="file" class="upload" file-model="files_resume" onchange="angular.element(this).scope().change(this.value)" />
+                    <md-input-container flex="10"></md-input-container>
+
+                    <div class="fileUpload md-button md-raised md-default" flex="50">
+                        <span ng-hide="files_photo">Upload Photo</span>
+                        <span ng-show="files_photo" ng-style="{'color':'green'}">Uploaded Photo</span>
+                        <input flex="50" id="photo" name="photo" type="file" class="upload" file-model="files_photo" onchange="angular.element(this).scope().change(this.value)" />
+                    </div>
+                </div>
+                <!--upload photo and resume-->
+
+
+                <div layout="row">
+                    <md-input-container flex="50" md-no-float class="md-block">
+                        <input name="laPassword" ng-model="labAsst.password" type="password" placeholder="Password">
+                    </md-input-container>
+
+                    <md-input-container flex="10"></md-input-container>
+
+                    <md-input-container flex="50" md-no-float class="md-block">
+                        <input name="laConfirmPassword" ng-model="labAsst.confirmedPassword" type="password" placeholder="Confirm Password">
+                    </md-input-container>
+                </div>
+
+                <!--Education and Specialization-->
+                <div layout="row">
+                    <md-input-container flex="50">
+                        <label>Education</label>
+                        <md-select name="education" ng-model="labAsst.education" placeholder="Education Level">
+                            <md-option value="Under Graduate">Under Graduate</md-option>
+                            <md-option value="Graduate">Graduate</md-option>
+                            <md-option value="Post Graduate">Post Graduate</md-option>
+                        </md-select>
+                    </md-input-container>
+
+                    <md-input-container flex="10"></md-input-container>
+
+                    <md-input-container flex="50" md-no-float class="md-block">
+                        <label>Specialization</label>
+                        <input name="specialization" ng-model="labAsst.specialization" type="text" />
+                    </md-input-container>
+                </div>
+
+                <!--Contact-->
+                <div layout="row">
+                    <md-input-container flex="50" md-no-float class="md-block">
+                        <label>LinkedIn Profile</label>
+                        <input name="profileLink" ng-model="labAsst.profileLink" type="url" ng-pattern="" />
+                    </md-input-container>
+
+                    <md-input-container flex="10"></md-input-container>
+
+                    <md-input-container flex="50" md-no-float class="md-block">
+                        <label>Phone Number</label>
+                        <input name="phone" ng-model="labAsst.phone" ng-pattern="/^[0-9]{3}[0-9]{3}[0-9]{4}$/" />
+                        <div ng-messages="laProfileForm.phone.$error">
+                            <div ng-message="pattern">Phone number format is ##########</div>
                         </div>
+                    </md-input-container>
+                </div>
 
-                        <md-input-container flex="10"></md-input-container>
+                <!--Description-->
+                <div layout="row">
+                    <md-input-container md-no-float class="md-block" flex>
+                        <label>About Yourself</label>
+                        <textarea name="description" ng-model="labAsst.description" md-maxlength="150" rows="4" max-rows="4" md-select-on-focus placeholder="A little description about yourself"></textarea>
+                    </md-input-container>
+                </div>
 
-                        <div class="fileUpload md-button md-raised md-default" flex="50">
-                            <span ng-hide="files_photo">Upload Photo</span>
-                            <span ng-show="files_photo" ng-style="{'color':'green'}">Uploaded Photo</span>
-                            <input flex="50" id="photo" name="photo" type="file" class="upload" file-model="files_photo" onchange="angular.element(this).scope().change(this.value)" />
-                        </div>
+                <!--Button-->
+                <div layout="row" layout-align="center" flex>
+                    <md-button class="md-raised md-default" ng-click="clearValue()">Clear</md-button>
 
-                    </div>
-                    <!--upload photo and resume-->
+                    <md-button class="md-raised md-primary" ng-click="updateProfile(labAsst)">Update</md-button>
+                </div>
 
-
-                    <div layout="row">
-                        <md-input-container flex="50" md-no-float class="md-block">
-                            <input name="laPassword" ng-model="labAsst.password" type="password" placeholder="Password">
-                        </md-input-container>
-
-                        <md-input-container flex="10"></md-input-container>
-
-                        <md-input-container flex="50" md-no-float class="md-block">
-                            <input name="laConfirmPassword" ng-model="labAsst.confirmedPassword" type="password" placeholder="Confirm Password">
-                        </md-input-container>
-                    </div>
-
-                    <div layout="row">
-                        <md-input-container flex="50">
-                            <md-select name="educationLevel" ng-model="labAsst.educationLevel" placeholder="Education Level">
-                                <md-option value="UNDERGRAD">Under Graduate</md-option>
-                                <md-option value="GRAD">Graduate</md-option>
-                                <md-option value="POSTGRAD">Post Graduate</md-option>
-                            </md-select>
-                        </md-input-container>
-
-                        <md-input-container flex="10"></md-input-container>
-
-                        <md-input-container flex="50" md-no-float class="md-block">
-                            <input name="specialization" ng-model="labAsst.specialization" type="text" placeholder="Your Specialization">
-                        </md-input-container>
-                    </div>
-
-
-                    <div layout="row">
-                        <md-input-container flex="50" md-no-float class="md-block">
-                            <input name="linkedInProfile" ng-model="labAsst.linkedInProfile" type="url" ng-pattern="" placeholder="LinkedIn Profile">
-                            <!--<div ng-messages="laProfileForm.linkedInProfile.$error.url">
-                                <div ng-message="pattern">Please enter a valid website address</div>
-                            </div>-->
-                        </md-input-container>
-
-                        <md-input-container flex="10"></md-input-container>
-
-                        <md-input-container flex="50" md-no-float class="md-block">
-                            <input name="phone" ng-model="labAsst.phone" ng-pattern="/^[0-9]{3}[0-9]{3}[0-9]{4}$/" placeholder="Phone Number" />
-                            <div ng-messages="laProfileForm.phone.$error">
-                                <div ng-message="pattern">Phone number format is ##########</div>
-                            </div>
-                        </md-input-container>
-                    </div>
-
-                    <div layout="row">
-                        <md-input-container md-no-float class="md-block" flex>
-                            <label>About Yourself</label>
-                            <textarea name="biography" ng-model="labAsst.biography" md-maxlength="150" rows="4" max-rows="4" md-select-on-focus placeholder="A little description about yourself"></textarea>
-                        </md-input-container>
-                    </div>
-
-
-                    <div layout="row" layout-align="center" flex>
-                        <md-button class="md-raised md-primary" ng-click="updateProfile(labAsst)">Submit</md-button>
-                    </div>
-
-                </form>
-            </md-content>
+            </form>
         </md-content>
     </div>
 </div>

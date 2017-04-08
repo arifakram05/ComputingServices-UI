@@ -12,7 +12,7 @@ angular.module('computingServices.manageprofile', ['ngRoute'])
 
 .factory('ManageProfileService', ['$http', '$q', function ($http, $q) {
 
-    var UPDATE_LA_PROFILE = constants.url + 'laservices/updateProfile';
+    var UPDATE_LA_PROFILE_URI = constants.url + 'assistant/updateProfile';
 
     //define all factory methods
     var factory = {
@@ -22,28 +22,23 @@ angular.module('computingServices.manageprofile', ['ngRoute'])
     return factory;
 
     //update LA profile
-    function updateProfile(submittedData, submittedResume, submittedPhoto) {
+    function updateProfile(labassistant, resume, photo) {
         var deferred = $q.defer();
 
         $http({
             method: 'POST',
-            url: UPDATE_LA_PROFILE,
+            url: UPDATE_LA_PROFILE_URI,
             headers: {
                 'Content-Type': undefined
             },
 
             transformRequest: function (data) {
                 var formData = new FormData();
-                formData.append("model", angular.toJson(data.model));
-                formData.append("resume", data.submittedResume);
-                formData.append("photo", data.submittedPhoto);
+                formData.append("labassistant", angular.toJson(labassistant));
+                formData.append("resume", resume);
+                formData.append("photo", photo);
                 return formData;
-            },
-            data: {
-                model: submittedData,
-                resume: submittedResume,
-                photo: submittedPhoto
-            },
+            }
         }).
         success(function (data, status, headers, config) {
             console.log('LA profile update success ', data);
@@ -59,7 +54,7 @@ angular.module('computingServices.manageprofile', ['ngRoute'])
 
 }])
 
-.controller('ManageProfileCtrl', ['$scope', '$filter', '$mdDialog', 'ManageProfileService', function ($scope, $filter, $mdDialog, ManageProfileService) {
+.controller('ManageProfileCtrl', ['$scope', '$filter', '$mdDialog', 'ManageProfileService', 'SharedService', function ($scope, $filter, $mdDialog, ManageProfileService, SharedService) {
 
     console.log('manage LA profile...');
 
@@ -90,23 +85,27 @@ angular.module('computingServices.manageprofile', ['ngRoute'])
         //make service call
         var promise = ManageProfileService.updateProfile(labAsst, $scope.files_resume, $scope.files_photo);
         promise.then(function (result) {
-            console.log('Profile Updated.', result);
-        });
-
-        //clear fields
-        $scope.clearValue();
-
+                if (result.statusCode === 200) {
+                    SharedService.showSuccess(result.message);
+                    console.log('Profile Updated');
+                    //clear fields
+                    $scope.clearValue();
+                } else {
+                    SharedService.showError(result.message);
+                }
+            })
+            .catch(function (resError) {
+                console.log('UPDATED CALL FAILURE :: ', resError);
+                //show failure message to the user
+                SharedService.showError('Update Failed');
+            });
     }
 
     //clear form
     $scope.clearValue = function () {
-        /*$scope.rawStartDate = undefined;
-        $scope.rawEndDate = undefined;
-        $scope.rawStartTime = undefined;
-        $scope.rawEndTime = undefined;
-        $scope.labSchedule = undefined;
-        $scope.selectedCampusName = undefined;
-        $scope.selectedLabName = undefined;*/
+        $scope.labAsst = undefined;
+        $scope.files_resume = undefined;
+        $scope.files_photo = undefined;
         $scope.laProfileForm.$setPristine();
         $scope.laProfileForm.$setUntouched();
     };
