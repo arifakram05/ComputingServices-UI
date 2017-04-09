@@ -16,16 +16,16 @@
                 <div layout="row">
                     <div class="fileUpload md-button md-raised md-default" flex="50">
                         <span ng-hide="files_resume">Upload Resume</span>
-                        <span ng-show="files_resume" ng-style="{'color':'green'}">Uploaded Resume</span>
-                        <input flex="50" id="resume" name="resume" type="file" class="upload" file-model="files_resume" onchange="angular.element(this).scope().change(this.value)" />
+                        <span ng-show="files_resume" ng-style="{'color':'green'}">{{files_resume.name}}</span>
+                        <input flex="50" id="resume" name="resume" type="file" class="upload" file-model="files_resume" />
                     </div>
 
                     <md-input-container flex="10"></md-input-container>
 
                     <div class="fileUpload md-button md-raised md-default" flex="50">
                         <span ng-hide="files_photo">Upload Photo</span>
-                        <span ng-show="files_photo" ng-style="{'color':'green'}">Uploaded Photo</span>
-                        <input flex="50" id="photo" name="photo" type="file" class="upload" file-model="files_photo" onchange="angular.element(this).scope().change(this.value)" />
+                        <span ng-show="files_photo" ng-style="{'color':'green'}">{{files_photo.name}}</span>
+                        <input flex="50" id="photo" name="photo" type="file" class="upload" file-model="files_photo" />
                     </div>
                 </div>
                 <!--upload photo and resume-->

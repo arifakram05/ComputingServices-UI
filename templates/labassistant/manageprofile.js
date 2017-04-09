@@ -54,24 +54,11 @@ angular.module('computingServices.manageprofile', ['ngRoute'])
 
 }])
 
-.controller('ManageProfileCtrl', ['$scope', '$filter', '$mdDialog', 'ManageProfileService', 'SharedService', function ($scope, $filter, $mdDialog, ManageProfileService, SharedService) {
+.controller('ManageProfileCtrl', ['$scope', '$filter', 'ManageProfileService', 'SharedService', function ($scope, $filter, ManageProfileService, SharedService) {
 
     console.log('manage LA profile...');
 
-    //$scope.files = [];
-    //listen for the file selected event which is raised from directive
-    /*$scope.$on("seletedFile", function (event, args) {
-        $scope.$apply(function () {
-            //add the file object to the scope's files collection
-            console.log('pushing files: ', args);
-            $scope.files.push(args.file);
-        });
-    });*/
-
-    $scope.change = function (fileName) {
-        console.log('file being uploaded is ', fileName);
-    };
-
+    $scope.labAsst = {};
     //update form
     $scope.updateProfile = function (labAsst) {
 
@@ -80,7 +67,12 @@ angular.module('computingServices.manageprofile', ['ngRoute'])
         console.log('resume ', $scope.files_resume);
         console.log('photo ', $scope.files_photo);
 
-        console.log('profile to be saved is ', labAsst, $scope.files_resume, $scope.files_photo);
+        console.log('profile to be saved is ', labAsst, $scope.files, $scope.files_photo);
+
+        //Testing Only
+        labAsst._id = "58e09e4d31f2f7c8d9dd2d59";
+        labAsst.firstName = "Allan";
+        labAsst.lastName = "Donald";
 
         //make service call
         var promise = ManageProfileService.updateProfile(labAsst, $scope.files_resume, $scope.files_photo);
@@ -110,14 +102,21 @@ angular.module('computingServices.manageprofile', ['ngRoute'])
         $scope.laProfileForm.$setUntouched();
     };
 
-    //alerts to user
-    function notifyUser(message) {
-        $mdDialog.show(
-            $mdDialog.alert()
-            .clickOutsideToClose(true)
-            .textContent(message)
-            .ok('Got it!')
-        );
-    }
+}])
+
+.directive('fileModel', ['$parse', function ($parse) {
+    return {
+        restrict: 'A',
+        link: function (scope, element, attrs) {
+            var model = $parse(attrs.fileModel);
+            var modelSetter = model.assign;
+
+            element.bind('change', function () {
+                scope.$apply(function () {
+                    modelSetter(scope, element[0].files[0]);
+                });
+            });
+        }
+    };
 
 }]);
