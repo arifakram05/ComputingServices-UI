@@ -1,17 +1,52 @@
 <br/>
 <br/>
 <div ng-controller="managelabschedulectrl">
-    <div layout="row" layout-align="center center" flex>
-        <div ng-show="SelectedEvent" class="alert alert-success">
-            <p style="color:#A9A50E">{{SelectedEvent.title}}</p>
-            <span>{{SelectedEvent.start}}</span> - <span>{{SelectedEvent.end}}</span>
-            <span>{{SelectedEvent.description}}</span>
-        </div>
-    </div>
 
+    <!--Calendar-->
     <div class="row styleCal">
         <div class="col-md-12">
             <div id="calendar" ui-calendar="uiConfig.calendar" ng-model="eventSources" calendar="myCalendar"></div>
         </div>
     </div>
+
+    <!--Modal Begin-->
+    <div class="modal fade" id="las_modal" tabindex="-1" role="dialog" aria-labelledby="las_modal" aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-body">
+                    <md-content class="md-no-momentum" class="PaddingAllAround">
+                        <div layout="column" flex="" class="PaddingAllAround">
+
+                            <md-input-container flex="">
+                                <label>Class</label>
+                                <input name="title" ng-model="SelectedEvent.title" />
+                            </md-input-container>
+
+                            <md-input-container flex="">
+                                <label>Professor</label>
+                                <input name="professor" ng-model="SelectedEvent.professor" />
+                            </md-input-container>
+
+                            <md-input-container flex="">
+                                <label>Color</label>
+                                <input name="color" ng-model="SelectedEvent.color" />
+                            </md-input-container>
+
+                            <label>Dates</label>
+                            <input date-range-picker class="form-control date-picker" type="text" ng-model="event" options="opts" />
+
+                        </div>
+
+                        <md-input-container flex="5"></md-input-container>
+
+                        <div layout="row" layout-align="center" flex>
+                            <md-button class="md-raised md-default" data-dismiss="modal">cancel</md-button>
+                            <md-button class="md-raised md-primary" data-dismiss="modal" ng-click="create()">create</md-button>
+                        </div>
+                    </md-content>
+                </div>
+            </div>
+        </div>
+    </div>
+    <!--Modal End-->
 </div>

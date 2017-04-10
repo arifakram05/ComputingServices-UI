@@ -213,3 +213,7 @@ hr {
 .selected {
     border-left: 4px solid #73C20E !important;
 }
+
+.PaddingAllAround {
+    padding: 10px;
+}

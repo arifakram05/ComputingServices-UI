@@ -1,4 +1,4 @@
-angular.module('computingServices.managelabschedule', ['ngRoute', 'ui.calendar'])
+angular.module('computingServices.managelabschedule', ['ngRoute', 'ui.calendar', 'daterangepicker'])
 
 .config(['$routeProvider', function ($routeProvider) {
     $routeProvider.when('/managelabschedule', {
@@ -7,10 +7,24 @@ angular.module('computingServices.managelabschedule', ['ngRoute', 'ui.calendar']
     });
 }])
 
-    .controller('managelabschedulectrl', ['$scope', '$http', 'uiCalendarConfig', function ($scope, $http, uiCalendarConfig) {
+.controller('managelabschedulectrl', ['$scope', '$http', 'uiCalendarConfig', function ($scope, $http, uiCalendarConfig) {
 
-    $scope.SelectedEvent = null;
+    $scope.SelectedEvent = {};
     var isFirstTime = true;
+
+    //required for datetimepicker
+    $scope.event = {
+        startDate: '',
+        endDate: ''
+    };
+
+    $scope.opts = {
+        timePicker: true,
+        timePickerIncrement: 15,
+        locale: {
+            format: 'MMM D, YYYY HH:mm'
+        }
+    };
 
     $scope.events = [{
         title: "Computer Architecture",
@@ -59,6 +73,13 @@ angular.module('computingServices.managelabschedule', ['ngRoute', 'ui.calendar']
         start: new Date('2017-03-16T16:00:30Z'),
         end: new Date('2017-03-16T23:30:30Z'),
         allDay: false
+        }, {
+        title: "Data Processing",
+        professor: "Chandler Bing",
+        start: new Date('2017-03-16T16:00:30Z'),
+        end: new Date('2017-03-26T23:30:30Z'),
+        allDay: false,
+        backgroundColor: 'Red'
         }];
     $scope.eventSources = [$scope.events];
 
@@ -67,14 +88,51 @@ angular.module('computingServices.managelabschedule', ['ngRoute', 'ui.calendar']
         calendar: {
             height: 800,
             editable: true,
+            // display event's start time
+            displayEventTime: true,
+            //calendar header
             header: {
-                left: 'month agendaWeek agendaDay',
+                left: 'month agendaWeek agendaDay list',
                 center: 'title',
                 right: 'today prev,next'
             },
+            //can select a cell
+            selectable: true,
+            //highlight cell when selected
+            selectHelper: true,
+            //enables editing a cell
+            editable: true,
+            //does not make a cell too tall in case of many event; displays +more link
+            //eventLimit: true,
+            //event to trigger on selection of a date
+            select: function (start, end) {
+                //reset
+                $scope.SelectedEvent = {};
+                $scope.event = null;
+                //set new data
+                $scope.event = {
+                    startDate: moment(start).format('MMM D, YYYY HH:mm'),
+                    endDate: moment(end).subtract(1, "days").format('MMM D, YYYY HH:mm')
+                };
+                //show modal
+                $('#las_modal').modal('show');
+            },
+            //event to trigger when an event on calendar is clicked
             eventClick: function (event) {
-                    $scope.SelectedEvent = event;
-                }
+                console.log('event selected : ',event);
+
+                $scope.event = {
+                    startDate: moment(event.start).format('MMM D, YYYY HH:mm'),
+                    endDate: moment(event.end).format('MMM D, YYYY HH:mm')
+                };
+
+                $scope.SelectedEvent.title = event.title;
+                $scope.SelectedEvent.color = event.backgroundColor;
+
+                //show modal
+                $('#las_modal').modal('show');
+            },
+            eventColor: '#378006'
                 /*,
                             eventAfterAllRender: function () {
                                 if ($scope.events.length > 0 && isFirstTime) {
@@ -86,4 +144,9 @@ angular.module('computingServices.managelabschedule', ['ngRoute', 'ui.calendar']
         }
     };
 
-            }]);
+    //create
+    $scope.create = function() {
+        console.log($scope.SelectedEvent, ' ', $scope.event);
+    }
+
+}]);
