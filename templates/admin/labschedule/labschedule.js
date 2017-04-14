@@ -188,9 +188,8 @@ angular.module('computingServices.managelabschedule', ['ngRoute', 'ui.calendar',
             displayEventTime: true,
             //calendar header
             header: {
-                left: 'month agendaWeek agendaDay list',
-                center: 'title',
-                right: 'today prev,next'
+                left: 'title',
+                right: 'month,agendaWeek,agendaDay,list prev,today,next'
             },
             //can select a cell
             selectable: true,

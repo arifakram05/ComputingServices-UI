@@ -218,3 +218,18 @@ hr {
 .PaddingAllAround {
     padding: 10px;
 }
+
+.fc-toolbar.fc-header-toolbar {
+    padding: 20px;
+    color: #fff;
+    background-color: rgb(16,108,200);
+    margin: inherit;
+    font-family: serif;
+    font-weight: 400;
+    font-size: 14px;
+    letter-spacing: 0.005em;
+}
+
+.h2, h2 {
+    font-size: 24px;
+}
