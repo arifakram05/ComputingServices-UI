@@ -238,7 +238,29 @@ angular.module('computingServices.managelabschedule', ['ngRoute', 'ui.calendar',
         }
     };
 
-    $scope.events = [{
+    // all events
+    $scope.events = [];
+
+    // get lab schedule
+    getLabSchedule();
+
+    function getLabSchedule() {
+        console.log('making a server call to get lab schedule');
+        var promise = ManageLabScheduleService.getLabSchedule();
+        promise.then(function (result) {
+            var events = result.response;
+            console.log('all events fetched :', events);
+            //process event and the display
+            angular.forEach(events, function (event) {
+                event.start = new Date(event.start);
+                event.end = new Date(event.end);
+                event.stick = true;
+                $scope.events.push(event);
+            });
+        });
+    }
+
+    /*$scope.events = [{
         title: "Computer Architecture",
         professor: "Linda Cook",
         start: new Date('2017-03-26T12:00:30Z'),
@@ -378,7 +400,7 @@ angular.module('computingServices.managelabschedule', ['ngRoute', 'ui.calendar',
         labName: 'Vancouver Labs',
         _id: '456789',
         groupId: '3298724362'
-        }];
+        }];*/
     $scope.eventSources = [$scope.events];
 
     //configure calendar
@@ -472,7 +494,7 @@ angular.module('computingServices.managelabschedule', ['ngRoute', 'ui.calendar',
             return a.value;
         });
 
-        if (Object.keys($scope.SelectedEvent).length !== 3 || Object.keys($scope.event).length !== 2 || selectedDays.length !== 1 || $scope.selLab === '' || $scope.selLab === undefined) {
+        if (Object.keys($scope.SelectedEvent).length !== 3 || Object.keys($scope.event).length !== 2 || selectedDays.length < 1 || $scope.selLab === '' || $scope.selLab === undefined) {
             return true;
         }
         return false;
