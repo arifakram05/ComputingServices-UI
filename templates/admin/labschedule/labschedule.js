@@ -238,13 +238,13 @@ angular.module('computingServices.managelabschedule', ['ngRoute', 'ui.calendar',
         }
     };
 
-    // all events
-    $scope.events = [];
-
     // get lab schedule
     getLabSchedule();
 
     function getLabSchedule() {
+        $scope.events = undefined;
+        // create events object
+        $scope.events = [];
         console.log('making a server call to get lab schedule');
         var promise = ManageLabScheduleService.getLabSchedule();
         promise.then(function (result) {
@@ -459,7 +459,7 @@ angular.module('computingServices.managelabschedule', ['ngRoute', 'ui.calendar',
                 $scope.SelectedEvent.color = event.backgroundColor;
                 $scope.SelectedEvent.professor = event.professor;
                 $scope.selLab = event.labName;
-                //$scope._id = event._id.$oid;
+                $scope._id = event._id.$oid;
                 $scope.SelectedEvent._id = event._id;
                 $scope.SelectedEvent.groupId = event.groupId;
 
@@ -569,7 +569,7 @@ angular.module('computingServices.managelabschedule', ['ngRoute', 'ui.calendar',
                     //clear modal contents
                     $scope.clear();
                     // reload calendar
-                    //getLabSchedule();
+                    getLabSchedule();
                     return;
                 } else {
                     SharedService.showError(result.message);
@@ -611,12 +611,31 @@ angular.module('computingServices.managelabschedule', ['ngRoute', 'ui.calendar',
         event.backgroundColor = $scope.SelectedEvent.color;
         event.allDay = false;
         event.labName = $scope.selLab;
-        event._id = $scope.SelectedEvent._id;
+        event._id = $scope.SelectedEvent._id.$oid;
         event.groupId = $scope.SelectedEvent.groupId;
         event.start = stDate + ' ' + startTime;
         event.end = edDate + ' ' + endTime;
 
         console.log('Record to update: ', event);
+
+        //call service method to update event
+        var promise = ManageLabScheduleService.updateLabSchedule(event);
+        promise.then(function (result) {
+                if (result.statusCode === 200) {
+                    SharedService.showSuccess(result.message);
+                    //clear modal contents
+                    $scope.clear();
+                    // reload calendar
+                    getLabSchedule();
+                } else {
+                    SharedService.showError(result.message);
+                }
+            })
+            .catch(function (resError) {
+                console.log('UPDATE CALL FAILURE :: ', resError);
+                //show failure message to the user
+                SharedService.showError('Failed to update lab schedule');
+            });
     }
 
     function calculateStartDateTime() {
