@@ -516,35 +516,12 @@ angular.module('computingServices.managelabschedule', ['ngRoute', 'ui.calendar',
         var startDate = new Date($scope.event.startDate);
         var endDate = new Date($scope.event.endDate);
 
-        var startHour = startDate.getHours();
-        var startMins = startDate.getMinutes();
-        if (startMins === 0) {
-            startMins = startMins + '0';
-        }
-        var startTime = startHour + ':' + startMins;
-
-        var endHour = endDate.getHours();
-        var endMins = endDate.getMinutes();
-        if (endMins === 0) {
-            endMins = endMins + '0';
-        }
-        var endTime = endHour + ':' + endMins;
-
-        //console.log('start time: ',startTime, ' end time: ',endTime);
+        var startDateTime = calculateStartDateTime();
+        var endDateTime = calculateEndDateTime();
 
         for (var day = startDate; day <= endDate;) {
             if (selectedDays.includes(day.getDay())) {
                 var event = {};
-
-                //console.log('day is ',day);
-
-                var stDate = moment(day).format('MMM D, YYYY');
-                //console.log('stDate is ',stDate);
-                event.start = stDate + ' ' + startTime;
-
-                var edDate = moment(day).format('MMM D, YYYY');
-                //console.log('edDate is ',edDate);
-                event.end = edDate + ' ' + endTime;
 
                 event.title = $scope.SelectedEvent.title;
                 event.professor = $scope.SelectedEvent.professor;
@@ -552,7 +529,8 @@ angular.module('computingServices.managelabschedule', ['ngRoute', 'ui.calendar',
                 event.allDay = false;
                 event.day = day.getDay();
                 event.labName = $scope.selLab;
-                //console.log('object to save : ',event);
+                event.start = startDateTime;
+                event.end = endDateTime;
 
                 eventDates.push(event);
             }
@@ -586,26 +564,6 @@ angular.module('computingServices.managelabschedule', ['ngRoute', 'ui.calendar',
     $scope.update = function () {
         var event = {};
 
-        var startDate = new Date($scope.event.startDate);
-        var endDate = new Date($scope.event.endDate);
-
-        var startHour = startDate.getHours();
-        var startMins = startDate.getMinutes();
-        if (startMins === 0) {
-            startMins = startMins + '0';
-        }
-        var startTime = startHour + ':' + startMins;
-
-        var endHour = endDate.getHours();
-        var endMins = endDate.getMinutes();
-        if (endMins === 0) {
-            endMins = endMins + '0';
-        }
-        var endTime = endHour + ':' + endMins;
-
-        var stDate = moment(startDate).format('MMM D, YYYY');
-        var edDate = moment(endDate).format('MMM D, YYYY');
-
         event.title = $scope.SelectedEvent.title;
         event.professor = $scope.SelectedEvent.professor;
         event.backgroundColor = $scope.SelectedEvent.color;
@@ -613,8 +571,8 @@ angular.module('computingServices.managelabschedule', ['ngRoute', 'ui.calendar',
         event.labName = $scope.selLab;
         event._id = $scope.SelectedEvent._id.$oid;
         event.groupId = $scope.SelectedEvent.groupId;
-        event.start = stDate + ' ' + startTime;
-        event.end = edDate + ' ' + endTime;
+        event.start = calculateStartDateTime();
+        event.end = calculateEndDateTime();
 
         console.log('Record to update: ', event);
 
@@ -638,6 +596,7 @@ angular.module('computingServices.managelabschedule', ['ngRoute', 'ui.calendar',
             });
     }
 
+    //calculate start date and time
     function calculateStartDateTime() {
         var startDate = new Date($scope.event.startDate);
 
@@ -647,8 +606,13 @@ angular.module('computingServices.managelabschedule', ['ngRoute', 'ui.calendar',
             startMins = startMins + '0';
         }
         var startTime = startHour + ':' + startMins;
+
+        var stDate = moment(startDate).format('MMM D, YYYY');
+
+        return stDate + ' ' + startTime;
     }
 
+    //calculate end date and time
     function calculateEndDateTime() {
         var endDate = new Date($scope.event.endDate);
 
@@ -658,6 +622,10 @@ angular.module('computingServices.managelabschedule', ['ngRoute', 'ui.calendar',
             endMins = endMins + '0';
         }
         var endTime = endHour + ':' + endMins;
+
+        var edDate = moment(endDate).format('MMM D, YYYY');
+
+        return edDate + ' ' + endTime;
     }
 
     //update all related events
