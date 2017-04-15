@@ -7,7 +7,179 @@ angular.module('computingServices.managelabschedule', ['ngRoute', 'ui.calendar',
     });
 }])
 
-.controller('managelabschedulectrl', ['$scope', '$http', 'uiCalendarConfig', '$mdDialog', 'SharedService', function ($scope, $http, uiCalendarConfig, $mdDialog, SharedService) {
+.factory('ManageLabScheduleService', ['$http', '$q', function ($http, $q) {
+
+    var GET_LAB_SCHEDULE_URI = constants.url + 'lab-schedule/fetch';
+    var SAVE_LAB_SCHEDULE_URI = constants.url + 'lab-schedule/save';
+    var UPDATE_LAB_SCHEDULE_URI = constants.url + 'lab-schedule/update';
+    var DELETE_LAB_SCHEDULE_URI = constants.url + 'lab-schedule/delete';
+    var UPDATE_ALL_LAB_SCHEDULE_URI = constants.url + 'lab-schedule/update-all';
+    var DELETE_ALL_LAB_SCHEDULE_URI = constants.url + 'lab-schedule/delete-all';
+
+    //define all factory methods
+    var factory = {
+        getLabSchedule: getLabSchedule,
+        saveLabSchedule: saveLabSchedule,
+        updateLabSchedule: updateLabSchedule,
+        deleteLabSchedule: deleteLabSchedule,
+        updateAllEvents: updateAllEvents,
+        deleteAllEvents: deleteAllEvents
+    };
+
+    return factory;
+
+    //fetch all events
+    function getLabSchedule() {
+        var deferred = $q.defer();
+
+        $http({
+            method: 'GET',
+            url: GET_LAB_SCHEDULE_URI
+        }).then(
+            function success(response) {
+                console.log('lab schedule from web service: ', response.data);
+                deferred.resolve(response.data);
+            },
+            function error(errResponse) {
+                console.error('Error while making service call to fetch lab schedule ', errResponse);
+                deferred.reject(errResponse);
+            }
+        );
+        return deferred.promise;
+    }
+
+    //create new event
+    function saveLabSchedule(schedule) {
+        console.log('schedule to save : ', schedule);
+        var deferred = $q.defer();
+
+        $http({
+            method: 'POST',
+            url: SAVE_LAB_SCHEDULE_URI,
+            headers: {
+                'Content-Type': undefined
+            },
+            transformRequest: function (data) {
+                var formData = new FormData();
+                formData.append("labschedule", angular.toJson(schedule));
+                return formData;
+            }
+        }).success(function (data, status, headers, config) {
+            console.log('Saved schedule: ', data);
+            deferred.resolve(data);
+        }).error(function (data, status, headers, config) {
+            console.log('Failed to save the schedule: ', status);
+            deferred.reject(data);
+        });
+
+        return deferred.promise;
+    }
+
+    //update existing event
+    function updateLabSchedule(schedule) {
+        console.log('schedule details to update : ', schedule);
+        var deferred = $q.defer();
+
+        $http({
+            method: 'POST',
+            url: UPDATE_LAB_SCHEDULE_URI,
+            headers: {
+                'Content-Type': undefined
+            },
+            transformRequest: function (data) {
+                var formData = new FormData();
+                formData.append("labschedule", angular.toJson(schedule));
+                return formData;
+            }
+        }).success(function (data, status, headers, config) {
+            console.log('Updated schedule: ', data);
+            deferred.resolve(data);
+        }).error(function (data, status, headers, config) {
+            console.log('Failed to update the schedule: ', status);
+            deferred.reject(data);
+        });
+
+        return deferred.promise;
+    }
+
+    //delete existing event
+    function deleteLabSchedule(eventId) {
+        var deferred = $q.defer();
+
+        $http({
+                method: 'DELETE',
+                url: DELETE_LAB_SCHEDULE_URI,
+                params: {
+                    eventId: eventId
+                }
+            })
+            .then(
+                function success(response) {
+                    console.log('schedule deleted ', response);
+                    deferred.resolve(response.data);
+                },
+                function error(errResponse) {
+                    console.error('Error while deleting schedule ', errResponse);
+                    deferred.reject(errResponse);
+                }
+            );
+        return deferred.promise;
+    }
+
+    //update all events
+    function updateAllEvents(schedule) {
+        console.log('all schedule details to update : ', schedule);
+        var deferred = $q.defer();
+
+        $http({
+            method: 'POST',
+            url: UPDATE_ALL_LAB_SCHEDULE_URI,
+            headers: {
+                'Content-Type': undefined
+            },
+            transformRequest: function (data) {
+                var formData = new FormData();
+                formData.append("labschedule", angular.toJson(schedule));
+                return formData;
+            }
+        }).success(function (data, status, headers, config) {
+            console.log('Updated schedule: ', data);
+            deferred.resolve(data);
+        }).error(function (data, status, headers, config) {
+            console.log('Failed to update the schedule: ', status);
+            deferred.reject(data);
+        });
+
+        return deferred.promise;
+    }
+
+    //delete all events
+    function deleteAllEvents(groupId) {
+        var deferred = $q.defer();
+
+        $http({
+                method: 'DELETE',
+                url: DELETE_ALL_LAB_SCHEDULE_URI,
+                params: {
+                    groupId: groupId
+                }
+            })
+            .then(
+                function success(response) {
+                    console.log('schedule deleted ', response);
+                    deferred.resolve(response.data);
+                },
+                function error(errResponse) {
+                    console.error('Error while deleting schedule ', errResponse);
+                    deferred.reject(errResponse);
+                }
+            );
+        return deferred.promise;
+    }
+
+}])
+
+.controller('managelabschedulectrl', ['$scope', '$http', 'uiCalendarConfig', '$mdDialog', 'SharedService', 'ManageLabScheduleService', function ($scope, $http, uiCalendarConfig, $mdDialog, SharedService, ManageLabScheduleService) {
 
     $scope.isNewEvent = false;
 
@@ -62,7 +234,7 @@ angular.module('computingServices.managelabschedule', ['ngRoute', 'ui.calendar',
         timePicker: true,
         timePickerIncrement: 15,
         locale: {
-            format: 'MMM D, YYYY HH:mm'
+            format: 'MMM D, YYYY h:mm A'
         }
     };
 
@@ -274,8 +446,8 @@ angular.module('computingServices.managelabschedule', ['ngRoute', 'ui.calendar',
             },
             eventColor: '#378006',
             eventMouseover: function (event, jsEvent, view) {
-                var startTime = moment(event.start).format('HH:mm A');
-                var endTime = moment(event.end).format('HH:mm A');
+                var startTime = moment(event.start).format('h:mm A');
+                var endTime = moment(event.end).format('h:mm A');
                 var tooltip = '<div class="tooltiptopicevent" style="width:auto;height:auto;background:rgb(16,108,200);color:#fff;position:absolute;z-index:10001;padding: 5px; line-height: 150%;border-top-right-radius: 15px;border-bottom-left-radius: 15px;">' + startTime + ' - ' + endTime + '</br>' + event.title + '</br>' + event.professor + '</br>' + event.labName + '</div>';
                 $("body").append(tooltip);
                 $(this).mouseover(function (e) {
@@ -365,16 +537,52 @@ angular.module('computingServices.managelabschedule', ['ngRoute', 'ui.calendar',
             day.setTime(day.getTime() + 1000 * 60 * 60 * 24);
         }
 
-        console.log('Recorded events: ', eventDates, angular.toJson(eventDates));
+        console.log('Recorded events to save: ', eventDates);
 
         //make a server call to save 'eventDates'
-
-        $scope.clear();
+        var promise = ManageLabScheduleService.saveLabSchedule(eventDates);
+        promise.then(function (result) {
+                if (result.statusCode === 200) {
+                    SharedService.showSuccess(result.message);
+                    //clear modal contents
+                    $scope.clear();
+                    // reload calendar
+                    //getLabSchedule();
+                    return;
+                } else {
+                    SharedService.showError(result.message);
+                }
+            })
+            .catch(function (resError) {
+                console.log('SAVE SCHEDULE CALL FAILURE :: ', resError);
+                //show failure message to the user
+                SharedService.showError('Failed to save the lab schedule');
+            });
     }
 
     //update an event
     $scope.update = function () {
         var event = {};
+
+        var startDate = new Date($scope.event.startDate);
+        var endDate = new Date($scope.event.endDate);
+
+        var startHour = startDate.getHours();
+        var startMins = startDate.getMinutes();
+        if (startMins === 0) {
+            startMins = startMins + '0';
+        }
+        var startTime = startHour + ':' + startMins;
+
+        var endHour = endDate.getHours();
+        var endMins = endDate.getMinutes();
+        if (endMins === 0) {
+            endMins = endMins + '0';
+        }
+        var endTime = endHour + ':' + endMins;
+
+        var stDate = moment(startDate).format('MMM D, YYYY');
+        var edDate = moment(endDate).format('MMM D, YYYY');
 
         event.title = $scope.SelectedEvent.title;
         event.professor = $scope.SelectedEvent.professor;
@@ -383,8 +591,32 @@ angular.module('computingServices.managelabschedule', ['ngRoute', 'ui.calendar',
         event.labName = $scope.selLab;
         event._id = $scope.SelectedEvent._id;
         event.groupId = $scope.SelectedEvent.groupId;
+        event.start = stDate + ' ' + startTime;
+        event.end = edDate + ' ' + endTime;
 
         console.log('Record to update: ', event);
+    }
+
+    function calculateStartDateTime() {
+        var startDate = new Date($scope.event.startDate);
+
+        var startHour = startDate.getHours();
+        var startMins = startDate.getMinutes();
+        if (startMins === 0) {
+            startMins = startMins + '0';
+        }
+        var startTime = startHour + ':' + startMins;
+    }
+
+    function calculateEndDateTime() {
+        var endDate = new Date($scope.event.endDate);
+
+        var endHour = endDate.getHours();
+        var endMins = endDate.getMinutes();
+        if (endMins === 0) {
+            endMins = endMins + '0';
+        }
+        var endTime = endHour + ':' + endMins;
     }
 
     //update all related events
