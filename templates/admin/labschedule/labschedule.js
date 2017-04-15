@@ -72,62 +72,80 @@ angular.module('computingServices.managelabschedule', ['ngRoute', 'ui.calendar',
         start: new Date('2017-03-26T12:00:30Z'),
         end: new Date('2017-03-26T13:30:30Z'),
         allDay: false,
-        labName: 'Becton Hall'
+        labName: 'Becton Hall',
+        _id: '456789',
+        groupId: '3298724362'
         }, {
         title: "Operating Systems",
         professor: "Betty Moore",
         start: new Date('2017-03-26T14:00:30Z'),
         end: new Date('2017-03-26T16:30:30Z'),
         allDay: false,
-        labName: 'Dickinson Hall'
+        labName: 'Dickinson Hall',
+        _id: '456789',
+        groupId: null
         }, {
         title: "Database Systems",
         professor: "Shawn Reynolds",
         start: new Date('2017-03-26T15:00:30Z'),
         end: new Date('2017-03-26T16:30:30Z'),
         allDay: false,
-        labName: 'University Hall'
+        labName: 'University Hall',
+        _id: '456789',
+        groupId: '3298724362'
         }, {
         title: 'Economics',
         start: new Date('2017-03-16T10:20:30Z'),
         end: new Date('2017-03-16T15:20:30Z'),
         allDay: false,
-        labName: 'Becton Hall'
+        labName: 'Becton Hall',
+        _id: '456789',
+        groupId: '3298724362'
         }, {
         title: "Computer Architecture 2",
         professor: "Linda Cook",
         start: new Date('2017-03-16T12:00:30Z'),
         end: new Date('2017-03-16T13:30:30Z'),
         allDay: false,
-        labName: 'University Hall'
+        labName: 'University Hall',
+        _id: '456789',
+        groupId: '3298724362'
         }, {
         title: "Adv Operating Systems",
         professor: "Betty Moore",
         start: new Date('2017-03-16T14:00:30Z'),
         end: new Date('2017-03-16T16:30:30Z'),
         allDay: false,
-        labName: 'Becton Hall'
+        labName: 'Becton Hall',
+        _id: '456789',
+        groupId: '3298724362'
         }, {
         title: "Adv Database Systems",
         professor: "Shawn Reynolds",
         start: new Date('2017-03-16T15:00:30Z'),
         end: new Date('2017-03-16T16:30:30Z'),
         allDay: false,
-        labName: 'Becton Hall'
+        labName: 'Becton Hall',
+        _id: '456789',
+        groupId: '3298724362'
         }, {
         title: "Operating Systems",
         professor: "Betty Moore",
         start: new Date('April 10, 2017 23:13:00'),
         end: new Date('April 11, 2017 08:00:00'),
         allDay: false,
-        labName: 'Vancouver Labs'
+        labName: 'Vancouver Labs',
+        _id: '456789',
+        groupId: '3298724362'
         }, {
         title: "Calculus",
         professor: "Gary Smith",
-        start: new Date('April 11, 2017 1491138000000'),
-        end: new Date('April 11, 2017 1491674400000'),
+        start: new Date('April 11, 2017 15:00'),
+        end: new Date('April 11, 2017 18:30'),
         allDay: false,
-        labName: 'Becton Hall'
+        labName: 'Becton Hall',
+        _id: '456789',
+        groupId: '3298724362'
         }, {
         title: "Data Processing",
         professor: "Chandler Bing",
@@ -135,7 +153,9 @@ angular.module('computingServices.managelabschedule', ['ngRoute', 'ui.calendar',
         end: new Date('2017-03-26T23:30:30Z'),
         allDay: false,
         backgroundColor: 'Red',
-        labName: 'Vancouver Labs'
+        labName: 'Vancouver Labs',
+        _id: '456789',
+        groupId: '3298724362'
         }, {
         allDay: false,
         backgroundColor: "Blue",
@@ -143,7 +163,9 @@ angular.module('computingServices.managelabschedule', ['ngRoute', 'ui.calendar',
         professor: "Mike Vance",
         start: new Date("Apr 2, 2017 11:00"),
         title: "Unix Systems",
-        labName: 'Becton Hall'
+        labName: 'Becton Hall',
+        _id: '456789',
+        groupId: '3298724362'
         }, {
         allDay: false,
         backgroundColor: "Pink",
@@ -151,7 +173,9 @@ angular.module('computingServices.managelabschedule', ['ngRoute', 'ui.calendar',
         professor: "John Barry",
         start: new Date("Apr 16, 2017 17:15"),
         title: "Adv Algorithms",
-        labName: 'Becton Hall'
+        labName: 'Becton Hall',
+        _id: '456789',
+        groupId: '3298724362'
         }, {
         allDay: false,
         backgroundColor: "Pink",
@@ -159,7 +183,9 @@ angular.module('computingServices.managelabschedule', ['ngRoute', 'ui.calendar',
         professor: "John Barry",
         start: new Date("Apr 18, 2017 17:15"),
         title: "Adv Algorithms",
-        labName: 'Vancouver Labs'
+        labName: 'Vancouver Labs',
+        _id: '456789',
+        groupId: '3298724362'
         }, {
         allDay: false,
         backgroundColor: "Pink",
@@ -167,7 +193,9 @@ angular.module('computingServices.managelabschedule', ['ngRoute', 'ui.calendar',
         professor: "John Barry",
         start: new Date("Apr 21, 2017 17:15"),
         title: "Adv Algorithms",
-        labName: 'Vancouver Labs'
+        labName: 'Vancouver Labs',
+        _id: '456789',
+        groupId: '3298724362'
         }, {
         allDay: false,
         backgroundColor: "Red",
@@ -175,7 +203,9 @@ angular.module('computingServices.managelabschedule', ['ngRoute', 'ui.calendar',
         professor: "Arif Akram",
         start: new Date("Apr 21, 2017 17:15"),
         title: "Mathematics",
-        labName: 'Vancouver Labs'
+        labName: 'Vancouver Labs',
+        _id: '456789',
+        groupId: '3298724362'
         }];
     $scope.eventSources = [$scope.events];
 
@@ -184,6 +214,8 @@ angular.module('computingServices.managelabschedule', ['ngRoute', 'ui.calendar',
         calendar: {
             height: 800,
             editable: true,
+            // disable event drag and drop
+            eventStartEditable: false,
             // display event's start time
             displayEventTime: true,
             //calendar header
@@ -233,19 +265,32 @@ angular.module('computingServices.managelabschedule', ['ngRoute', 'ui.calendar',
                 $scope.SelectedEvent.color = event.backgroundColor;
                 $scope.SelectedEvent.professor = event.professor;
                 $scope.selLab = event.labName;
+                //$scope._id = event._id.$oid;
+                $scope.SelectedEvent._id = event._id;
+                $scope.SelectedEvent.groupId = event.groupId;
 
                 //show modal
                 $('#las_modal').modal('show');
             },
-            eventColor: '#378006'
-                /*,
-                            eventAfterAllRender: function () {
-                                if ($scope.events.length > 0 && isFirstTime) {
-                                    //Focus first event
-                                    uiCalendarConfig.calendars.myCalendar.fullCalendar('gotoDate', $scope.events[0].start);
-                                    isFirstTime = false;
-                                }
-                            }*/
+            eventColor: '#378006',
+            eventMouseover: function (event, jsEvent, view) {
+                var startTime = moment(event.start).format('HH:mm A');
+                var endTime = moment(event.end).format('HH:mm A');
+                var tooltip = '<div class="tooltiptopicevent" style="width:auto;height:auto;background:rgb(16,108,200);color:#fff;position:absolute;z-index:10001;padding: 5px; line-height: 150%;border-top-right-radius: 15px;border-bottom-left-radius: 15px;">' + startTime + ' - ' + endTime + '</br>' + event.title + '</br>' + event.professor + '</br>' + event.labName + '</div>';
+                $("body").append(tooltip);
+                $(this).mouseover(function (e) {
+                    $(this).css('z-index', 10000);
+                    $('.tooltiptopicevent').fadeIn('500');
+                    $('.tooltiptopicevent').fadeTo('10', 1.9);
+                }).mousemove(function (e) {
+                    $('.tooltiptopicevent').css('top', e.pageY + 10);
+                    $('.tooltiptopicevent').css('left', e.pageX + 20);
+                });
+            },
+            eventMouseout: function (data, event, view) {
+                $(this).css('z-index', 8);
+                $('.tooltiptopicevent').remove();
+            }
         }
     };
 
@@ -325,6 +370,46 @@ angular.module('computingServices.managelabschedule', ['ngRoute', 'ui.calendar',
         //make a server call to save 'eventDates'
 
         $scope.clear();
+    }
+
+    //update an event
+    $scope.update = function () {
+        var event = {};
+
+        event.title = $scope.SelectedEvent.title;
+        event.professor = $scope.SelectedEvent.professor;
+        event.backgroundColor = $scope.SelectedEvent.color;
+        event.allDay = false;
+        event.labName = $scope.selLab;
+        event._id = $scope.SelectedEvent._id;
+        event.groupId = $scope.SelectedEvent.groupId;
+
+        console.log('Record to update: ', event);
+    }
+
+    //update all related events
+    $scope.updateAll = function () {
+        var event = {};
+
+        event.title = $scope.SelectedEvent.title;
+        event.professor = $scope.SelectedEvent.professor;
+        event.backgroundColor = $scope.SelectedEvent.color;
+        event.allDay = false;
+        event.labName = $scope.selLab;
+        event._id = $scope.SelectedEvent._id;
+        event.groupId = $scope.SelectedEvent.groupId;
+
+        console.log('Record to update: ', event);
+    }
+
+    //delete an event
+    $scope.delete = function () {
+        console.log('Deleting event: ', $scope.SelectedEvent._id);
+    }
+
+    //delete all related events
+    $scope.deleteAll = function () {
+        console.log('Deleting event: ', $scope.SelectedEvent.groupId);
     }
 
     //clear modal contents
