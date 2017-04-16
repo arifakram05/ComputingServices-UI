@@ -242,9 +242,8 @@ angular.module('computingServices.managelabschedule', ['ngRoute', 'ui.calendar',
     getLabSchedule();
 
     function getLabSchedule() {
-        $scope.events = undefined;
         // create events object
-        $scope.events = [];
+        $scope.events1 = [];
         console.log('making a server call to get lab schedule');
         var promise = ManageLabScheduleService.getLabSchedule();
         promise.then(function (result) {
@@ -255,14 +254,15 @@ angular.module('computingServices.managelabschedule', ['ngRoute', 'ui.calendar',
                 event.start = new Date(event.start);
                 event.end = new Date(event.end);
                 event.stick = true;
-                $scope.events.push(event);
+                $scope.events1.push(event);
             });
-            angular.element('.calendar').fullCalendar('addEventSource', $scope.eventSources);
-            angular.element('.calendar').fullCalendar('refetchEvents');
+            $('#calendar').fullCalendar('removeEvents');
+            $('#calendar').fullCalendar('addEventSource', $scope.events1);
+            $('#calendar').fullCalendar('addEventSource', $scope.events2);
         });
     }
 
-    /*$scope.events = [{
+    $scope.events2 = [{
         title: "Computer Architecture",
         professor: "Linda Cook",
         start: new Date('2017-03-26T12:00:30Z'),
@@ -402,8 +402,9 @@ angular.module('computingServices.managelabschedule', ['ngRoute', 'ui.calendar',
         labName: 'Vancouver Labs',
         _id: '456789',
         groupId: '3298724362'
-        }];*/
-    $scope.eventSources = [$scope.events];
+        }];
+    //$scope.eventSources = [$scope.events1, $scope.events2];
+    $scope.eventSources = [];
 
     //configure calendar
     $scope.uiConfig = {
@@ -569,7 +570,7 @@ angular.module('computingServices.managelabschedule', ['ngRoute', 'ui.calendar',
                     //clear modal contents
                     $scope.clear();
                     //clear existing claendar
-                    angular.element('.calendar').fullCalendar('removeEventSource', $scope.eventSources);
+                    //angular.element('.calendar').fullCalendar('removeEventSource', $scope.eventSources);
                     // reload calendar
                     getLabSchedule();
                     return;
@@ -759,7 +760,7 @@ angular.module('computingServices.managelabschedule', ['ngRoute', 'ui.calendar',
     }, {
         id: 4,
         campusName: 'Madison',
-        labName: 'Vancouver Labs'
+        labName: 'Vancouver Labs Madison'
     }, {
         id: 5,
         campusName: 'Madison',
@@ -779,4 +780,24 @@ angular.module('computingServices.managelabschedule', ['ngRoute', 'ui.calendar',
             .ok('Got it!')
         );
     }
+
+    //filter events on calendar
+    $scope.filter = function () {
+        console.log('filtering events');
+        // how to filter events?
+        // firstly, remove all events from the calendar as this is the only way to make the events marked as stick disappear
+        $('#calendar').fullCalendar('removeEvents');
+        // then, add the events you want to see
+        $('#calendar').fullCalendar('addEventSource', $scope.events2);
+    }
+
+    //related to filter
+    $scope.searchTerm;
+    $scope.clearSearchTerm = function () {
+        $scope.searchTerm = '';
+    };
+    $scope.onSearchChange = function ($event) {
+        $event.stopPropagation();
+    }
+
 }]);
