@@ -258,11 +258,12 @@ angular.module('computingServices.managelabschedule', ['ngRoute', 'ui.calendar',
             });
             $('#calendar').fullCalendar('removeEvents');
             $('#calendar').fullCalendar('addEventSource', $scope.events1);
-            $('#calendar').fullCalendar('addEventSource', $scope.events2);
+            //reset filters
+            $scope.filteredLabs = undefined;
         });
     }
 
-    $scope.events2 = [{
+    /*$scope.events2 = [{
         title: "Computer Architecture",
         professor: "Linda Cook",
         start: new Date('2017-03-26T12:00:30Z'),
@@ -402,8 +403,7 @@ angular.module('computingServices.managelabschedule', ['ngRoute', 'ui.calendar',
         labName: 'Vancouver Labs',
         _id: '456789',
         groupId: '3298724362'
-        }];
-    //$scope.eventSources = [$scope.events1, $scope.events2];
+        }];*/
     $scope.eventSources = [];
 
     //configure calendar
@@ -782,14 +782,41 @@ angular.module('computingServices.managelabschedule', ['ngRoute', 'ui.calendar',
     }
 
     //filter events on calendar
-    $scope.filter = function () {
-        console.log('filtering events');
-        // how to filter events?
+    $scope.filter = function (lab) {
+        console.log('filtering events of lab - ',lab);
+
         // firstly, remove all events from the calendar as this is the only way to make the events marked as stick disappear
         $('#calendar').fullCalendar('removeEvents');
-        // then, add the events you want to see
-        $('#calendar').fullCalendar('addEventSource', $scope.events2);
+
+        if (lab) {
+            var updatedEvents = [];
+            angular.forEach($scope.events1, function (event) {
+                if (lab.indexOf(event.labName) !== -1) {
+                    event.start = new Date(event.start);
+                    event.end = new Date(event.end);
+                    event.stick = true;
+                    updatedEvents.push(event);
+                }
+            });
+            console.log('updated events with the filter - ', updatedEvents);
+            // secondly, add the filtered events to the calendar
+            $('#calendar').fullCalendar('addEventSource', updatedEvents);
+        } else {
+            $('#calendar').fullCalendar('addEventSource', $scope.events1);
+        }
+        $('#calendar').fullCalendar('refetchEvents');
     }
+
+    //watch filter and update calendar
+    $scope.$watch('filteredLabs', function (filteredLabs) {
+        console.log('filteredLabs - ', filteredLabs);
+        if (filteredLabs && filteredLabs.length > 0) {
+            console.log('filter applied - ', filteredLabs);
+            $scope.filter(filteredLabs);
+        } else {
+            $scope.filter(null);
+        }
+    });
 
     //related to filter
     $scope.searchTerm;
