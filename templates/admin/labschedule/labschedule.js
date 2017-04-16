@@ -179,7 +179,7 @@ angular.module('computingServices.managelabschedule', ['ngRoute', 'ui.calendar',
 
 }])
 
-.controller('managelabschedulectrl', ['$scope', '$http', 'uiCalendarConfig', '$mdDialog', 'SharedService', 'ManageLabScheduleService', function ($scope, $http, uiCalendarConfig, $mdDialog, SharedService, ManageLabScheduleService) {
+.controller('managelabschedulectrl', ['$scope', '$http', 'uiCalendarConfig', '$mdDialog', 'SharedService', 'ManageLabScheduleService', '$location', function ($scope, $http, uiCalendarConfig, $mdDialog, SharedService, ManageLabScheduleService, $location) {
 
     $scope.isNewEvent = false;
 
@@ -257,6 +257,8 @@ angular.module('computingServices.managelabschedule', ['ngRoute', 'ui.calendar',
                 event.stick = true;
                 $scope.events.push(event);
             });
+            angular.element('.calendar').fullCalendar('addEventSource', $scope.eventSources);
+            angular.element('.calendar').fullCalendar('refetchEvents');
         });
     }
 
@@ -516,8 +518,19 @@ angular.module('computingServices.managelabschedule', ['ngRoute', 'ui.calendar',
         var startDate = new Date($scope.event.startDate);
         var endDate = new Date($scope.event.endDate);
 
-        var startDateTime = calculateStartDateTime();
-        var endDateTime = calculateEndDateTime();
+        var startHour = startDate.getHours();
+        var startMins = startDate.getMinutes();
+        if (startMins === 0) {
+            startMins = startMins + '0';
+        }
+        var startTime = startHour + ':' + startMins;
+
+        var endHour = endDate.getHours();
+        var endMins = endDate.getMinutes();
+        if (endMins === 0) {
+            endMins = endMins + '0';
+        }
+        var endTime = endHour + ':' + endMins;
 
         for (var day = startDate; day <= endDate;) {
             if (selectedDays.includes(day.getDay())) {
@@ -529,12 +542,21 @@ angular.module('computingServices.managelabschedule', ['ngRoute', 'ui.calendar',
                 event.allDay = false;
                 event.day = day.getDay();
                 event.labName = $scope.selLab;
-                event.start = startDateTime;
-                event.end = endDateTime;
+
+                var stDate = moment(day).format('MMM D, YYYY');
+                event.start = stDate + ' ' + startTime;
+
+                var edDate = moment(day).format('MMM D, YYYY');
+                event.end = edDate + ' ' + endTime;
 
                 eventDates.push(event);
             }
             day.setTime(day.getTime() + 1000 * 60 * 60 * 24);
+        }
+
+        // do not submit until there is a valid day selected
+        if (eventDates == null || eventDates.length === 0) {
+            return;
         }
 
         console.log('Recorded events to save: ', eventDates);
@@ -546,6 +568,8 @@ angular.module('computingServices.managelabschedule', ['ngRoute', 'ui.calendar',
                     SharedService.showSuccess(result.message);
                     //clear modal contents
                     $scope.clear();
+                    //clear existing claendar
+                    angular.element('.calendar').fullCalendar('removeEventSource', $scope.eventSources);
                     // reload calendar
                     getLabSchedule();
                     return;
@@ -592,7 +616,7 @@ angular.module('computingServices.managelabschedule', ['ngRoute', 'ui.calendar',
             .catch(function (resError) {
                 console.log('UPDATE CALL FAILURE :: ', resError);
                 //show failure message to the user
-                SharedService.showError('Failed to update lab schedule');
+                SharedService.showError('Failed to update the lab schedule');
             });
     }
 
@@ -637,20 +661,78 @@ angular.module('computingServices.managelabschedule', ['ngRoute', 'ui.calendar',
         event.backgroundColor = $scope.SelectedEvent.color;
         event.allDay = false;
         event.labName = $scope.selLab;
-        event._id = $scope.SelectedEvent._id;
         event.groupId = $scope.SelectedEvent.groupId;
+        event.start = calculateStartDateTime();
+        event.end = calculateEndDateTime();
 
         console.log('Record to update: ', event);
+
+        //call service method to update event
+        var promise = ManageLabScheduleService.updateAllEvents(event);
+        promise.then(function (result) {
+                if (result.statusCode === 200) {
+                    SharedService.showSuccess(result.message);
+                    //clear modal contents
+                    $scope.clear();
+                    // reload calendar
+                    getLabSchedule();
+                } else {
+                    SharedService.showError(result.message);
+                }
+            })
+            .catch(function (resError) {
+                console.log('UPDATE CALL FAILURE :: ', resError);
+                //show failure message to the user
+                SharedService.showError('Failed to update the lab schedule');
+            });
     }
 
     //delete an event
     $scope.delete = function () {
-        console.log('Deleting event: ', $scope.SelectedEvent._id);
+
+        console.log('Deleting - ', $scope.SelectedEvent._id.$oid);
+        var promise = ManageLabScheduleService.deleteLabSchedule($scope.SelectedEvent._id.$oid);
+        promise.then(function (result) {
+                if (result.statusCode === 200) {
+                    SharedService.showSuccess(result.message);
+                    //clear modal contents
+                    $scope.clear();
+                    // reload calendar
+                    getLabSchedule();
+                    return;
+                } else {
+                    SharedService.showError(result.message);
+                }
+            })
+            .catch(function (resError) {
+                console.log('DELETE CALL FAILURE :: ', resError);
+                //show failure message to the user
+                SharedService.showError('Failed to delete the event');
+            });
     }
 
     //delete all related events
     $scope.deleteAll = function () {
-        console.log('Deleting event: ', $scope.SelectedEvent.groupId);
+
+        console.log('Deleting - ', $scope.SelectedEvent.groupId);
+        var promise = ManageLabScheduleService.deleteAllEvents($scope.SelectedEvent.groupId);
+        promise.then(function (result) {
+                if (result.statusCode === 200) {
+                    SharedService.showSuccess(result.message);
+                    //clear modal contents
+                    $scope.clear();
+                    // reload calendar
+                    getLabSchedule();
+                    return;
+                } else {
+                    SharedService.showError(result.message);
+                }
+            })
+            .catch(function (resError) {
+                console.log('DELETE ALL CALL FAILURE :: ', resError);
+                //show failure message to the user
+                SharedService.showError('Failed to delete all occurrences of the event');
+            });
     }
 
     //clear modal contents
@@ -660,17 +742,6 @@ angular.module('computingServices.managelabschedule', ['ngRoute', 'ui.calendar',
         //reset selected lab
         $scope.selLab = undefined;
     }
-
-    // checks if given object is empty
-    /*$scope.isEmpty = function (object) {
-        if (Object.keys(object).length === 0) {
-            $scope.isNewEvent = true;
-        }
-        else {
-            $scope.isNewEvent = false;
-        }
-        return $scope.isNewEvent;
-    }*/
 
     // This data has to be obtained from service call
     $scope.labs = [{
