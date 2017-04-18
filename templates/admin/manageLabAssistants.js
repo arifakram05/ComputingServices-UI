@@ -15,11 +15,13 @@ angular.module('computingServices.manageLabAssistants', ['ngRoute'])
     var GET_LAB_ASSISTANTS_URI = constants.url + 'admin/viewLabAssistants';
     var DELETE_LAB_ASSISTANT_URI = constants.url + 'admin/deleteLabAssistant';
     var UPDATE_LAB_ASSISTANT_URI = constants.url + 'admin/updateLabAssistant';
+    var DOWNLOAD_URI = constants.url + 'admin/download';
 
     var factory = {
         getAllLabAssistants: getAllLabAssistants,
         deleteLabAssistant: deleteLabAssistant,
-        updateLabAssistant: updateLabAssistant
+        updateLabAssistant: updateLabAssistant,
+        download: download
     };
 
     return factory;
@@ -93,6 +95,33 @@ angular.module('computingServices.manageLabAssistants', ['ngRoute'])
                 console.log('Update operation failed ', status);
                 deferred.reject(data);
             });
+        return deferred.promise;
+    }
+
+    //download file
+    function download(laId) {
+        var deferred = $q.defer();
+        $http({
+                method: 'POST',
+                url: DOWNLOAD_URI,
+                responseType: 'arraybuffer',
+                headers: {
+                    'Content-Type': undefined
+                },
+                params: {
+                    studentId: laId
+                }
+            })
+            .then(
+                function (response) {
+                    console.log('data from web service: ', response);
+                    deferred.resolve(response.data);
+                },
+                function (errResponse) {
+                    console.error('Error while making service call to download file');
+                    deferred.reject(errResponse);
+                }
+            );
         return deferred.promise;
     }
 
@@ -215,7 +244,7 @@ angular.module('computingServices.manageLabAssistants', ['ngRoute'])
     $scope.deleteLA = function (laId) {
 
         var confirm = $mdDialog.confirm()
-            .title('Are you sure you want to delete LA with ID '+laId+'?')
+            .title('Are you sure you want to delete LA with ID ' + laId + '?')
             .textContent('You cannot retrieve the data once it is deleted. Continue?')
             .ok('Yes')
             .cancel('No');
@@ -244,6 +273,33 @@ angular.module('computingServices.manageLabAssistants', ['ngRoute'])
 
         });
     };
+
+    $scope.download = function (laId) {
+
+        console.log('downloading resume of ', laId);
+        //call service to download
+        var promise = ManageLabAssistantsService.download(laId);
+        promise.then(function (result) {
+                console.log('result : ', result);
+
+                var url = URL.createObjectURL(new Blob([result]));
+                var a = document.createElement('a');
+                a.href = url;
+                a.download = laId+'.pdf';
+                a.target = '_blank';
+                a.click();
+
+                if (result != 200) {
+                    SharedService.showSuccess('Download Complete');
+                } else {
+                    SharedService.showError('Download Failure');
+                }
+            })
+            .catch(function (resError) {
+                console.log('DOWNLOAD FAILURE :: ', resError);
+                SharedService.showError('Failed to download resume');
+            });
+    }
 
     //Create backup
     function createBackup(la) {
