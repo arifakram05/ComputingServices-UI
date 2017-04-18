@@ -112,16 +112,27 @@ angular.module('computingServices.manageLabAssistants', ['ngRoute'])
                     studentId: laId
                 }
             })
-            .then(
-                function (response) {
-                    console.log('data from web service: ', response);
-                    deferred.resolve(response.data);
-                },
-                function (errResponse) {
-                    console.error('Error while making service call to download file');
-                    deferred.reject(errResponse);
-                }
-            );
+            .success(function (data, status, headers, config) {
+                console.log('Download operation success - data ', data, ' - status ', status, ' - headers ', headers('filename'));
+
+                headers = headers();
+
+                var filename = headers['filename'];
+                console.log('file name is ', filename);
+                var contentType = headers['content-type'];
+                console.log('content type of the file is ', contentType);
+
+                var response = {};
+                response.data = data;
+                response.statusCode = status;
+                response.filename = filename;
+
+                deferred.resolve(response);
+            })
+            .error(function (data, status, headers, config) {
+                console.log('Download operation failure ', status);
+                deferred.reject(data, headers, status);
+            });
         return deferred.promise;
     }
 
@@ -279,25 +290,30 @@ angular.module('computingServices.manageLabAssistants', ['ngRoute'])
         console.log('downloading resume of ', laId);
         //call service to download
         var promise = ManageLabAssistantsService.download(laId);
-        promise.then(function (result) {
-                console.log('result : ', result);
+        promise.then(function (response) {
+                console.log('result : ', response);
 
-                var url = URL.createObjectURL(new Blob([result]));
-                var a = document.createElement('a');
-                a.href = url;
-                a.download = laId+'.pdf';
-                a.target = '_blank';
-                a.click();
+                var fileLength = response.data.byteLength;
 
-                if (result != 200) {
-                    SharedService.showSuccess('Download Complete');
+                if (fileLength !== 0) {
+                    var url = URL.createObjectURL(new Blob([response.data]));
+                    var a = document.createElement('a');
+                    a.href = url;
+                    a.download = response.filename;
+                    a.target = '_blank';
+                    a.click();
+
+                    //show success message
+                    SharedService.showSuccess("Download Complete");
                 } else {
-                    SharedService.showError('Download Failure');
+                    //notify that file does not exist for requested user
+                    SharedService.showWarning("File does not exist for this user");
                 }
+
             })
             .catch(function (resError) {
                 console.log('DOWNLOAD FAILURE :: ', resError);
-                SharedService.showError('Failed to download resume');
+                SharedService.showError('Error occurred while downloading requested file');
             });
     }
 
