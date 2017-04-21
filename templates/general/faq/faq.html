@@ -1,48 +1,56 @@
-<div class="comptingServices">
-    <div class="container">        
-        <div class="row">
-          <div class="col-lg-12">
-              <div ng-controller="FaqCtrl">
-                  <h3>Frequently Asked Questions</h3>
-                  <hr>                
-                  <div class="row">
-<!--
-                      <div class="col-xs-4">
-                          <h3>Page: {{ currentPage }}</h3>
-                      </div>
--->
-                      <div class="col-xs-6">
-                          <label for="search">Search:</label> 
-                          <input ng-model="q" id="search" class="form-control" placeholder="Search FAQs">
-                      </div>    
-                      <div class="col-xs-6">
-                          <label for="search">Items per page:</label>
-                          <input type="number" min="1" max="100" class="form-control" ng-model="pageSize">
-                      </div>  
-                  </div>
-              
-                  <br>
-              
-                  <div class="panel panel-default">
-                        <div class="panel-body">
-                            <ul class="no-bullets">
-                                <li dir-paginate="faq in faqs | filter:q | itemsPerPage: pageSize" current-page="currentPage">
-                                    <div class="text-left"> {{ faq.question }} </div>
-                                    <div class="text-left"> {{ faq.answer }} </div>
-                                    <hr>
-                                </li>                                
-                            </ul>
-                        </div>
-                  </div>
-              </div>
+<div class="comptingServices" ng-controller="FaqCtrl">
+    <div class="container">
 
-              <div ng-controller="FaqPageCtrl">
-                  <div class="text-center">
-                      <dir-pagination-controls boundary-links="true" on-page-change="pageChangeHandler(newPageNumber)" template-url="core/dirPagination.tpl.html"></dir-pagination-controls>
-                  </div>
-              </div>
-              
+        <md-toolbar class="md-primary">
+            <div class="toolbar">
+                <div class="md-toolbar-tools">
+                    <h2 class="md-flex">Frequently Asked Questions</h2>
+                </div>
             </div>
-        </div>
+        </md-toolbar>
+
+            <div class="row">
+                <div layout="row" layout-align="center" md-no-float class="md-block">
+                    <md-input-container flex="50" ng-style="{'height':'20px'}">
+                        <input ng-model="q" id="search" placeholder="Search FAQ....">
+                    </md-input-container>
+                </div>
+                <!--<div class="col-xs-6">
+                            <label for="search">Items per page:</label>
+                            <input type="number" min="1" max="100" class="form-control" ng-model="pageSize">
+                      </div>-->
+            </div>
+
+            <br>
+
+        <md-content flex layout-padding>
+
+            <md-list-item class="md-1-line" dir-paginate="faq in faqs | filter:q | itemsPerPage: pageSize" current-page="currentPage" ng-click="selectedQA(faq)">
+                <div class="md-list-item-text" layout="column">
+                    <p ng-class="{selected : faq.id === selQues}">Q. {{ faq.question }}</p>
+                    <p ng-if="faq.id === selQues" ng-style="{'color':'blue'}">{{ faq.answer }}</p>
+                    <md-divider></md-divider>
+                </div>
+            </md-list-item>
+
+            <!--<div class="panel panel-default">
+                <div class="panel-body">
+                    <ul class="no-bullets">
+                        <li dir-paginate="faq in faqs | filter:q | itemsPerPage: pageSize" current-page="currentPage">
+                            <div class="text-left"> {{ faq.question }} </div>
+                            <div class="text-left"> {{ faq.answer }} </div>
+                            <hr>
+                        </li>
+                    </ul>
+                </div>
+            </div>-->
+
+
+            <div ng-controller="FaqPageCtrl">
+                <div class="text-center">
+                    <dir-pagination-controls boundary-links="true" on-page-change="pageChangeHandler(newPageNumber)" template-url="core/dirPagination.tpl.html"></dir-pagination-controls>
+                </div>
+            </div>
+        </md-content>
     </div>
 </div>

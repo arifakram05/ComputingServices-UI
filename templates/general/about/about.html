@@ -1,7 +1,11 @@
 <div class="comptingServices">
     <div ng-repeat="data in pageData">
-        <h3>{{data.name}}</h3>
+        <h2>{{data.name}}</h2>
+
+        <br/>
         <p>{{data.description}}</p>
+
+        <br/>
         <img ng-src="img/{{data.images[0].name}}">
     </div>
 </div>

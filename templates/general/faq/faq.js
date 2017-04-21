@@ -40,6 +40,11 @@ angular.module('computingServices.faq', ['ngRoute'])
         console.log('FAQ Service Object:' + $scope.faqs);
     });
 
+    $scope.selectedQA = function (faq) {
+        console.log('showing faq - ',faq);
+        $scope.selQues = faq.id;
+    }
+
 }])
 
 .controller('FaqPageCtrl', ['$scope', function ($scope) {

@@ -4,11 +4,8 @@
     text-align: center;
     margin-top: 70px;
     margin-bottom: 30px;
-    font-family: "Helvetica Neue",Helvetica,Arial,sans-serif;
+    font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
 }
-/*.navbar {
-    background-color: black;
-}*/
 
 .jumbotron {
     background-color: #fff;
@@ -16,88 +13,24 @@
 }
 
 .no-bullets {
-    list-style-type:none;
+    list-style-type: none;
 }
-
-/*.menu {
-  list-style: none;
-  border-bottom: 0.1em solid black;
-  margin-bottom: 2em;
-  padding: 0 0 0.5em;
-}
-
-.menu:before {
-  content: "[";
-}
-
-.menu:after {
-  content: "]";
-}
-
-.menu > li {
-  display: inline;
-}
-
-.menu > li:before {
-  content: "|";
-  padding-right: 0.3em;
-}
-
-.menu > li:nth-child(1):before {
-  content: "";
-  padding: 0;
-}
-
-.img-full{
-  width:100%;
-}
-
-.no-bullets {
-    list-style-type:none;
-}*/
-
-/*
-hr {
-    border-top: 1px solid #e74c3d;
-    width: 160px;
-    margin-top: 15px;
-}
-*/
 
 .staff {
     background-color: #f5f5f5;
 }
 
-
-/*careers styling*/
-/*.username.ng-valid {
-    background-color: lightgreen;
-}
-.username.ng-dirty.ng-invalid-required {
-    background-color: red;
-}
-.username.ng-dirty.ng-invalid-minlength {
-    background-color: yellow;
-}
-
-.email.ng-valid {
-    background-color: lightgreen;
-}
-.email.ng-dirty.ng-invalid-required {
-    background-color: red;
-}
-.email.ng-dirty.ng-invalid-email {
-    background-color: yellow;
-}*/
 /*careers styling*/
 
 
 /*Apply For a Job - Fileupload*/
+
 .fileUpload {
     position: relative;
     overflow: hidden;
     margin: 10px;
 }
+
 .fileUpload input.upload {
     position: absolute;
     top: 0;
@@ -110,19 +43,21 @@ hr {
     filter: alpha(opacity=0);
 }
 
+
 /*Manage Job Applicants*/
-.formcontainer{
+
+.formcontainer {
     background-color: #fff;
     padding: 20px;
     border: 1px solid #d8dee2;
 }
 
-.tablecontainer{
+.tablecontainer {
     padding-left: 10px;
 }
 
 .generic-container {
-    width:100%;
+    width: 100%;
     margin-left: 10px;
     margin-top: 10px;
     margin-bottom: 10px;
@@ -165,22 +100,30 @@ hr {
 
 
 /*Manage Lab Schedule*/
+
 .inputdemoErrors .inputErrorsApp {
-    min-height: 48px; }
+    min-height: 48px;
+}
 
 .inputdemoErrors md-input-container > p {
     font-size: 0.8em;
     text-align: left;
-    width: 100%; }
+    width: 100%;
+}
+
 
 /*Lab Schedule Edit Form*/
+
 .labScheduleEditForm {
     background-color: whitesmoke;
 }
 
+
 /*record lab assistant work*/
+
 .recordwork md-content {
-    padding: 24px; }
+    padding: 24px;
+}
 
 .rightAlign {
     text-align: right;
@@ -203,7 +146,7 @@ hr {
 }
 
 .toolbar {
-    background-color: rgb(16,108,200);
+    background-color: rgb(16, 108, 200);
 }
 
 .styleCal {
@@ -222,7 +165,7 @@ hr {
 .fc-toolbar.fc-header-toolbar {
     padding: 20px;
     color: #fff;
-    background-color: rgb(16,108,200);
+    background-color: rgb(16, 108, 200);
     margin: inherit;
     font-family: serif;
     font-weight: 400;
@@ -234,13 +177,14 @@ hr {
     font-size: 24px;
 }
 
-
 .selectdemoSelectHeader .demo-header-searchbox {
     border: none;
     outline: none;
     height: 100%;
     width: 100%;
-    padding: 0; }
+    padding: 0;
+}
+
 .selectdemoSelectHeader .demo-select-header {
     box-shadow: 0 1px 0 0 rgba(0, 0, 0, 0.1), 0 0 0 0 rgba(0, 0, 0, 0.14), 0 0 0 0 rgba(0, 0, 0, 0.12);
     padding-left: 10.667px;
@@ -249,6 +193,9 @@ hr {
     position: relative;
     display: flex;
     align-items: center;
-    width: auto; }
+    width: auto;
+}
+
 .selectdemoSelectHeader md-content._md {
-    max-height: 240px; }
+    max-height: 240px;
+}
