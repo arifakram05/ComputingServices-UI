@@ -152,9 +152,9 @@ angular.module('computingServices.login', ['ngRoute'])
 
 .factory('LoginService', ['$http', '$q', function ($http, $q) {
 
-    var LOGIN_USER_URI = constants.url + 'login/';
-    var REGISTER_CHECK_URI = constants.url + 'registrationCheck/';
-    var REGISTER_USER_URI = constants.url + 'register/';
+    var LOGIN_USER_URI = constants.url + 'general/login/';
+    var REGISTER_CHECK_URI = constants.url + 'general/check/';
+    var REGISTER_USER_URI = constants.url + 'general/register/';
 
     var factory = {
         loginUser: loginUser,
@@ -220,7 +220,7 @@ angular.module('computingServices.login', ['ngRoute'])
         console.log('User to verify registration for is : ', userId);
         var deferred = $q.defer();
 
-        if (userId === 1) {
+        /*if (userId === 1) {
             console.log('control inside testing method : ', userId);
             var result = {
                 "code": 200
@@ -231,11 +231,11 @@ angular.module('computingServices.login', ['ngRoute'])
             };
         }
         deferred.resolve(result);
-        return deferred.promise;
+        return deferred.promise;*/
 
         //Real Server Call
-        /*$http({
-                method: 'POST',
+        $http({
+                method: 'GET',
                 url: REGISTER_CHECK_URI,
                 headers: {
                     'Content-Type': undefined
@@ -251,7 +251,7 @@ angular.module('computingServices.login', ['ngRoute'])
                 console.log('Registration check Failure ', status);
                 deferred.reject(data);
             });
-        return deferred.promise;*/
+        return deferred.promise;
     }
 
     //Register new user
@@ -365,22 +365,24 @@ angular.module('computingServices.login', ['ngRoute'])
         promise.then(function (result) {
                 console.log('Login Success, data retrieved :', result);
 
-                if (result.code === 500) {
-                    SharedService.showError('Error occurred while registering you. Please contact Lab Assistant or Lab Manager');
+                if (result.statusCode === 500) {
+                    SharedService.showError('Error occurred while verifying. Please contact Lab Assistant or Lab Manager');
                     return;
                 }
 
-                if (result.code === 200) {
+                if (result.statusCode === 200) {
                     $scope.canUserRegister = true;
-                } else {
-                    notifyUser('This ID is not authorized for registration. Please contact Lab Assistant or Lab Manager.');
+                } else if (result.statusCode === 404) {
+                    SharedService.showError(result.messages);
                     return;
+                } else if (result.statusCode === 403) {
+                    notifyUser(result.message);
                 }
             })
             .catch(function (resError) {
                 console.log('FAILURE :: ', resError);
                 //show failure message to the user
-                SharedService.showError('Server Error. System could not process your request');
+                SharedService.showError('Error Ocurred. System could not process your request');
             });
     }
 
