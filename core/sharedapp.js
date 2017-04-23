@@ -3,6 +3,7 @@ angular.module('computingServices.shared', ['ngRoute'])
 .service('SharedService', ['growl', '$http', '$q', '$window', '$location', function (growl, $http, $q, $window, $location) {
 
     var SEARCH_USERS_URI = constants.url + 'general/search';
+    var GET_ROLES_URI = constants.url + 'admin/role-names';
 
     this.userDetails = {};
     this.authToken = '';
@@ -33,7 +34,8 @@ angular.module('computingServices.shared', ['ngRoute'])
         logout: logout,
 
         //common service calls
-        searchUsers: searchUsers
+        searchUsers: searchUsers,
+        getRoles: getRoles
     };
 
     return service;
@@ -143,6 +145,7 @@ angular.module('computingServices.shared', ['ngRoute'])
     }
 
     //Common service calls
+
     function searchUsers(searchText) {
         var deferred = $q.defer();
         $http({
@@ -159,6 +162,25 @@ angular.module('computingServices.shared', ['ngRoute'])
                 },
                 function error(errResponse) {
                     console.error('Error while making service call to search for users ', errResponse);
+                    deferred.reject(errResponse);
+                }
+            );
+        return deferred.promise;
+    }
+
+    function getRoles() {
+        var deferred = $q.defer();
+        $http({
+                method: 'GET',
+                url: GET_ROLES_URI
+            })
+            .then(
+                function success(response) {
+                    console.log('Roles retreived: ', response);
+                    deferred.resolve(response.data);
+                },
+                function error(errResponse) {
+                    console.error('Error while making service call to fetch roles ', errResponse);
                     deferred.reject(errResponse);
                 }
             );

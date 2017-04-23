@@ -50,12 +50,15 @@ angular.module('computingServices.authorize', ['ngRoute'])
 
 .controller('AuthorizeCtrl', ['$scope', 'AuthorizeService', 'SharedService', function ($scope, AuthorizeService, SharedService) {
 
+    // get all roles
+    searchForRoles();
+
     $scope.authorize = function (user) {
-        console.log('authorizing ',user);
-        if (user.userId !== undefined) {
+        console.log('authorizing ', user);
+        if (user.userId !== undefined && $scope.role !== undefined) {
             user.firstName = user.firstName;
             user.lastName = user.lastName;
-            user.role = null;
+            user.role = $scope.role;
             console.log('authorizing user ', user);
             //call service method to authorize a user for registration to this system
             var promise = AuthorizeService.authorize(user);
@@ -102,11 +105,22 @@ angular.module('computingServices.authorize', ['ngRoute'])
         firstName: 'Spider Man'
     }];*/
 
+    /*$scope.roles = [{
+        id: 1,
+        roleName: 'Teaneck/Hackensack'
+    }, {
+        id: 2,
+        roleName: 'Madison'
+    }, {
+        id: 3,
+        roleName: 'Canada'
+    }];*/
+
     $scope.search = function (searchText) {
         var promise = SharedService.searchUsers(searchText);
         promise.then(function (result) {
                 console.log('got the result from searching users :', result);
-                if(result.statusCode === 200) {
+                if (result.statusCode === 200) {
                     $scope.users = result.response;
                 } else {
                     SharedService.showError('Failed to retreive users');
@@ -118,6 +132,33 @@ angular.module('computingServices.authorize', ['ngRoute'])
                 //show failure message to the user
                 SharedService.showError('Error ocurred while searching for users');
             });
+    }
+
+    function searchForRoles() {
+        var promise = SharedService.getRoles();
+        promise.then(function (result) {
+                console.log('got the result from searching users :', result);
+                if (result.statusCode === 200) {
+                    $scope.roles = result.response;
+                } else {
+                    SharedService.showError('Failed to retreive roles');
+                }
+
+            })
+            .catch(function (resError) {
+                console.log('fetching roles failed :: ', resError);
+                //show failure message to the user
+                SharedService.showError('Error ocurred while retreiving roles');
+            });
+    }
+
+    //check if button can be enabled
+    $scope.canContinue = function() {
+        if ($scope.user != null && $scope.role != null) {
+            return false;
+        } else {
+            return true;
+        }
     }
 
     //related to filter
