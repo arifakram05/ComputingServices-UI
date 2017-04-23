@@ -11,9 +11,22 @@
         <md-content class="md-padding">
             <form name="authorizeAUserForm">
                 <md-content class="md-no-momentum">
-                    <md-input-container md-no-float class="md-block">
-                        <input ng-model="user.userId" type="number" placeholder="Id Number to Authorize" required>
-                    </md-input-container>
+
+                    <md-input-container flex="" md-no-float class="md-block">
+                        <md-select ng-model="user" md-on-close="clearSearchTerm()" data-md-container-class="selectdemoSelectHeader" md-container-class="mySelect">
+                            <md-select-header class="demo-select-header">
+                                <input ng-model="searchTerm"
+                                       ng-change="search(searchTerm)"
+                                       type="search"
+                                       placeholder="Search for a Id Number or name to authorize..."
+                                       class="demo-header-searchbox md-text"
+                                       ng-keydown="onSearchChange($event)" >
+                            </md-select-header>
+                            <md-optgroup label="users">
+                                <md-option ng-value="user" ng-repeat="user in users | filter:searchTerm">{{user.lastName}}, {{user.firstName}} </md-option>
+                            </md-optgroup>
+                        </md-select>
+                    </md-input-container>user-{{user}}
                 </md-content>
 
                 <div layout="row" layout-align="center" flex>

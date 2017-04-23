@@ -51,10 +51,11 @@ angular.module('computingServices.authorize', ['ngRoute'])
 .controller('AuthorizeCtrl', ['$scope', 'AuthorizeService', 'SharedService', function ($scope, AuthorizeService, SharedService) {
 
     $scope.authorize = function (user) {
+        console.log('authorizing ',user);
         if (user.userId !== undefined) {
-            user.firstName = "Arif";
-            user.lastName = "Akram";
-            user.role = "Admin";
+            user.firstName = user.firstName;
+            user.lastName = user.lastName;
+            user.role = null;
             console.log('authorizing user ', user);
             //call service method to authorize a user for registration to this system
             var promise = AuthorizeService.authorize(user);
@@ -77,6 +78,55 @@ angular.module('computingServices.authorize', ['ngRoute'])
                     }
                 });
         }
+    }
+
+    // This data has to be obtained from service call
+    /*$scope.users = [{
+        userId: 1,
+        firstName: 'Arif Akram',
+        lastName: 'Mohammed'
+    }, {
+        userId: 2,
+        firstName: 'Julia',
+        lastName: 'Roberts'
+    }, {
+        userId: 3,
+        firstName: 'Michael',
+        lastName: 'Faraday'
+    }, {
+        userId: 4,
+        firstName: 'Taylor',
+        lastName: 'Swift'
+    }, {
+        userId: 5,
+        firstName: 'Spider Man'
+    }];*/
+
+    $scope.search = function (searchText) {
+        var promise = SharedService.searchUsers(searchText);
+        promise.then(function (result) {
+                console.log('got the result from searching users :', result);
+                if(result.statusCode === 200) {
+                    $scope.users = result.response;
+                } else {
+                    SharedService.showError('Failed to retreive users');
+                }
+
+            })
+            .catch(function (resError) {
+                console.log('search for users failed :: ', resError);
+                //show failure message to the user
+                SharedService.showError('Error ocurred while searching for users');
+            });
+    }
+
+    //related to filter
+    $scope.searchTerm;
+    $scope.clearSearchTerm = function () {
+        $scope.searchTerm = '';
+    };
+    $scope.onSearchChange = function ($event) {
+        $event.stopPropagation();
     }
 
     //Clear form fields

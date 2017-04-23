@@ -2,6 +2,8 @@ angular.module('computingServices.shared', ['ngRoute'])
 
 .service('SharedService', ['growl', '$http', '$q', '$window', '$location', function (growl, $http, $q, $window, $location) {
 
+    var SEARCH_USERS_URI = constants.url + 'general/search';
+
     this.userDetails = {};
     this.authToken = '';
 
@@ -31,7 +33,7 @@ angular.module('computingServices.shared', ['ngRoute'])
         logout: logout,
 
         //common service calls
-
+        searchUsers: searchUsers
     };
 
     return service;
@@ -141,6 +143,26 @@ angular.module('computingServices.shared', ['ngRoute'])
     }
 
     //Common service calls
-
+    function searchUsers(searchText) {
+        var deferred = $q.defer();
+        $http({
+                method: 'GET',
+                url: SEARCH_USERS_URI,
+                params: {
+                    user: searchText
+                }
+            })
+            .then(
+                function success(response) {
+                    console.log('users retrieved per search criteria: ', response);
+                    deferred.resolve(response.data);
+                },
+                function error(errResponse) {
+                    console.error('Error while making service call to search for users ', errResponse);
+                    deferred.reject(errResponse);
+                }
+            );
+        return deferred.promise;
+    }
 
 }]);
