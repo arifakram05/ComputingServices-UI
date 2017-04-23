@@ -373,8 +373,9 @@ angular.module('computingServices.login', ['ngRoute'])
                 if (result.statusCode === 200) {
                     $scope.canUserRegister = true;
                 } else if (result.statusCode === 404) {
-                    SharedService.showError(result.messages);
-                    return;
+                    SharedService.showInfo(result.message);
+                    //show first tab, as user is already registered
+                    $scope.showTab(1);
                 } else if (result.statusCode === 403) {
                     notifyUser(result.message);
                 }
@@ -421,13 +422,14 @@ angular.module('computingServices.login', ['ngRoute'])
                     }
 
                     //Show success message to the user
-                    SharedService.showSuccess(result.message + '. You can now login');
+                    SharedService.showSuccess(result.message);
 
                     //show first tab
                     $scope.showTab(1);
 
                     //clear register form
                     $scope.clearRegisterForm();
+                    $scope.startRegistration();
                 })
                 .catch(function (resError) {
                     console.log('FAILURE :: ', resError);
