@@ -67,13 +67,15 @@ angular.module('computingServices.careers', ['ngRoute'])
             console.log($scope.user);
             // get the file extension
             var allowedExtns = ['pdf', 'doc', 'docx', 'odt'];
-            var fileExtn = $scope.files.name.split('.');
-            if (fileExtn.length === 1 || (fileExtn[0] === "" && a.length === 2) || fileExtn.length > 2 || allowedExtns.indexOf(fileExtn[1]) === -1) {
-                notifyUser('Only the files with extensions .pdf .doc .docx .odt are permitted for upload. Please upload a valid file');
-                return;
+            if ($scope.files.length > 0) {
+                var fileExtn = $scope.files.name.split('.');
+                if (fileExtn.length === 1 || (fileExtn[0] === "" && a.length === 2) || fileExtn.length > 2 || allowedExtns.indexOf(fileExtn[1]) === -1) {
+                    notifyUser('Only the files with extensions .pdf .doc .docx .odt are permitted for upload. Please upload a valid file');
+                    return;
+                }
+                console.log('resume extn ', fileExtn[1]);
+                $scope.user.resumeExtn = fileExtn[1];
             }
-            console.log('resume extn ', fileExtn[1]);
-            $scope.user.resumeExtn = fileExtn[1];
 
             $scope.user.dateApplied = $filter('date')(new Date(), 'mediumDate');
             /*http://127.0.0.1:8080/ComputingServicesApp/home/careers2*/
