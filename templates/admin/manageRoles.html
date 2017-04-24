@@ -13,12 +13,6 @@
         <md-content class="md-padding" ng-style="{'width': '30%'}">
             <md-list-item ng-repeat="role in roles" ng-click="selectRole(role);changeTab(role);" ng-class="{selected : role.roleName === selRoleToShow.roleName}">
                 <span ng-bind="role.roleName"></span>
-                <div class="md-secondary" class="btn-group">
-                    <a class="btn btn-danger" ng-click="deleteRole(role)">
-                        <i class="fa fa-trash-o fa-lg"></i>
-                        <md-tooltip>Delete Role</md-tooltip>
-                    </a>
-                </div>
                 <md-divider></md-divider>
             </md-list-item>
             <md-input-container flex="5"></md-input-container>
@@ -74,7 +68,7 @@
 
                     <md-input-container flex="1"></md-input-container>
 
-                    <a class="btn" ng-click="deleteRole(selRoleToShow)">
+                    <a class="btn" ng-if="creatingRole === false" ng-click="deleteRole(selRoleToShow)">
                         <i class="fa fa-trash-o fa-lg"></i>
                         <md-tooltip>Delete Role</md-tooltip>
                     </a>
@@ -86,7 +80,7 @@
             <div layout="row">
                 <div layout="column" ng-style="{'width': '40%'}">
                     <p ng-style="{'font-size':'16px'}">Available Privileges</p>
-                    <select size="10" multiple ng-model="selRoleToShow.available" ng-options="priv as priv.name for priv in selRoleToShow.availablePrivs"></select>
+                    <select size="10" multiple ng-model="selRoleToShow.available" ng-options="priv as priv.description for priv in selRoleToShow.availablePrivs"></select>
                 </div>
 
                 <md-input-container flex="5"></md-input-container>
@@ -111,7 +105,7 @@
 
                 <div layout="column" ng-style="{'width': '40%'}">
                     <p ng-style="{'font-size':'16px'}">Assigned Privileges</p>
-                    <select size="10" multiple ng-model="selRoleToShow.selected" ng-options="priv as priv.name for priv in selRoleToShow.assignedPrivs"></select>
+                    <select size="10" multiple ng-model="selRoleToShow.selected" ng-options="priv as priv.description for priv in selRoleToShow.assignedPrivs"></select>
                 </div>
             </div>
         </md-content>
