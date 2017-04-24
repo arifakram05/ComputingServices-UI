@@ -155,11 +155,13 @@ angular.module('computingServices.login', ['ngRoute'])
     var LOGIN_USER_URI = constants.url + 'general/login/';
     var REGISTER_CHECK_URI = constants.url + 'general/check/';
     var REGISTER_USER_URI = constants.url + 'general/register/';
+    var GET_PRIVILEGES_URI = constants.url + 'admin/assigned-privs/';
 
     var factory = {
         loginUser: loginUser,
         canUserRegister: canUserRegister,
-        registerUser: registerUser
+        registerUser: registerUser,
+        getPrivileges: getPrivileges
     };
 
     return factory;
@@ -282,6 +284,36 @@ angular.module('computingServices.login', ['ngRoute'])
             });
         return deferred.promise;
     }
+
+    //get user privileges
+    function getPrivileges(role) {
+        console.log('fetching privileges for role name : ', role);
+        var deferred = $q.defer();
+
+        //mock data
+        var privileges = ["/manageJobApplicants", "/manageLabAssistants", "/authorize", "/manageRoles", "/managelabschedule", "/manageStaffSchedule", "/displaywork", "/recordwork",
+            "/manageprofile"];
+        deferred.resolve(privileges);
+
+        //real server call
+        /*$http({
+                method: 'GET',
+                url: GET_PRIVILEGES_URI,
+                params: {
+                    role: role
+                }
+            })
+            .success(function (data, status, headers, config) {
+                console.log('privileges fetched ', data);
+                deferred.resolve(data);
+            })
+            .error(function (data, status, headers, config) {
+                console.log('Failed to fetch privileges ', status);
+                deferred.reject(data);
+            });*/
+        return deferred.promise;
+    }
+
 }])
 
 .controller('LoginCtrl', ['$scope', 'LoginService', '$location', 'SharedService', '$mdDialog', function ($scope, LoginService, $location, SharedService, $mdDialog) {
@@ -349,6 +381,27 @@ angular.module('computingServices.login', ['ngRoute'])
         SharedService.setUserDetails(userDetails);
         //set auth token
         SharedService.setAuthToken(userDetails.authToken);
+        //get privileges
+        getPrivileges();
+    }
+
+    //get the info about what sections of application the user can access
+    function getPrivileges() {
+        var promise = LoginService.getPrivileges(SharedService.getUserRole());
+        promise.then(function (result) {
+                console.log('Obtained user privileges', result);
+                //put them in sharedservice
+                SharedService.setUserPrivileges(result);
+                //do something with the privileges
+                console.log('user privileges: ', SharedService.getUserPrivileges());
+            })
+            .catch(function (resError) {
+                console.log('FETCH USER PRIVILEGES FAILURE :: ', resError);
+                //show failure message to the user
+                SharedService.showError('Error while getting crucial data, hence logging you out. Please contact Lab Manager');
+                // logout the user
+                SharedService.logout();
+            });
     }
 
     //Clear login form

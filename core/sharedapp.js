@@ -7,6 +7,7 @@ angular.module('computingServices.shared', ['ngRoute'])
 
     this.userDetails = {};
     this.authToken = '';
+    this.privileges = [];
 
     var service = {
         setUserDetails: setUserDetails,
@@ -20,6 +21,9 @@ angular.module('computingServices.shared', ['ngRoute'])
         getUserRole: getUserRole,
         getUserTitle: getUserTitle,
         getUserEmail: getUserEmail,
+
+        setUserPrivileges: setUserPrivileges,
+        getUserPrivileges: getUserPrivileges,
 
         showLoginPage: showLoginPage,
         navigateToHome: navigateToHome,
@@ -84,6 +88,17 @@ angular.module('computingServices.shared', ['ngRoute'])
         return this.userDetails.emailId;
     }
 
+    function setUserPrivileges(privileges) {
+        $window.localStorage.setItem('csPrivileges', JSON.stringify(privileges));
+    }
+
+    function getUserPrivileges() {
+        if ($window.localStorage.getItem('csPrivileges')) {
+            this.privileges = JSON.parse($window.localStorage.getItem('csPrivileges'));
+        }
+        return this.privileges;
+    }
+
     function showLoginPage() {
         //console.log('Inside Shared Controller"s showLoginPage method');
         $location.path('/login');
@@ -117,6 +132,7 @@ angular.module('computingServices.shared', ['ngRoute'])
         this.authToken = '';
         $window.localStorage.removeItem('csUserDetails');
         $window.localStorage.removeItem('csAuthToken');
+        $window.localStorage.removeItem('csPrivileges');
     }
 
     /*Messages to the user*/

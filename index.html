@@ -54,29 +54,25 @@
                     <li><a href="#/faq">FAQ</a></li>
                     <li><a href="#/about">About</a></li>
                     <li><a href="#/contact">Contact</a></li>
-                    <li><a href="#/careers">Apply for a LA Position</a></li>
+                    <li><a href="#/careers">Jobs</a></li>
 
                     <!--Admin only features-->
                     <li class="dropdown" ng-if="isUserLoggedIn && userRole === 'Admin' ">
-                        <a class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">Admin <span class="caret"></span></a>
+                        <a class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">Features <span class="caret"></span></a>
                         <ul class="dropdown-menu">
-                            <li><a href="#/manageJobApplicants">Job Applicants</a></li>
-                            <li><a href="#/manageLabAssistants">Lab Assistants</a></li>
-                            <li><a href="#/managelabschedule">Lab Schedule</a></li>
-                            <li><a href="#/manageStaffSchedule">Staff Schedule</a></li>
-                            <li><a href="#/manageRoles">Roles</a></li>
-                            <li><a href="#/authorize">Authorize</a></li>
-                        </ul>
-                    </li>
+                            <li ng-if="isExists('/manageJobApplicants')"><a href="#/manageJobApplicants">Job Applicants</a></li>
+                            <li ng-if="isExists('/manageLabAssistants')"><a href="#/manageLabAssistants">Lab Assistants</a></li>
+                            <li ng-if="isExists('/managelabschedule')"><a href="#/managelabschedule">Lab Schedule</a></li>
+                            <li ng-if="isExists('/manageStaffSchedule')"><a href="#/manageStaffSchedule">Staff Schedule</a></li>
+                            <li ng-if="isExists('/manageRoles')"><a href="#/manageRoles">Roles</a></li>
+                            <li ng-if="isExists('/authorize')"><a href="#/authorize">Authorize</a></li>
 
-                    <!--LA only features-->
-                    <li class="dropdown" ng-if="isUserLoggedIn && userRole === 'Admin' ">
-                        <a class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">LA <span class="caret"></span></a>
-                        <ul class="dropdown-menu">
-                            <li><a href="#/recordwork">Log Shift</a></li>
-                            <li><a href="#/displaywork">Show Recorded Work</a></li>
+                            <li class="divider"></li>
+
+                            <li ng-if="isExists('/recordwork')"><a href="#/recordwork">Log Shift</a></li>
+                            <li ng-if="isExists('/displaywork')"><a href="#/displaywork">Show Recorded Work</a></li>
+                            <li ng-if="isExists('/manageprofile')"><a href="#/manageprofile">Manage Profile</a></li>
                             <!--<li><a href="#/viewworkschedule">Work Schedule</a></li>-->
-                            <li><a href="#/manageprofile">Manage Profile</a></li>
                         </ul>
                     </li>
 

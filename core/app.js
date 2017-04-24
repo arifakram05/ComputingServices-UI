@@ -78,6 +78,7 @@ var computingServicesApp = angular.module('computingServices', [
 
         if ($scope.userDetails != null) {
             $scope.userRole = $scope.userDetails.role;
+            $scope.userPrivileges = SharedService.getUserPrivileges();
         }
     }, true);
 
@@ -91,6 +92,10 @@ var computingServicesApp = angular.module('computingServices', [
         SharedService.navigateToHome();
         SharedService.logout();
         SharedService.showSuccess("Logged out");
+    }
+
+    $scope.isExists = function(feature) {
+        return ($scope.userPrivileges.indexOf(feature) != -1)
     }
 
 }]);
