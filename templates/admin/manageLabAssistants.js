@@ -20,8 +20,7 @@ angular.module('computingServices.manageLabAssistants', ['ngRoute'])
     var factory = {
         getAllLabAssistants: getAllLabAssistants,
         deleteLabAssistant: deleteLabAssistant,
-        updateLabAssistant: updateLabAssistant,
-        download: download
+        updateLabAssistant: updateLabAssistant
     };
 
     return factory;
@@ -98,43 +97,7 @@ angular.module('computingServices.manageLabAssistants', ['ngRoute'])
         return deferred.promise;
     }
 
-    //download file
-    function download(laId) {
-        var deferred = $q.defer();
-        $http({
-                method: 'POST',
-                url: DOWNLOAD_URI,
-                responseType: 'arraybuffer',
-                headers: {
-                    'Content-Type': undefined
-                },
-                params: {
-                    studentId: laId
-                }
-            })
-            .success(function (data, status, headers, config) {
-                console.log('Download operation success - data ', data, ' - status ', status, ' - headers ', headers('filename'));
 
-                headers = headers();
-
-                var filename = headers['filename'];
-                console.log('file name is ', filename);
-                var contentType = headers['content-type'];
-                console.log('content type of the file is ', contentType);
-
-                var response = {};
-                response.data = data;
-                response.statusCode = status;
-                response.filename = filename;
-
-                deferred.resolve(response);
-            })
-            .error(function (data, status, headers, config) {
-                console.log('Download operation failure ', status);
-                deferred.reject(data, headers, status);
-            });
-        return deferred.promise;
-    }
 
     /*function createUser(user) {
         var deferred = $q.defer();
@@ -285,11 +248,12 @@ angular.module('computingServices.manageLabAssistants', ['ngRoute'])
         });
     };
 
+    //download LA resume
     $scope.download = function (laId) {
 
         console.log('downloading resume of ', laId);
         //call service to download
-        var promise = ManageLabAssistantsService.download(laId);
+        var promise = SharedService.download(laId, 'labassistants');
         promise.then(function (response) {
                 console.log('result : ', response);
 

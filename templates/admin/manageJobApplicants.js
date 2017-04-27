@@ -284,6 +284,39 @@ angular.module('computingServices.manageJobApplicants', ['ngRoute'])
             });
     }
 
+    // download applicant resume
+    $scope.download = function (applicantId) {
+
+        console.log('downloading resume of ', applicantId);
+        //call service to download
+        var promise = SharedService.download(applicantId, 'jobapplicants');
+        promise.then(function (response) {
+                console.log('result : ', response);
+
+                var fileLength = response.data.byteLength;
+
+                if (fileLength !== 0) {
+                    var url = URL.createObjectURL(new Blob([response.data]));
+                    var a = document.createElement('a');
+                    a.href = url;
+                    a.download = response.filename;
+                    a.target = '_blank';
+                    a.click();
+
+                    //show success message
+                    SharedService.showSuccess("Download Complete");
+                } else {
+                    //notify that file does not exist for requested user
+                    SharedService.showWarning("File does not exist for this user");
+                }
+
+            })
+            .catch(function (resError) {
+                console.log('DOWNLOAD FAILURE :: ', resError);
+                SharedService.showError('Error occurred while downloading requested file');
+            });
+    }
+
     $scope.email = function (jobApplicant) {
         console.log('Sending email to the candidate ', jobApplicant);
 

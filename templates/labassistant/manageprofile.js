@@ -70,7 +70,7 @@ angular.module('computingServices.manageprofile', ['ngRoute'])
         console.log('profile to be saved is ', labAsst, $scope.files, $scope.files_photo);
 
         //Testing Only
-        labAsst._id = "58e09e4d31f2f7c8d9dd2d59";
+        labAsst._id = "590138b3218de207b7ed018f";
         labAsst.firstName = "Allan";
         labAsst.lastName = "Donald";
 

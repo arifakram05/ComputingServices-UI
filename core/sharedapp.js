@@ -4,6 +4,7 @@ angular.module('computingServices.shared', ['ngRoute'])
 
     var SEARCH_USERS_URI = constants.url + 'general/search';
     var GET_ROLES_URI = constants.url + 'admin/role-names';
+    var DOWNLOAD_URI = constants.url + 'admin/download';
 
     this.userDetails = {};
     this.authToken = '';
@@ -39,7 +40,8 @@ angular.module('computingServices.shared', ['ngRoute'])
 
         //common service calls
         searchUsers: searchUsers,
-        getRoles: getRoles
+        getRoles: getRoles,
+        download: download
     };
 
     return service;
@@ -200,6 +202,45 @@ angular.module('computingServices.shared', ['ngRoute'])
                     deferred.reject(errResponse);
                 }
             );
+        return deferred.promise;
+    }
+
+    //download file
+    function download(id, requester) {
+        var deferred = $q.defer();
+        $http({
+                method: 'POST',
+                url: DOWNLOAD_URI,
+                responseType: 'arraybuffer',
+                headers: {
+                    'Content-Type': undefined
+                },
+                params: {
+                    id: id,
+                    requester: requester
+                }
+            })
+            .success(function (data, status, headers, config) {
+                console.log('Download operation success - data ', data, ' - status ', status, ' - headers ', headers('filename'));
+
+                headers = headers();
+
+                var filename = headers['filename'];
+                console.log('file name is ', filename);
+                var contentType = headers['content-type'];
+                console.log('content type of the file is ', contentType);
+
+                var response = {};
+                response.data = data;
+                response.statusCode = status;
+                response.filename = filename;
+
+                deferred.resolve(response);
+            })
+            .error(function (data, status, headers, config) {
+                console.log('Download operation failure ', status);
+                deferred.reject(data, headers, status);
+            });
         return deferred.promise;
     }
 
