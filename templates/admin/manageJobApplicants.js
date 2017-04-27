@@ -148,7 +148,7 @@ angular.module('computingServices.manageJobApplicants', ['ngRoute'])
 
 }])
 
-.controller('ManageJobApplicantsCtrl', ['$scope', 'ManageJobApplicantsService', 'SharedService', '$filter', function ($scope, ManageJobApplicantsService, SharedService, $filter) {
+.controller('ManageJobApplicantsCtrl', ['$scope', 'ManageJobApplicantsService', 'SharedService', '$filter', '$mdDialog', function ($scope, ManageJobApplicantsService, SharedService, $filter, $mdDialog) {
     console.log('clicked on manage job applicants');
 
     $scope.jobApplicants = [];
@@ -239,49 +239,65 @@ angular.module('computingServices.manageJobApplicants', ['ngRoute'])
     $scope.delete = function (studentId) {
         console.log('Deleting job applicant with id: ', studentId);
 
-        var promise = ManageJobApplicantsService.deleteJobApplicant(studentId);
-        promise.then(function (result) {
+        var confirm = $mdDialog.confirm()
+            .title('Are you sure you want to delete job applicant with ID ' + studentId + '?')
+            .textContent('You cannot retrieve the data once it is deleted. Continue?')
+            .ok('Yes')
+            .cancel('No');
 
-                if (result.statusCode === 200) {
-                    SharedService.showSuccess(result.message);
-                    //refresh table contents
-                    fetchAllJobApplicants();
-                    console.log('Delete Operation success, refershing job applicants table');
-                    return;
-                } else {
-                    SharedService.showError(result.message);
-                }
-            })
-            .catch(function (resError) {
-                console.log('DELETE FAILURE :: ', resError);
-                //show failure message to the user
-                SharedService.showError('Failed to delete job applicant');
-            });
+        $mdDialog.show(confirm).then(function () {
+            var promise = ManageJobApplicantsService.deleteJobApplicant(studentId);
+            promise.then(function (result) {
+
+                    if (result.statusCode === 200) {
+                        SharedService.showSuccess(result.message);
+                        //refresh table contents
+                        fetchAllJobApplicants();
+                        console.log('Delete Operation success, refershing job applicants table');
+                        return;
+                    } else {
+                        SharedService.showError(result.message);
+                    }
+                })
+                .catch(function (resError) {
+                    console.log('DELETE FAILURE :: ', resError);
+                    //show failure message to the user
+                    SharedService.showError('Failed to delete job applicant');
+                });
+        });
     }
 
     //Hire the job applicant
     $scope.hire = function (labAssistant) {
         console.log('Hiring applicant', labAssistant);
 
-        labAssistant.dateHired = $filter('date')(new Date(), 'mediumDate');
+        var confirm = $mdDialog.confirm()
+        .title('Hiring job applicant with ID ' + labAssistant.studentId)
+            .textContent('Do you want to proceed with hiring this candidate?')
+            .ok('Yes')
+            .cancel('No');
 
-        var promise = ManageJobApplicantsService.hireJobApplicant(labAssistant);
-        promise.then(function (result) {
-                if (result.statusCode === 200) {
-                    SharedService.showSuccess(result.message);
-                    //refresh table contents
-                    fetchAllJobApplicants();
-                    console.log('Hiring operation success, refershing job applicants table');
-                    return;
-                } else {
-                    SharedService.showError(result.message);
-                }
-            })
-            .catch(function (resError) {
-                console.log('HIRING CALL FAILURE :: ', resError);
-                //show failure message to the user
-                SharedService.showError('Failed to hire job applicant');
-            });
+        $mdDialog.show(confirm).then(function () {
+            labAssistant.dateHired = $filter('date')(new Date(), 'mediumDate');
+
+            var promise = ManageJobApplicantsService.hireJobApplicant(labAssistant);
+            promise.then(function (result) {
+                    if (result.statusCode === 200) {
+                        SharedService.showSuccess(result.message);
+                        //refresh table contents
+                        fetchAllJobApplicants();
+                        console.log('Hiring operation success, refershing job applicants table');
+                        return;
+                    } else {
+                        SharedService.showError(result.message);
+                    }
+                })
+                .catch(function (resError) {
+                    console.log('HIRING CALL FAILURE :: ', resError);
+                    //show failure message to the user
+                    SharedService.showError('Failed to hire job applicant');
+                });
+        });
     }
 
     // download applicant resume
