@@ -160,12 +160,15 @@
 
                             <!--Education level and LinkedIn Profile-->
                             <div layout="row">
-                                <select flex="50" class="form-control" name="education" ng-model="selectedApplicant.education">
-                                    <option value="ASSOCIATES">Associates</option>
-                                    <option value="UNDERGRAD">Under Grad</option>
-                                    <option value="GRAD">Grad</option>
-                                    <option value="POSTGRAD">Post Grad</option>
-                                </select>
+                                <!--<select flex="50" class="form-control" name="education" ng-model="selectedApplicant.education">
+                                    <option value="Undergrad">Undergrad</option>
+                                    <option value="Grad">Grad</option>
+                                </select>-->
+
+                                <md-input-container flex="50">
+                                    <label>Education</label>
+                                    <input name="education" ng-model="selectedApplicant.education" disabled/>
+                                </md-input-container>
 
                                 <md-input-container flex="10"></md-input-container>
 
