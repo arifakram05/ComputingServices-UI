@@ -23,6 +23,7 @@
                         <th ng-style="{'text-align':'left'}">First Name</th>
                         <th ng-style="{'text-align':'left'}">Last Name</th>
                         <th ng-style="{'text-align':'left'}">Education</th>
+                        <th ng-style="{'text-align':'left'}">Status</th>
                         <th ng-style="{'text-align':'left'}">Resume</th>
                         <th ng-style="{'text-align':'left', 'width':'170px'}">Actions</th>
                     </tr>
@@ -40,6 +41,16 @@
 
                             <td>
                                 <span ng-bind="applicant.education"></span>
+                            </td>
+
+                            <td>
+                                <md-select name="status" ng-model="applicant.status" ng-style="{'width':'80%', 'padding':'0', 'margin':'0'}">
+                                    <md-option value="Submitted">Submitted</md-option>
+                                    <md-option value="InReview">In Review</md-option>
+                                    <md-option value="InProgress">Interview in progress</md-option>
+                                    <md-option value="Selected">Selected</md-option>
+                                    <md-option value="Rejected">No longer in consideration</md-option>
+                                </md-select>
                             </td>
 
                             <td>
@@ -160,11 +171,6 @@
 
                             <!--Education level and LinkedIn Profile-->
                             <div layout="row">
-                                <!--<select flex="50" class="form-control" name="education" ng-model="selectedApplicant.education">
-                                    <option value="Undergrad">Undergrad</option>
-                                    <option value="Grad">Grad</option>
-                                </select>-->
-
                                 <md-input-container flex="50">
                                     <label>Education</label>
                                     <input name="education" ng-model="selectedApplicant.education" disabled/>
