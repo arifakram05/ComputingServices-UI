@@ -1,0 +1,113 @@
+<div ng-controller="manageStaffScheduleCtrl" class="topPadding30">
+
+    <!--Filter-->
+    <md-input-container flex="" md-no-float class="md-block">
+        <label>Filters</label>
+        <md-select ng-model="filteredLabs" md-on-close="clearSearchTerm()" data-md-container-class="selectdemoSelectHeader" multiple="">
+            <md-select-header class="demo-select-header">
+                <input ng-model="searchTerm"
+                       type="search"
+                       placeholder="Search for a lab..."
+                       class="demo-header-searchbox md-text"
+                       ng-keydown="onSearchChange($event)" >
+            </md-select-header>
+            <md-optgroup label="labs">
+                <md-option ng-value="lab.labName" ng-repeat="lab in labs |
+                                                             filter:searchTerm">{{lab.labName}} </md-option>
+            </md-optgroup>
+        </md-select>
+    </md-input-container>
+
+    <!--Calendar-->
+    <div class="row styleCal">
+        <div class="col-md-12">
+            <div id="calendar" ui-calendar="uiConfig.calendar" ng-model="eventSources" calendar="myCalendar"></div>
+        </div>
+    </div>
+
+    <!--Modal Begin-->
+    <div class="modal fade" id="las_modal" tabindex="-1" role="dialog" aria-labelledby="las_modal" aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+
+                <div class="modal-header">
+                    <md-toolbar class="md-primary">
+                        <div class="toolbar">
+                            <div class="md-toolbar-tools">
+                                <h2 class="md-flex">Create Staff Schedule</h2>
+                            </div>
+                        </div>
+                    </md-toolbar>
+                </div>
+
+                <div class="modal-body">
+                    <md-content class="md-no-momentum" class="PaddingAllAround">
+
+                        <!--Days of a week-->
+                        <div layout="column" flex="" class="PaddingAllAround">
+
+                            <div layout="row" layout-align="center">
+                                <div layout="row" layout-align="center center" flex="50">
+                                    <select ng-model="selLab" flex="">
+                                        <option value="">Select Campus</option>
+                                        <option ng-repeat="lab in labs" value="{{lab.labName}}">{{lab.labName}}</option>
+                                    </select>
+                                </div>
+                            </div>
+
+                            <md-input-container flex="10"></md-input-container>
+
+                            <div layout="row" layout-align="center">
+                                <md-input-container flex="">
+                                    <label>Dates</label>
+                                    <input date-range-picker class="form-control date-picker" type="text" ng-model="event" options="opts" />
+                                </md-input-container>
+                            </div>
+
+
+                            <div layout="row" layout-align="center" flex="" ng-if="isNewEvent === true">
+                                <div flex="" ng-repeat="item in items">
+                                    <md-checkbox ng-checked="exists(item, selectedDays)" ng-click="toggle(item, selectedDays)">
+                                        {{ item.name }}
+                                    </md-checkbox>
+                                </div>
+                            </div>
+                        </div>
+
+                        <md-input-container flex="5" ng-if="isNewEvent === true"></md-input-container>
+                    </md-content>
+                </div>
+
+                <div class="modal-footer">
+                    <div layout="row" layout-align="center center" flex>
+                        <a class="btn btn-default" data-dismiss="modal" ng-style="{'height':'35px'}" ng-click="clear()">
+                            <i class="fa fa-times-circle"></i> Close
+                        </a>
+                        <md-input-container flex="1" ng-if="isNewEvent === true"></md-input-container>
+                        <a class="btn btn-primary" id="create" ng-style="{'height':'35px'}"  ng-click="create()" ng-if="isNewEvent === true && !shouldEnableButtonForCreate()">
+                            <i class="fa fa-plus-square-o"></i> Create
+                        </a>
+                        <md-input-container flex="1"></md-input-container>
+                        <a class="btn btn-primary" data-dismiss="modal" ng-style="{'height':'35px'}" ng-click="update()" ng-if="isNewEvent === false">
+                            <i class="fa fa-wrench"></i> Update
+                        </a>
+                        <md-input-container flex="1"></md-input-container>
+                        <a class="btn btn-danger" data-dismiss="modal" ng-style="{'height':'35px'}" ng-click="delete()" ng-if="isNewEvent === false">
+                            <i class="fa fa-trash-o"></i> Delete
+                        </a>
+                        <md-input-container flex="1"></md-input-container>
+                        <a class="btn btn-primary" data-dismiss="modal" ng-style="{'height':'35px'}" ng-click="updateAll()" ng-if="isNewEvent === false">
+                            <i class="fa fa-wrench"></i> Update All
+                        </a>
+                        <md-input-container flex="1"></md-input-container>
+                        <a class="btn btn-danger" data-dismiss="modal" ng-style="{'height':'35px'}" ng-click="deleteAll()" ng-if="isNewEvent === false">
+                            <i class="fa fa-trash-o"></i> Delete All
+                        </a>
+                    </div>
+                </div>
+
+            </div>
+        </div>
+    </div>
+    <!--Modal End-->
+</div>

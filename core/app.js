@@ -8,7 +8,6 @@ var computingServicesApp = angular.module('computingServices', [
     'computingServices.about',
     'computingServices.contact',
     'computingServices.faq',
-    'computingServices.labSchedule',
     'computingServices.staff',
     'computingServices.staffSchedule',
 
