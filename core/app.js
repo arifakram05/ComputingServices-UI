@@ -17,7 +17,6 @@ var computingServicesApp = angular.module('computingServices', [
     'computingServices.manageRoles',
     'computingServices.authorize',
     'computingServices.manageStaffSchedule',
-    'computingServices.managelabschedule',
 
     /*lab assistant modules*/
     'computingServices.recordwork',
@@ -130,7 +129,7 @@ var computingServicesApp = angular.module('computingServices', [
         }
 
         // redirect to login page if not logged in and trying to access a restricted page
-        var unRestrictedPages = ['/home', '/login', '/register', '/about', '/contact', '/', '/labSchedule', '/staffSchedule', '/staff', '/faq', '/careers'];
+        var unRestrictedPages = ['/home', '/login', '/register', '/about', '/contact', '/', '/staffSchedule', '/staff', '/faq', '/careers'];
         var restrictedPage = $.inArray($location.path(), unRestrictedPages) === -1;
         console.log('path:' + $location.path() + ' --isRestrictedPage: ' + restrictedPage);
         var loggedIn = $rootScope.globals.currentUser;

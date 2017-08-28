@@ -11,10 +11,10 @@ angular.module('computingServices.manageStaffSchedule', ['ngRoute', 'ui.calendar
 
         var GET_LAB_SCHEDULE_URI = constants.url + 'lab-schedule/fetch';
         var SAVE_LAB_SCHEDULE_URI = constants.url + 'lab-schedule/save';
-        var UPDATE_LAB_SCHEDULE_URI = constants.url + 'lab-schedule/update';
-        var DELETE_LAB_SCHEDULE_URI = constants.url + 'lab-schedule/delete';
-        var UPDATE_ALL_LAB_SCHEDULE_URI = constants.url + 'lab-schedule/update-all';
-        var DELETE_ALL_LAB_SCHEDULE_URI = constants.url + 'lab-schedule/delete-all';
+        var UPDATE_LAB_SCHEDULE_URI = constants.url + 'staff-schedule/update';
+        var DELETE_LAB_SCHEDULE_URI = constants.url + 'staff-schedule/delete';
+        var UPDATE_ALL_LAB_SCHEDULE_URI = constants.url + 'staff-schedule/update-all';
+        var DELETE_ALL_LAB_SCHEDULE_URI = constants.url + 'staff-schedule/delete-all';
 
         //define all factory methods
         var factory = {
@@ -179,7 +179,7 @@ angular.module('computingServices.manageStaffSchedule', ['ngRoute', 'ui.calendar
 
     }])
 
-    .controller('manageStaffScheduleCtrl', ['$scope', '$http', 'uiCalendarConfig', '$mdDialog', 'SharedService', 'ManageLabScheduleService', '$location', function ($scope, $http, uiCalendarConfig, $mdDialog, SharedService, ManageLabScheduleService, $location) {
+    .controller('manageStaffScheduleCtrl', ['$scope', '$http', 'uiCalendarConfig', '$mdDialog', 'SharedService', 'ManageStaffScheduleService', '$location', function ($scope, $http, uiCalendarConfig, $mdDialog, SharedService, ManageStaffScheduleService, $location) {
 
         $scope.isNewEvent = false;
 
@@ -245,7 +245,7 @@ angular.module('computingServices.manageStaffSchedule', ['ngRoute', 'ui.calendar
             // create events object
             $scope.events1 = [];
             console.log('making a server call to get lab schedule');
-            var promise = ManageLabScheduleService.getLabSchedule();
+            var promise = ManageStaffScheduleService.getLabSchedule();
             promise.then(function (result) {
                 var events = result.response;
                 console.log('all events fetched :', events);
@@ -264,8 +264,8 @@ angular.module('computingServices.manageStaffSchedule', ['ngRoute', 'ui.calendar
         }
 
         /*$scope.events2 = [{
-        title: "Computer Architecture",
-        professor: "Linda Cook",
+        title: "Linda Cook",
+        studentId: "987325",
         start: new Date('2017-03-26T12:00:30Z'),
         end: new Date('2017-03-26T13:30:30Z'),
         allDay: false,
@@ -273,8 +273,8 @@ angular.module('computingServices.manageStaffSchedule', ['ngRoute', 'ui.calendar
         _id: '456789',
         groupId: '3298724362'
         }, {
-        title: "Operating Systems",
-        professor: "Betty Moore",
+        title: "Betty Moore",
+        studentId: "904208",
         start: new Date('2017-03-26T14:00:30Z'),
         end: new Date('2017-03-26T16:30:30Z'),
         allDay: false,
@@ -282,8 +282,8 @@ angular.module('computingServices.manageStaffSchedule', ['ngRoute', 'ui.calendar
         _id: '456789',
         groupId: null
         }, {
-        title: "Database Systems",
-        professor: "Shawn Reynolds",
+        title: "Shawn Reynolds",
+        studentId: "287222",
         start: new Date('2017-03-26T15:00:30Z'),
         end: new Date('2017-03-26T16:30:30Z'),
         allDay: false,
@@ -291,7 +291,8 @@ angular.module('computingServices.manageStaffSchedule', ['ngRoute', 'ui.calendar
         _id: '456789',
         groupId: '3298724362'
         }, {
-        title: 'Economics',
+        title: 'AB Devilliers',
+        studentId: "972525"
         start: new Date('2017-03-16T10:20:30Z'),
         end: new Date('2017-03-16T15:20:30Z'),
         allDay: false,
@@ -299,8 +300,8 @@ angular.module('computingServices.manageStaffSchedule', ['ngRoute', 'ui.calendar
         _id: '456789',
         groupId: '3298724362'
         }, {
-        title: "Computer Architecture 2",
-        professor: "Linda Cook",
+        title: "Linda Cook",
+        studentId: "32523",
         start: new Date('2017-03-16T12:00:30Z'),
         end: new Date('2017-03-16T13:30:30Z'),
         allDay: false,
@@ -309,7 +310,7 @@ angular.module('computingServices.manageStaffSchedule', ['ngRoute', 'ui.calendar
         groupId: '3298724362'
         }, {
         title: "Adv Operating Systems",
-        professor: "Betty Moore",
+        studentId: "Betty Moore",
         start: new Date('2017-03-16T14:00:30Z'),
         end: new Date('2017-03-16T16:30:30Z'),
         allDay: false,
@@ -318,7 +319,7 @@ angular.module('computingServices.manageStaffSchedule', ['ngRoute', 'ui.calendar
         groupId: '3298724362'
         }, {
         title: "Adv Database Systems",
-        professor: "Shawn Reynolds",
+        studentId: "Shawn Reynolds",
         start: new Date('2017-03-16T15:00:30Z'),
         end: new Date('2017-03-16T16:30:30Z'),
         allDay: false,
@@ -327,7 +328,7 @@ angular.module('computingServices.manageStaffSchedule', ['ngRoute', 'ui.calendar
         groupId: '3298724362'
         }, {
         title: "Operating Systems",
-        professor: "Betty Moore",
+        studentId: "Betty Moore",
         start: new Date('April 10, 2017 23:13:00'),
         end: new Date('April 11, 2017 08:00:00'),
         allDay: false,
@@ -336,7 +337,7 @@ angular.module('computingServices.manageStaffSchedule', ['ngRoute', 'ui.calendar
         groupId: '3298724362'
         }, {
         title: "Calculus",
-        professor: "Gary Smith",
+        studentId: "Gary Smith",
         start: new Date('April 11, 2017 15:00'),
         end: new Date('April 11, 2017 18:30'),
         allDay: false,
@@ -344,8 +345,8 @@ angular.module('computingServices.manageStaffSchedule', ['ngRoute', 'ui.calendar
         _id: '456789',
         groupId: '3298724362'
         }, {
-        title: "Data Processing",
-        professor: "Chandler Bing",
+        title: "Chandler Bing",
+        studentId: "727883",
         start: new Date('2017-03-16T16:00:30Z'),
         end: new Date('2017-03-26T23:30:30Z'),
         allDay: false,
@@ -357,9 +358,9 @@ angular.module('computingServices.manageStaffSchedule', ['ngRoute', 'ui.calendar
         allDay: false,
         backgroundColor: "Blue",
         end: new Date("Apr 2, 2017 14:00"),
-        professor: "Mike Vance",
+        studentId: "9833",
         start: new Date("Apr 2, 2017 11:00"),
-        title: "Unix Systems",
+        title: "Mike Vance",
         labName: 'Becton Hall',
         _id: '456789',
         groupId: '3298724362'
@@ -367,9 +368,9 @@ angular.module('computingServices.manageStaffSchedule', ['ngRoute', 'ui.calendar
         allDay: false,
         backgroundColor: "Pink",
         end: new Date("Apr 16, 2017 20:30"),
-        professor: "John Barry",
+        studentId: "436247",
         start: new Date("Apr 16, 2017 17:15"),
-        title: "Adv Algorithms",
+        title: "John Barry",
         labName: 'Becton Hall',
         _id: '456789',
         groupId: '3298724362'
@@ -377,9 +378,9 @@ angular.module('computingServices.manageStaffSchedule', ['ngRoute', 'ui.calendar
         allDay: false,
         backgroundColor: "Pink",
         end: new Date("Apr 18, 2017 20:30"),
-        professor: "John Barry",
+        studentId: "14145",
         start: new Date("Apr 18, 2017 17:15"),
-        title: "Adv Algorithms",
+        title: "John Barry",
         labName: 'Vancouver Labs',
         _id: '456789',
         groupId: '3298724362'
@@ -387,9 +388,9 @@ angular.module('computingServices.manageStaffSchedule', ['ngRoute', 'ui.calendar
         allDay: false,
         backgroundColor: "Pink",
         end: new Date("Apr 21, 2017 20:30"),
-        professor: "John Barry",
+        studentId: "975352",
         start: new Date("Apr 21, 2017 17:15"),
-        title: "Adv Algorithms",
+        title: "John Barry",
         labName: 'Vancouver Labs',
         _id: '456789',
         groupId: '3298724362'
@@ -397,9 +398,9 @@ angular.module('computingServices.manageStaffSchedule', ['ngRoute', 'ui.calendar
         allDay: false,
         backgroundColor: "Red",
         end: new Date("Apr 21, 2017 20:30"),
-        professor: "Arif Akram",
+        studentId: "468415",
         start: new Date("Apr 21, 2017 17:15"),
-        title: "Mathematics",
+        title: "Arif Akram",
         labName: 'Vancouver Labs',
         _id: '456789',
         groupId: '3298724362'
@@ -460,7 +461,7 @@ angular.module('computingServices.manageStaffSchedule', ['ngRoute', 'ui.calendar
 
                     $scope.SelectedEvent.title = event.title;
                     $scope.SelectedEvent.color = event.backgroundColor;
-                    $scope.SelectedEvent.professor = event.professor;
+                    $scope.SelectedEvent.studentId = event.studentId;
                     $scope.selLab = event.labName;
                     $scope._id = event._id.$oid;
                     $scope.SelectedEvent._id = event._id;
@@ -473,7 +474,7 @@ angular.module('computingServices.manageStaffSchedule', ['ngRoute', 'ui.calendar
                 eventMouseover: function (event, jsEvent, view) {
                     var startTime = moment(event.start).format('h:mm A');
                     var endTime = moment(event.end).format('h:mm A');
-                    var tooltip = '<div class="tooltiptopicevent" style="width:auto;height:auto;background:rgb(16,108,200);color:#fff;position:absolute;z-index:10001;padding: 5px; line-height: 150%;border-top-right-radius: 15px;border-bottom-left-radius: 15px;">' + startTime + ' - ' + endTime + '</br>' + event.title + '</br>' + event.professor + '</br>' + event.labName + '</div>';
+                    var tooltip = '<div class="tooltiptopicevent" style="width:auto;height:auto;background:rgb(16,108,200);color:#fff;position:absolute;z-index:10001;padding: 5px; line-height: 150%;border-top-right-radius: 15px;border-bottom-left-radius: 15px;">' + startTime + ' - ' + endTime + '</br>' + event.title + '</br>' + event.studentId + '</br>' + event.labName + '</div>';
                     $("body").append(tooltip);
                     $(this).mouseover(function (e) {
                         $(this).css('z-index', 10000);
@@ -506,6 +507,8 @@ angular.module('computingServices.manageStaffSchedule', ['ngRoute', 'ui.calendar
         //create an event
         $scope.create = function () {
 
+            console.log("clicked on create event button");
+
             var selectedDays = $scope.selectedDays.map(function (a) {
                 return a.value;
             });
@@ -535,10 +538,18 @@ angular.module('computingServices.manageStaffSchedule', ['ngRoute', 'ui.calendar
 
             for (var day = startDate; day <= endDate;) {
                 if (selectedDays.includes(day.getDay())) {
+
+                    //delete the below object once the UI is ready
+                    $scope.SelectedEvent = {
+                        title : "Arif Akram",
+                        studentId : "468415",
+                        color : "green"
+                    };
+
                     var event = {};
 
-                    event.title = $scope.SelectedEvent.title;
-                    event.professor = $scope.SelectedEvent.professor;
+                    event.title = $scope.SelectedEvent.title; // title is lab assistant's name
+                    event.studentId = $scope.SelectedEvent.studentId;
                     event.backgroundColor = $scope.SelectedEvent.color;
                     event.allDay = false;
                     event.day = day.getDay();
@@ -563,7 +574,7 @@ angular.module('computingServices.manageStaffSchedule', ['ngRoute', 'ui.calendar
             console.log('Recorded events to save: ', eventDates);
 
             //make a server call to save 'eventDates'
-            var promise = ManageLabScheduleService.saveLabSchedule(eventDates);
+            var promise = ManageStaffScheduleService.saveLabSchedule(eventDates);
             promise.then(function (result) {
                 if (result.statusCode === 200) {
                     SharedService.showSuccess(result.message);
@@ -590,7 +601,7 @@ angular.module('computingServices.manageStaffSchedule', ['ngRoute', 'ui.calendar
             var event = {};
 
             event.title = $scope.SelectedEvent.title;
-            event.professor = $scope.SelectedEvent.professor;
+            event.studentId = $scope.SelectedEvent.studentId;
             event.backgroundColor = $scope.SelectedEvent.color;
             event.allDay = false;
             event.labName = $scope.selLab;
@@ -658,7 +669,7 @@ angular.module('computingServices.manageStaffSchedule', ['ngRoute', 'ui.calendar
             var event = {};
 
             event.title = $scope.SelectedEvent.title;
-            event.professor = $scope.SelectedEvent.professor;
+            event.studentId = $scope.SelectedEvent.studentId;
             event.backgroundColor = $scope.SelectedEvent.color;
             event.allDay = false;
             event.labName = $scope.selLab;
