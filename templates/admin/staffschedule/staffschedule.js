@@ -9,8 +9,8 @@ angular.module('computingServices.manageStaffSchedule', ['ngRoute', 'ui.calendar
 
     .factory('ManageStaffScheduleService', ['$http', '$q', function ($http, $q) {
 
-        var GET_LAB_SCHEDULE_URI = constants.url + 'lab-schedule/fetch';
-        var SAVE_LAB_SCHEDULE_URI = constants.url + 'lab-schedule/save';
+        var GET_LAB_SCHEDULE_URI = constants.url + 'staff-schedule/fetch';
+        var SAVE_LAB_SCHEDULE_URI = constants.url + 'staff-schedule/save';
         var UPDATE_LAB_SCHEDULE_URI = constants.url + 'staff-schedule/update';
         var DELETE_LAB_SCHEDULE_URI = constants.url + 'staff-schedule/delete';
         var UPDATE_ALL_LAB_SCHEDULE_URI = constants.url + 'staff-schedule/update-all';
@@ -61,7 +61,7 @@ angular.module('computingServices.manageStaffSchedule', ['ngRoute', 'ui.calendar
                 },
                 transformRequest: function (data) {
                     var formData = new FormData();
-                    formData.append("labschedule", angular.toJson(schedule));
+                    formData.append("staffschedule", angular.toJson(schedule));
                     return formData;
                 }
             }).success(function (data, status, headers, config) {
@@ -88,7 +88,7 @@ angular.module('computingServices.manageStaffSchedule', ['ngRoute', 'ui.calendar
                 },
                 transformRequest: function (data) {
                     var formData = new FormData();
-                    formData.append("labschedule", angular.toJson(schedule));
+                    formData.append("staffschedule", angular.toJson(schedule));
                     return formData;
                 }
             }).success(function (data, status, headers, config) {
@@ -139,7 +139,7 @@ angular.module('computingServices.manageStaffSchedule', ['ngRoute', 'ui.calendar
                 },
                 transformRequest: function (data) {
                     var formData = new FormData();
-                    formData.append("labschedule", angular.toJson(schedule));
+                    formData.append("staffschedule", angular.toJson(schedule));
                     return formData;
                 }
             }).success(function (data, status, headers, config) {
@@ -613,7 +613,7 @@ angular.module('computingServices.manageStaffSchedule', ['ngRoute', 'ui.calendar
             console.log('Record to update: ', event);
 
             //call service method to update event
-            var promise = ManageLabScheduleService.updateLabSchedule(event);
+            var promise = ManageStaffScheduleService.updateLabSchedule(event);
             promise.then(function (result) {
                 if (result.statusCode === 200) {
                     SharedService.showSuccess(result.message);
@@ -680,7 +680,7 @@ angular.module('computingServices.manageStaffSchedule', ['ngRoute', 'ui.calendar
             console.log('Record to update: ', event);
 
             //call service method to update event
-            var promise = ManageLabScheduleService.updateAllEvents(event);
+            var promise = ManageStaffScheduleService.updateAllEvents(event);
             promise.then(function (result) {
                 if (result.statusCode === 200) {
                     SharedService.showSuccess(result.message);
@@ -703,7 +703,7 @@ angular.module('computingServices.manageStaffSchedule', ['ngRoute', 'ui.calendar
         $scope.delete = function () {
 
             console.log('Deleting - ', $scope.SelectedEvent._id.$oid);
-            var promise = ManageLabScheduleService.deleteLabSchedule($scope.SelectedEvent._id.$oid);
+            var promise = ManageStaffScheduleService.deleteLabSchedule($scope.SelectedEvent._id.$oid);
             promise.then(function (result) {
                 if (result.statusCode === 200) {
                     SharedService.showSuccess(result.message);
@@ -727,7 +727,7 @@ angular.module('computingServices.manageStaffSchedule', ['ngRoute', 'ui.calendar
         $scope.deleteAll = function () {
 
             console.log('Deleting - ', $scope.SelectedEvent.groupId);
-            var promise = ManageLabScheduleService.deleteAllEvents($scope.SelectedEvent.groupId);
+            var promise = ManageStaffScheduleService.deleteAllEvents($scope.SelectedEvent.groupId);
             promise.then(function (result) {
                 if (result.statusCode === 200) {
                     SharedService.showSuccess(result.message);
