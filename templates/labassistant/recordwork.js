@@ -121,6 +121,43 @@ angular.module('computingServices.recordwork', ['ngRoute'])
         }
     }
 
+    // check if clock-out button can be enabled
+    $scope.isClockOutDisabled = function (isClockedOut, isClockedIn, givenStartTime, givenEndTime) {
+        // if already clocked out, do not let user clock-out again
+        if(isClockedOut) {
+            return true;
+        }
+        console.log('time to split ',givenStartTime);
+        var timeArr = givenStartTime.split(':');
+        var startDate = new Date().setHours(timeArr[0], timeArr[1]);
+        var startTime = moment(startDate).add(15, 'minutes').format('MMM D, YYYY HH:mm');
+        console.log('checking if clock-out button can be enabled ',startTime);
+        var rightNow = moment(new Date()).format('MMM D, YYYY HH:mm');
+
+        timeArr = givenEndTime.split(':');
+        var endDate = new Date().setHours(timeArr[0], timeArr[1]);
+        var endTime = moment(endDate).add(15, 'minutes').format('MMM D, YYYY HH:mm');
+        console.log('clock-out time ',endTime);
+
+        console.log('Right now ',rightNow);
+        // if shift has not begin yet; startTime refers to future time
+        if (startTime > rightNow) {
+            console.log("shiftstarttime > rightnow i.e. shift has not begun yet; cannot clock-out. Can only clock-out after 15 mins into shift start");
+            return true;
+        } else {
+            // if shift has already began; startTime refers to past time
+            // also, user can only clock-out within the shift end time
+            if (endTime > rightNow && isClockedIn === true) { // endTime refers to future time
+                console.log("shiftstarttime < rightnow i.e. shift has already begun and its been more than 15 mins; can clock-out");
+                return false;
+            } else {
+                // user if not clocked-out and startTime refers to past time, but endTime is also past time, then user can't clock-out
+                console.log("User was not able to clock-out in time, and user cannot clock-out anymore");
+                return true;
+            }
+        }
+    }
+
     // clock-in
     $scope.recordWork = function (operation) {
         var confirm = $mdDialog.confirm()

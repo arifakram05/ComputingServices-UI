@@ -77,10 +77,15 @@
                                             <md-tooltip>Clock In</md-tooltip>
                                         </button>
 
-                                        <button type="button" class="btn btn-danger" ng-disabled= "item.timesheet.isClockedOut" ng-click="">
-                                            <i class="fa fa-sign-out"></i>
+                                        <button type="button" class="btn btn-danger" ng-disabled= "isClockOutDisabled(item.timesheet.isClockedOut, item.timesheet.isClockedIn, item.start, item.end)" ng-click="">
+                                            <i class="fa fa-sign-in"></i>
                                             <md-tooltip>Clock Out</md-tooltip>
                                         </button>
+
+                                        <!--<button type="button" class="btn btn-danger" ng-disabled= "item.timesheet.isClockedOut" ng-click="">
+                                            <i class="fa fa-sign-out"></i>
+                                            <md-tooltip>Clock Out</md-tooltip>
+                                        </button>-->
                                     </td>
 
                                     <td>
