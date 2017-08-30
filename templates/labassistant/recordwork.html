@@ -1,6 +1,4 @@
-<div ng-controller="RecordWorkCtrl" class="recordwork">
-    <div class="col-md-8 col-md-offset-2">
-        <md-content class="md-padding">
+<div ng-controller="RecordWorkCtrl" class="topPadding30 recordwork">
             <md-toolbar class="md-primary">
                 <div class="toolbar">
                     <div class="md-toolbar-tools">
@@ -11,7 +9,7 @@
 
             <md-content class="md-no-momentum">
 
-                <div layout="row" layout-align="center" flex>
+                <!--<div layout="row" layout-align="center" flex>
                     <md-button class="md-raised md-default" ng-click="recordWork('clockedin')" style="width:125px;">
                         <i class="fa fa-clock-o lg"></i> Clock-In
                     </md-button>
@@ -21,11 +19,97 @@
                     <md-button class="md-raised md-default" ng-click="recordWork('clockedout')" style="width:125px;">
                         <i class="fa fa-clock-o lg"></i> Clock-Out
                     </md-button>
-                </div>
+                </div>-->
+
+                <table class="table table-borderless" ng-style="{'text-align':'left', 'margin':'0 auto'}">
+                    <thead>
+                        <tr class="bg-success">
+                            <th ng-style="{'text-align':'left'}">
+                                Lab Name
+                            </th>
+                            <th ng-style="{'text-align':'left'}">
+                                Shift Date
+                            </th>
+                            <th ng-style="{'text-align':'left'}">
+                                Shift Start
+                            </th>
+                            <th ng-style="{'text-align':'left'}">
+                                Shift End
+                            </th>
+                            <th ng-style="{'text-align':'left'}">
+                                Clocked In At
+                            </th>
+                            <th ng-style="{'text-align':'left'}">
+                                Clocked Out At
+                            </th>
+                            <th ng-style="{'text-align':'left'}">
+                                Actions
+                            </th>
+                            <th ng-style="{'text-align':'left'}">
+                                Hours
+                            </th>
+                        </tr>
+                    </thead>
+                    <tbody ng-repeat="item in shifts">
+                            <form>
+                                <tr>
+                                    <td>
+                                        <span ng-bind="item.labName"></span>
+                                    </td>
+                                    <td>
+                                        <span ng-bind="item.date"></span>
+                                    </td>
+                                    <td>
+                                        <span ng-bind="item.start"></span>
+                                    </td>
+                                    <td>
+                                        <span ng-bind="item.end"></span>
+                                    </td>
+                                    <td>
+                                        <span ng-bind="item.timesheet.clockedInDateTime"></span>
+                                    </td>
+                                    <td>
+                                        <span ng-bind="item.timesheet.clockedOutDateTime"></span>
+                                    </td>
+                                    <td>
+                                        <button type="button" class="btn btn-success" ng-disabled= "isClockInDisabled(item.timesheet.isClockedIn, item.start, item.end)" ng-click="">
+                                            <i class="fa fa-sign-in"></i>
+                                            <md-tooltip>Clock In</md-tooltip>
+                                        </button>
+
+                                        <button type="button" class="btn btn-danger" ng-disabled= "item.timesheet.isClockedOut" ng-click="">
+                                            <i class="fa fa-sign-out"></i>
+                                            <md-tooltip>Clock Out</md-tooltip>
+                                        </button>
+                                    </td>
+
+                                    <td>
+                                        <!--<div class="btn-group">
+                                            <button type="button" class="btn btn-danger btn" ng-click="delete(applicant.studentId)">
+                                                <i class="fa fa-trash-o"></i>
+                                                <md-tooltip>Delete Applicant</md-tooltip>
+                                            </button>
+
+                                            <button type="button" class="btn btn-default btn" ng-click="email(applicant)">
+                                                <i class="fa fa-envelope-o"></i>
+                                                <md-tooltip>Email Applicant</md-tooltip>
+                                            </button>
+
+                                            <button type="button" class="btn btn-primary btn" ng-click="hire(applicant)">
+                                                <i class="fa fa-star-o"></i>
+                                                <md-tooltip>Hire Applicant</md-tooltip>
+                                            </button>
+
+                                            <button type="button" class="btn btn-default btn" ng-click="edit(applicant); showDetails(applicant)">
+                                                <i class="fa fa-binoculars"></i>
+                                                <md-tooltip>Details</md-tooltip>
+                                            </button>
+                                        </div>-->
+                                    </td>
+                                </tr>
+                            </form>
+                    </tbody>
+                </table>
 
             </md-content>
-
-
-        </md-content>
-    </div>
 </div>
