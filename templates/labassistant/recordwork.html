@@ -63,10 +63,10 @@
                                         <span ng-bind="item.end"></span>
                                     </td>
                                     <td>
-                                        <span ng-bind="item.timesheet.clockedInDateTime"></span>
+                                        <span ng-bind="item.timesheet.clockedInDateTime | date: 'HH:mm'"></span>
                                     </td>
                                     <td>
-                                        <span ng-bind="item.timesheet.clockedOutDateTime"></span>
+                                        <span ng-bind="item.timesheet.clockedOutDateTime | date: 'HH:mm'"></span>
                                     </td>
                                     <td>
                                         <button type="button" class="btn btn-success" ng-click="isClockInDisabled(item.timesheet.isClockedIn, item.timesheet.isClockedOut, item.start, item.end, item._id.$oid)">
