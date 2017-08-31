@@ -524,8 +524,8 @@ angular.module('computingServices.manageStaffSchedule', ['ngRoute', 'ui.calendar
 
             var startHour = startDate.getHours();
             var startMins = startDate.getMinutes();
-            if (startMins === 0) {
-                startMins = startMins + '0';
+            if (startMins < 10) {
+                startMins = '0' + startMins;
             }
             if (startHour < 10) {
                 startHour = '0' + startHour;
@@ -534,8 +534,8 @@ angular.module('computingServices.manageStaffSchedule', ['ngRoute', 'ui.calendar
 
             var endHour = endDate.getHours();
             var endMins = endDate.getMinutes();
-            if (endMins === 0) {
-                endMins = endMins + '0';
+            if (endMins < 10) {
+                endMins = '0' + endMins;
             }
             if (endHour < 10) {
                 endHour = '0' + endHour;
@@ -644,8 +644,8 @@ angular.module('computingServices.manageStaffSchedule', ['ngRoute', 'ui.calendar
 
             var startHour = startDate.getHours();
             var startMins = startDate.getMinutes();
-            if (startMins === 0) {
-                startMins = startMins + '0';
+            if (startMins < 10) {
+                startMins = '0' + startMins;
             }
             if (startHour < 10) {
                 startHour = '0' + startHour;
@@ -663,8 +663,8 @@ angular.module('computingServices.manageStaffSchedule', ['ngRoute', 'ui.calendar
 
             var endHour = endDate.getHours();
             var endMins = endDate.getMinutes();
-            if (endMins === 0) {
-                endMins = endMins + '0';
+            if (endMins < 10) {
+                endMins = '0' + endMins;
             }
             if (endHour < 10) {
                 endHour = '0' + endHour;

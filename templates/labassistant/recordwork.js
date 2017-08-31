@@ -48,20 +48,32 @@ angular.module('computingServices.recordwork', ['ngRoute'])
     }
 
     // save clock-in or clock-out time
-    function recordWork(labasst) {
+    function recordWork(work) {
+        console.log('work to save : ', work);
         var deferred = $q.defer();
 
-        $http.post(CLOCK_IN_CLOCK_OUT, JSON.stringify(labasst))
-            .success(
-                function (data, status, headers, config) {
-                    console.log('clock-in or clock-out operation success ', data);
-                    deferred.resolve(data);
-                })
-            .error(
-                function (data, status, header, config) {
-                    console.log('clock-in or clock-out operation failure ', data);
-                    deferred.reject(data);
-                });
+        $http({
+            method: 'POST',
+            url: CLOCK_IN_CLOCK_OUT,
+            headers: {
+                'Content-Type': undefined
+            },
+            transformRequest: function (data) {
+                var formData = new FormData();
+                formData.append("operation", work.operation);
+                formData.append("studentId", work.studentId);
+                formData.append("datetime", work.datetime);
+                formData.append("id", work.id);
+                return formData;
+            }
+        }).success(function (data, status, headers, config) {
+            console.log('clock-in or clock-out operation success ', data);
+            deferred.resolve(data);
+        }).error(function (data, status, headers, config) {
+            console.log('clock-in or clock-out operation failure ', status);
+            deferred.reject(data);
+        });
+
         return deferred.promise;
     }
 
@@ -85,7 +97,7 @@ angular.module('computingServices.recordwork', ['ngRoute'])
     }
 
     // check if clock-in button can be enabled
-    $scope.isClockInDisabled = function (isClockedIn, isClockedOut, givenStartTime, givenEndTime) {
+    $scope.isClockInDisabled = function (isClockedIn, isClockedOut, givenStartTime, givenEndTime, id) {
         // if already clocked in, do not let user clock-in again
         if (isClockedIn) {
             notifyUser("You cannot clock-in as you are already clocked-in.");
@@ -117,7 +129,7 @@ angular.module('computingServices.recordwork', ['ngRoute'])
             if (!isClockedOut) {
                 console.log("shiftstarttime < rightnow i.e. shift has already begun; can clock-in");
                 // call a function to save clock-in time
-                $scope.recordWork('clock-in', '468415');
+                $scope.recordWork('clock-in', '468415', id);
                 //return false;
                 return;
             } else {
@@ -134,7 +146,7 @@ angular.module('computingServices.recordwork', ['ngRoute'])
     }
 
     // check if clock-out button can be enabled
-    $scope.isClockOutDisabled = function (isClockedOut, isClockedIn, givenStartTime, givenEndTime) {
+    $scope.isClockOutDisabled = function (isClockedOut, isClockedIn, givenStartTime, givenEndTime, id) {
         // if already clocked out, do not let user clock-out again
         if (isClockedOut) {
             notifyUser("You cannot clock-out as you have already clocked-out.");
@@ -165,7 +177,7 @@ angular.module('computingServices.recordwork', ['ngRoute'])
             // also, user can only clock-out within the shift end time + 15 mins
             console.log("shiftstarttime < rightnow i.e. shift has already begun and its been more than 15 mins; can clock-out");
             // call a function to save clock-out time
-            $scope.recordWork('clock-out', '468415');
+            $scope.recordWork('clock-out', '468415', id);
             //return false;
         } else {
             // user if not clocked-out and startTime refers to past time, but endTime is also past time, then user can't clock-out
@@ -177,7 +189,7 @@ angular.module('computingServices.recordwork', ['ngRoute'])
     }
 
     // save clock-in and clock-out time
-    $scope.recordWork = function (operation, studentId) {
+    $scope.recordWork = function (operation, studentId, id) {
         var confirm = $mdDialog.confirm()
             .title('Timesheet')
             .textContent('Are you sure you want to continue with this operation?')
@@ -186,13 +198,14 @@ angular.module('computingServices.recordwork', ['ngRoute'])
 
         $mdDialog.show(confirm).then(function () {
             var datetime = moment(new Date()).format('MMM DD, YYYY HH:mm');
-            var labasst = {
+            var work = {
                 operation: operation,
                 studentId: studentId,
-                datetime: datetime
+                datetime: datetime,
+                id: id
             };
-            console.log('details to record : ', labasst);
-            var promise = RecordWorkService.recordWork(labasst);
+            console.log('details to record : ', work);
+            var promise = RecordWorkService.recordWork(work);
             promise.then(function (result) {
                     if (result.statusCode === 200) {
                         SharedService.showSuccess(result.message);

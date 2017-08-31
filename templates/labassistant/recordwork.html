@@ -69,12 +69,12 @@
                                         <span ng-bind="item.timesheet.clockedOutDateTime"></span>
                                     </td>
                                     <td>
-                                        <button type="button" class="btn btn-success" ng-click="isClockInDisabled(item.timesheet.isClockedIn, item.timesheet.isClockedOut, item.start, item.end)">
+                                        <button type="button" class="btn btn-success" ng-click="isClockInDisabled(item.timesheet.isClockedIn, item.timesheet.isClockedOut, item.start, item.end, item._id.$oid)">
                                             <i class="fa fa-sign-in"></i>
                                             <md-tooltip>Clock In</md-tooltip>
                                         </button>
 
-                                        <button type="button" class="btn btn-danger" ng-click="isClockOutDisabled(item.timesheet.isClockedOut, item.timesheet.isClockedIn, item.start, item.end)">
+                                        <button type="button" class="btn btn-danger" ng-click="isClockOutDisabled(item.timesheet.isClockedOut, item.timesheet.isClockedIn, item.start, item.end, item._id.$oid)">
                                             <i class="fa fa-sign-in"></i>
                                             <md-tooltip>Clock Out</md-tooltip>
                                         </button>
