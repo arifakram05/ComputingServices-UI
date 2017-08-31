@@ -232,7 +232,7 @@ angular.module('computingServices.manageStaffSchedule', ['ngRoute', 'ui.calendar
 
         $scope.opts = {
             timePicker: true,
-            timePickerIncrement: 15,
+            timePickerIncrement: 1,
             locale: {
                 format: 'MMM D, YYYY h:mm A'
             }
@@ -436,8 +436,8 @@ angular.module('computingServices.manageStaffSchedule', ['ngRoute', 'ui.calendar
                     $scope.event = null;
                     //set new data
                     $scope.event = {
-                        startDate: moment(start).format('MMM D, YYYY HH:mm'),
-                        endDate: moment(end).subtract(1, "days").format('MMM D, YYYY HH:mm')
+                        startDate: moment(start).format('MMM DD, YYYY HH:mm'),
+                        endDate: moment(end).subtract(1, "days").format('MMM DD, YYYY HH:mm')
                     };
                     //console.log('day is ',$scope.startDate.getDay());
                     //creating new event
@@ -455,8 +455,8 @@ angular.module('computingServices.manageStaffSchedule', ['ngRoute', 'ui.calendar
                     $scope.isNewEvent = false;
 
                     $scope.event = {
-                        startDate: moment(event.start).format('MMM D, YYYY HH:mm'),
-                        endDate: moment(event.end).format('MMM D, YYYY HH:mm')
+                        startDate: moment(event.start).format('MMM DD, YYYY HH:mm'),
+                        endDate: moment(event.end).format('MMM DD, YYYY HH:mm')
                     };
 
                     $scope.SelectedEvent.title = event.title;
@@ -561,10 +561,10 @@ angular.module('computingServices.manageStaffSchedule', ['ngRoute', 'ui.calendar
                     event.day = day.getDay();
                     event.labName = $scope.selLab;
 
-                    var stDate = moment(day).format('MMM D, YYYY');
+                    var stDate = moment(day).format('MMM DD, YYYY');
                     event.start = stDate + ' ' + startTime;
 
-                    var edDate = moment(day).format('MMM D, YYYY');
+                    var edDate = moment(day).format('MMM DD, YYYY');
                     event.end = edDate + ' ' + endTime;
 
                     eventDates.push(event);
@@ -652,7 +652,7 @@ angular.module('computingServices.manageStaffSchedule', ['ngRoute', 'ui.calendar
             }
             var startTime = startHour + ':' + startMins;
 
-            var stDate = moment(startDate).format('MMM D, YYYY');
+            var stDate = moment(startDate).format('MMM DD, YYYY');
 
             return stDate + ' ' + startTime;
         }
@@ -671,7 +671,7 @@ angular.module('computingServices.manageStaffSchedule', ['ngRoute', 'ui.calendar
             }
             var endTime = endHour + ':' + endMins;
 
-            var edDate = moment(endDate).format('MMM D, YYYY');
+            var edDate = moment(endDate).format('MMM DD, YYYY');
 
             return edDate + ' ' + endTime;
         }

@@ -8,7 +8,7 @@ angular.module('computingServices.recordwork', ['ngRoute'])
         templateUrl: 'templates/labassistant/recordwork.html',
         controller: 'RecordWorkCtrl'
     })
-    }])
+}])
 
 .factory('RecordWorkService', ['$http', '$q', function ($http, $q) {
 
@@ -47,7 +47,7 @@ angular.module('computingServices.recordwork', ['ngRoute'])
         return deferred.promise;
     }
 
-    //clock-in or clock-out
+    // save clock-in or clock-out time
     function recordWork(labasst) {
         var deferred = $q.defer();
 
@@ -85,7 +85,7 @@ angular.module('computingServices.recordwork', ['ngRoute'])
     }
 
     // check if clock-in button can be enabled
-    $scope.isClockInDisabled = function (isClockedIn, givenStartTime, givenEndTime) {
+    $scope.isClockInDisabled = function (isClockedIn, isClockedOut, givenStartTime, givenEndTime) {
         // if already clocked in, do not let user clock-in again
         if (isClockedIn) {
             notifyUser("You cannot clock-in as you are already clocked-in.");
@@ -114,10 +114,16 @@ angular.module('computingServices.recordwork', ['ngRoute'])
         } else if (endTime > rightNow) { // endTime refers to future time
             // if shift has already began; startTime refers to past time
             // also, user can only clock-in within the shift end time
-            console.log("shiftstarttime < rightnow i.e. shift has already begun; can clock-in");
-            // call a function to save clock-in time
-            //return false;
-            return;
+            if (!isClockedOut) {
+                console.log("shiftstarttime < rightnow i.e. shift has already begun; can clock-in");
+                // call a function to save clock-in time
+                $scope.recordWork('clock-in', '468415');
+                //return false;
+                return;
+            } else {
+                console.log("You have already clocked-out, now you cannot clock-in");
+                notifyUser("You cannot continue with this operation as you have clocked-out already. Please see Lab Manager.");
+            }
         } else {
             // user if not clocked-in and startTime refers to past time, but endTime is also past time, then user can't clock-in
             console.log("User was not able to clock-in in time, and user cannot clock-in anymore");
@@ -159,6 +165,7 @@ angular.module('computingServices.recordwork', ['ngRoute'])
             // also, user can only clock-out within the shift end time + 15 mins
             console.log("shiftstarttime < rightnow i.e. shift has already begun and its been more than 15 mins; can clock-out");
             // call a function to save clock-out time
+            $scope.recordWork('clock-out', '468415');
             //return false;
         } else {
             // user if not clocked-out and startTime refers to past time, but endTime is also past time, then user can't clock-out
@@ -169,26 +176,22 @@ angular.module('computingServices.recordwork', ['ngRoute'])
         }
     }
 
-    // clock-in
-    $scope.recordWork = function (operation) {
+    // save clock-in and clock-out time
+    $scope.recordWork = function (operation, studentId) {
         var confirm = $mdDialog.confirm()
-            .title('Please make sure that you are scheduled to work at this time.')
-            .textContent('Are you sure you want to proceed?')
+            .title('Timesheet')
+            .textContent('Are you sure you want to continue with this operation?')
             .ok('Yes')
             .cancel('No');
 
         $mdDialog.show(confirm).then(function () {
-
             var datetime = moment(new Date()).format('MMM D, YYYY HH:mm');
-
             var labasst = {
                 operation: operation,
-                labAssistantId: 123456,
+                studentId: studentId,
                 datetime: datetime
             };
-
             console.log('details to record : ', labasst);
-
             var promise = RecordWorkService.recordWork(labasst);
             promise.then(function (result) {
                     if (result.statusCode === 200) {
@@ -216,4 +219,4 @@ angular.module('computingServices.recordwork', ['ngRoute'])
         );
     }
 
-            }]);
+}]);
