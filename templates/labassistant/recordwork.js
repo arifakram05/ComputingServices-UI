@@ -87,74 +87,85 @@ angular.module('computingServices.recordwork', ['ngRoute'])
     // check if clock-in button can be enabled
     $scope.isClockInDisabled = function (isClockedIn, givenStartTime, givenEndTime) {
         // if already clocked in, do not let user clock-in again
-        if(isClockedIn) {
-            return true;
+        if (isClockedIn) {
+            notifyUser("You cannot clock-in as you are already clocked-in.");
+            //return true;
+            return;
         }
-        console.log('time to split ',givenStartTime);
+        console.log('time to split ', givenStartTime);
         var timeArr = givenStartTime.split(':');
         var startDate = new Date().setHours(timeArr[0], timeArr[1]);
-        var startTime = moment(startDate).subtract('6', 'minutes').format('MMM D, YYYY HH:mm');
-        console.log('checking if clock-in button can be enabled ',startTime);
+        var startTime = moment(startDate).subtract(6, 'minutes').format('MMM D, YYYY HH:mm');
+        console.log('checking if clock-in button can be enabled ', startTime);
         var rightNow = moment(new Date()).format('MMM D, YYYY HH:mm');
 
         timeArr = givenEndTime.split(':');
         var endDate = new Date().setHours(timeArr[0], timeArr[1]);
         var endTime = moment(endDate).format('MMM D, YYYY HH:mm');
-        console.log('clock-out time ',endTime);
+        console.log('clock-out time ', endTime);
 
-        console.log('Right now ',rightNow);
+        console.log('Right now ', rightNow);
         // if shift has not begin yet; startTime refers to future time
         if (startTime > rightNow) {
             console.log("shiftstarttime > rightnow i.e. shift has not begun yet; cannot clock-in");
-            return true;
-        } else {
+            notifyUser("You can only clock-in before 5 minutes of shift start time.");
+            //return true;
+            return;
+        } else if (endTime > rightNow) { // endTime refers to future time
             // if shift has already began; startTime refers to past time
             // also, user can only clock-in within the shift end time
-            if (endTime > rightNow) { // endTime refers to future time
-                console.log("shiftstarttime < rightnow i.e. shift has already begun; can clock-in");
-                return false;
-            } else {
-                // user if not clocked-in and startTime refers to past time, but endTime is also past time, then user can't clock-in
-                console.log("User was not able to clock-in in time, and user cannot clock-in anymore");
-                return true;
-            }
+            console.log("shiftstarttime < rightnow i.e. shift has already begun; can clock-in");
+            // call a function to save clock-in time
+            //return false;
+            return;
+        } else {
+            // user if not clocked-in and startTime refers to past time, but endTime is also past time, then user can't clock-in
+            console.log("User was not able to clock-in in time, and user cannot clock-in anymore");
+            notifyUser("You cannot clock-in as you missed the window. Please contact Lab Manager");
+            //return true;
+            return;
         }
     }
 
     // check if clock-out button can be enabled
     $scope.isClockOutDisabled = function (isClockedOut, isClockedIn, givenStartTime, givenEndTime) {
         // if already clocked out, do not let user clock-out again
-        if(isClockedOut) {
-            return true;
+        if (isClockedOut) {
+            notifyUser("You cannot clock-out as you have already clocked-out.");
+            //return true;
+            return;
         }
-        console.log('time to split ',givenStartTime);
+        console.log('time to split ', givenStartTime);
         var timeArr = givenStartTime.split(':');
         var startDate = new Date().setHours(timeArr[0], timeArr[1]);
-        var startTime = moment(startDate).add(15, 'minutes').format('MMM D, YYYY HH:mm');
-        console.log('checking if clock-out button can be enabled ',startTime);
+        var startTime = moment(startDate).add(14, 'minutes').format('MMM D, YYYY HH:mm');
+        console.log('checking if clock-out button can be enabled ', startTime);
         var rightNow = moment(new Date()).format('MMM D, YYYY HH:mm');
 
         timeArr = givenEndTime.split(':');
         var endDate = new Date().setHours(timeArr[0], timeArr[1]);
-        var endTime = moment(endDate).add(15, 'minutes').format('MMM D, YYYY HH:mm');
-        console.log('clock-out time ',endTime);
+        var endTime = moment(endDate).add(16, 'minutes').format('MMM D, YYYY HH:mm');
+        console.log('clock-out time ', endTime);
 
-        console.log('Right now ',rightNow);
+        console.log('Right now ', rightNow);
         // if shift has not begin yet; startTime refers to future time
         if (startTime > rightNow) {
             console.log("shiftstarttime > rightnow i.e. shift has not begun yet; cannot clock-out. Can only clock-out after 15 mins into shift start");
-            return true;
-        } else {
+            notifyUser("You can only clock-out after 15 minutes of shift start time.");
+            //return true;
+            return;
+        } else if (endTime > rightNow) { // endTime refers to future time
             // if shift has already began; startTime refers to past time
-            // also, user can only clock-out within the shift end time
-            if (endTime > rightNow && isClockedIn === true) { // endTime refers to future time
-                console.log("shiftstarttime < rightnow i.e. shift has already begun and its been more than 15 mins; can clock-out");
-                return false;
-            } else {
-                // user if not clocked-out and startTime refers to past time, but endTime is also past time, then user can't clock-out
-                console.log("User was not able to clock-out in time, and user cannot clock-out anymore");
-                return true;
-            }
+            // also, user can only clock-out within the shift end time + 15 mins
+            console.log("shiftstarttime < rightnow i.e. shift has already begun and its been more than 15 mins; can clock-out");
+            // call a function to save clock-out time
+            //return false;
+        } else {
+            // user if not clocked-out and startTime refers to past time, but endTime is also past time, then user can't clock-out
+            console.log("User was not able to clock-out in time, and user cannot clock-out anymore");
+            notifyUser("You cannot clock-out as you missed the window. Please contact Lab Manager");
+            //return true;
+            return;
         }
     }
 
@@ -205,4 +216,4 @@ angular.module('computingServices.recordwork', ['ngRoute'])
         );
     }
 
-}]);
+            }]);

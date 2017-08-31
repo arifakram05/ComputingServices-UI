@@ -72,44 +72,18 @@
                                         <span ng-bind="item.timesheet.clockedOutDateTime"></span>
                                     </td>
                                     <td>
-                                        <button type="button" class="btn btn-success" ng-disabled= "isClockInDisabled(item.timesheet.isClockedIn, item.start, item.end)" ng-click="">
+                                        <button type="button" class="btn btn-success" ng-click="isClockInDisabled(item.timesheet.isClockedIn, item.start, item.end)">
                                             <i class="fa fa-sign-in"></i>
                                             <md-tooltip>Clock In</md-tooltip>
                                         </button>
 
-                                        <button type="button" class="btn btn-danger" ng-disabled= "isClockOutDisabled(item.timesheet.isClockedOut, item.timesheet.isClockedIn, item.start, item.end)" ng-click="">
+                                        <button type="button" class="btn btn-danger" ng-click="isClockOutDisabled(item.timesheet.isClockedOut, item.timesheet.isClockedIn, item.start, item.end)">
                                             <i class="fa fa-sign-in"></i>
                                             <md-tooltip>Clock Out</md-tooltip>
                                         </button>
-
-                                        <!--<button type="button" class="btn btn-danger" ng-disabled= "item.timesheet.isClockedOut" ng-click="">
-                                            <i class="fa fa-sign-out"></i>
-                                            <md-tooltip>Clock Out</md-tooltip>
-                                        </button>-->
                                     </td>
-
                                     <td>
-                                        <!--<div class="btn-group">
-                                            <button type="button" class="btn btn-danger btn" ng-click="delete(applicant.studentId)">
-                                                <i class="fa fa-trash-o"></i>
-                                                <md-tooltip>Delete Applicant</md-tooltip>
-                                            </button>
 
-                                            <button type="button" class="btn btn-default btn" ng-click="email(applicant)">
-                                                <i class="fa fa-envelope-o"></i>
-                                                <md-tooltip>Email Applicant</md-tooltip>
-                                            </button>
-
-                                            <button type="button" class="btn btn-primary btn" ng-click="hire(applicant)">
-                                                <i class="fa fa-star-o"></i>
-                                                <md-tooltip>Hire Applicant</md-tooltip>
-                                            </button>
-
-                                            <button type="button" class="btn btn-default btn" ng-click="edit(applicant); showDetails(applicant)">
-                                                <i class="fa fa-binoculars"></i>
-                                                <md-tooltip>Details</md-tooltip>
-                                            </button>
-                                        </div>-->
                                     </td>
                                 </tr>
                             </form>
