@@ -76,7 +76,7 @@ angular.module('computingServices.recordwork', ['ngRoute'])
     getShiftDetailsForClocking();
 
     function getShiftDetailsForClocking() {
-        var date = moment(new Date()).format('MMM D, YYYY');
+        var date = moment(new Date()).format('MMM DD, YYYY');
         var promise = RecordWorkService.getShiftDetailsForClocking("468415", date);
         promise.then(function (result) {
             $scope.shifts = result.response;
@@ -95,13 +95,13 @@ angular.module('computingServices.recordwork', ['ngRoute'])
         console.log('time to split ', givenStartTime);
         var timeArr = givenStartTime.split(':');
         var startDate = new Date().setHours(timeArr[0], timeArr[1]);
-        var startTime = moment(startDate).subtract(6, 'minutes').format('MMM D, YYYY HH:mm');
+        var startTime = moment(startDate).subtract(6, 'minutes').format('MMM DD, YYYY HH:mm');
         console.log('checking if clock-in button can be enabled ', startTime);
-        var rightNow = moment(new Date()).format('MMM D, YYYY HH:mm');
+        var rightNow = moment(new Date()).format('MMM DD, YYYY HH:mm');
 
         timeArr = givenEndTime.split(':');
         var endDate = new Date().setHours(timeArr[0], timeArr[1]);
-        var endTime = moment(endDate).format('MMM D, YYYY HH:mm');
+        var endTime = moment(endDate).format('MMM DD, YYYY HH:mm');
         console.log('clock-out time ', endTime);
 
         console.log('Right now ', rightNow);
@@ -144,13 +144,13 @@ angular.module('computingServices.recordwork', ['ngRoute'])
         console.log('time to split ', givenStartTime);
         var timeArr = givenStartTime.split(':');
         var startDate = new Date().setHours(timeArr[0], timeArr[1]);
-        var startTime = moment(startDate).add(14, 'minutes').format('MMM D, YYYY HH:mm');
+        var startTime = moment(startDate).add(14, 'minutes').format('MMM DD, YYYY HH:mm');
         console.log('checking if clock-out button can be enabled ', startTime);
-        var rightNow = moment(new Date()).format('MMM D, YYYY HH:mm');
+        var rightNow = moment(new Date()).format('MMM DD, YYYY HH:mm');
 
         timeArr = givenEndTime.split(':');
         var endDate = new Date().setHours(timeArr[0], timeArr[1]);
-        var endTime = moment(endDate).add(16, 'minutes').format('MMM D, YYYY HH:mm');
+        var endTime = moment(endDate).add(16, 'minutes').format('MMM DD, YYYY HH:mm');
         console.log('clock-out time ', endTime);
 
         console.log('Right now ', rightNow);
@@ -185,7 +185,7 @@ angular.module('computingServices.recordwork', ['ngRoute'])
             .cancel('No');
 
         $mdDialog.show(confirm).then(function () {
-            var datetime = moment(new Date()).format('MMM D, YYYY HH:mm');
+            var datetime = moment(new Date()).format('MMM DD, YYYY HH:mm');
             var labasst = {
                 operation: operation,
                 studentId: studentId,
@@ -196,6 +196,8 @@ angular.module('computingServices.recordwork', ['ngRoute'])
             promise.then(function (result) {
                     if (result.statusCode === 200) {
                         SharedService.showSuccess(result.message);
+                        // reload table content
+                        getShiftDetailsForClocking();
                         return;
                     } else {
                         SharedService.showError(result.message);
