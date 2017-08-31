@@ -12,7 +12,7 @@ angular.module('computingServices.manageprofile', ['ngRoute'])
 
 .factory('ManageProfileService', ['$http', '$q', function ($http, $q) {
 
-    var UPDATE_LA_PROFILE_URI = constants.url + 'assistant/updateProfile';
+    var UPDATE_LA_PROFILE_URI = constants.url + 'assistant/update-profile';
 
     //define all factory methods
     var factory = {
