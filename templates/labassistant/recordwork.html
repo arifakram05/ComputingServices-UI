@@ -9,19 +9,11 @@
 
             <md-content class="md-no-momentum">
 
-                <!--<div layout="row" layout-align="center" flex>
-                    <md-button class="md-raised md-default" ng-click="recordWork('clockedin')" style="width:125px;">
-                        <i class="fa fa-clock-o lg"></i> Clock-In
-                    </md-button>
+                <div class="text-center" ng-if="!isDataFetched">
+                    <p>There are no shifts assigned to you today.</p>
+                </div>
 
-                    <md-input-container flex="20"></md-input-container>
-
-                    <md-button class="md-raised md-default" ng-click="recordWork('clockedout')" style="width:125px;">
-                        <i class="fa fa-clock-o lg"></i> Clock-Out
-                    </md-button>
-                </div>-->
-
-                <table class="table table-borderless" ng-style="{'text-align':'left', 'margin':'0 auto'}">
+                <table ng-if="isDataFetched" class="table table-borderless" ng-style="{'text-align':'left', 'margin':'0 auto'}">
                     <thead>
                         <tr class="bg-success">
                             <th ng-style="{'text-align':'left'}">

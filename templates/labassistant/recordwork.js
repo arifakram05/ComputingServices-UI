@@ -93,6 +93,11 @@ angular.module('computingServices.recordwork', ['ngRoute'])
         promise.then(function (result) {
             $scope.shifts = result.response;
             console.log('Shift timings: ', $scope.shifts);
+            if ($scope.shifts.length > 0) {
+                $scope.isDataFetched = true;
+            } else {
+                $scope.isDataFetched = false;
+            }
         });
     }
 

@@ -48,68 +48,60 @@ angular.module('computingServices.displaywork', ['ngRoute'])
 
 }])
 
-.controller('DisplayWorkCtrl', ['$scope', '$filter', '$mdDialog', 'DisplayWorkService', function ($scope, $filter, $mdDialog, DisplayWorkService) {
+.controller('DisplayWorkCtrl', ['$scope', '$filter', '$mdDialog', 'SharedService', 'DisplayWorkService', function ($scope, $filter, $mdDialog, SharedService, DisplayWorkService) {
 
-    console.log('displaying lab assistants worked hours');
+    setup();
 
-    //remove this after attaching service call, just for dummy data
-    $scope.labAsstDetails = {
-        fullName: "Mohammed, Arif Akram",
-        userId: "1643568",
-        fromDate: "Jan 1, 2017",
-        toDate: "Jan 20, 2017",
-        work: [{
-            clockedInDate: "Jan 1,2016",
-            clockedOutDate: "Jan 1,2016",
-            clockedInTime: "08:00 AM",
-            clockedOutTime: "12:00 PM",
-            total: 4
-        }, {
-            clockedInDate: "Jan 2,2016",
-            clockedOutDate: "Jan 2,2016",
-            clockedInTime: "08:00 AM",
-            clockedOutTime: "12:00 PM",
-            total: 4
-        }, {
-            clockedInDate: "Jan 3,2016",
-            clockedOutDate: "Jan 2,2016",
-            clockedInTime: "08:00 AM",
-            clockedOutTime: "12:00 PM",
-            total: 4
-        }]
-    };
-
-    //monitor for form validity
-    $scope.$watch('showLAWork.$valid', function (rawStartDate, rawEndDate) {
-        //if form valid, then make a server call
-        if ($scope.rawStartDate && $scope.rawEndDate) {
-            displayWork();
-            $scope.isDataFetched = true;
+    function setup() {
+        $scope.labAsst = {};
+        $scope.isSubmitClicked = false;
+        console.log("user role is ", SharedService.getUserRole());
+        if (SharedService.getUserRole() === 'Admin') {
+            $scope.isUserAdmin = true;
+        } else {
+            $scope.labAsst.id = SharedService.getUserId();
+            $scope.isUserAdmin = false;
         }
-    });
-
-    // service call
-    function displayWork() {
-        var startDate = moment($scope.rawStartDate).format('MMM DD, YYYY');
-        var endDate = moment($scope.rawEndDate).format('MMM DD, YYYY');
-        var promise = DisplayWorkService.displayWork("468415", startDate, endDate);
-        promise.then(function (result) {
-            $scope.labAsstDetails = result.response;
-            console.log('Shift schedule details: ', $scope.labAsstDetails);
-        });
     }
 
+    // print
     $scope.print = function (divName) {
-        if ($scope.labAsstDetails) {
+        if ($scope.loggedWorkDetails) {
             console.log('printing....');
             var printContents = document.getElementById(divName).innerHTML;
             var popupWin = window.open('', '_blank', 'width=400,height=400');
             popupWin.document.open();
-            popupWin.document.write('<html><head><link rel="stylesheet" type="text/css" href="app.css"/></head><body onload="window.print()">' + printContents + '</body></html>');
+            popupWin.document.write('<html><head><link rel="stylesheet" type="text/css" href="../../css/app.css"/></head><body onload="window.print()">' + printContents + '</body></html>');
             popupWin.document.close();
         } else {
             notifyUser('Please select the dates to print');
         }
+    }
+
+    // clear form
+    $scope.clear = function () {
+        $scope.labAsst = undefined;
+        $scope.showLAWork.$setPristine();
+        $scope.showLAWork.$setUntouched();
+    };
+
+    // retrieve recorded work
+    $scope.fetch = function (labAsst) {
+        $scope.isSubmitClicked = true;
+        var id = labAsst.id;
+        var startDate = moment(labAsst.startDate).format('MMM DD, YYYY');
+        var endDate = moment(labAsst.endDate).format('MMM DD, YYYY');
+        console.log('request params: ', id, ' ', startDate, ' ', endDate);
+        var promise = DisplayWorkService.displayWork(id, startDate, endDate);
+        promise.then(function (result) {
+            $scope.loggedWorkDetails = result.response;
+            console.log('Shift schedule details: ', $scope.loggedWorkDetails);
+            if ($scope.loggedWorkDetails.length > 0) {
+                $scope.isDataFetched = true;
+            } else {
+                $scope.isDataFetched = false;
+            }
+        });
     }
 
     //alerts to user

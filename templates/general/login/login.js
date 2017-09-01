@@ -176,7 +176,7 @@ angular.module('computingServices.login', ['ngRoute'])
             var userDetails = {
                 "authToken": "shfulig{}}#@aelf734769q8rp3278",
                 "name": "Arif Akram",
-                "id": "1643568",
+                "userId": "1643568",
                 //"role": "Lab Assistant",
                 "role": "Admin",
                 "code": 200
@@ -378,6 +378,7 @@ angular.module('computingServices.login', ['ngRoute'])
     //share user details retured from login success call with all controllers
     function setApplicationLevelData(userDetails) {
         //set user details
+        console.log('setting application level data ', userDetails);
         SharedService.setUserDetails(userDetails);
         //set auth token
         SharedService.setAuthToken(userDetails.authToken);
