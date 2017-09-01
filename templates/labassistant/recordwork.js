@@ -13,7 +13,7 @@ angular.module('computingServices.recordwork', ['ngRoute'])
 .factory('RecordWorkService', ['$http', '$q', function ($http, $q) {
 
     var CLOCK_IN_CLOCK_OUT = constants.url + 'assistant/record-work';
-    var GET_SHIFT_DETAILS_FOR_CLOCKING = constants.url + 'assistant/shift-timings';
+    var GET_SHIFT_DETAILS_FOR_CLOCKING = constants.url + 'assistant/single-schedule';
 
     //define all factory methods
     var factory = {

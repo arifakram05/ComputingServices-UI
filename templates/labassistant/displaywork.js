@@ -10,9 +10,9 @@ angular.module('computingServices.displaywork', ['ngRoute'])
     })
 }])
 
-.factory('DisplayWorkCtrlService', ['$http', function ($http) {
+.factory('DisplayWorkService', ['$http', '$q', function ($http, $q) {
 
-    var GET_LA_WORK_HOURS = constants.url + 'admin/saveLabSchedule';
+    var GET_LA_SCHEDULE = constants.url + 'assistant/many-schedules';
 
     //define all factory methods
     var factory = {
@@ -22,26 +22,33 @@ angular.module('computingServices.displaywork', ['ngRoute'])
     return factory;
 
     //fetch the LAs work hours between two given dates
-    function displayWork(labasst) {
+    function displayWork(studentId, startDate, endDate) {
         var deferred = $q.defer();
-
-        $http.post(CLOCK_IN_CLOCK_OUT, JSON.stringify(labasst))
-            .success(
-                function (data, status, headers, config) {
-                    console.log('clock-in or clock-out operation success ', data);
-                    deferred.resolve(data);
-                })
-            .error(
-                function (data, status, header, config) {
-                    console.log('clock-in or clock-out operation failure ', data);
-                    deferred.reject(data);
-                });
+        $http({
+                method: 'GET',
+                url: GET_LA_SCHEDULE,
+                params: {
+                    studentId: studentId,
+                    startDate: startDate,
+                    endDate: endDate
+                }
+            })
+            .then(
+                function success(response) {
+                    console.log('Retrieved shift schedule: ', response);
+                    deferred.resolve(response.data);
+                },
+                function error(errResponse) {
+                    console.error('Error while retrieving shift schedule ', errResponse);
+                    deferred.reject(errResponse);
+                }
+            );
         return deferred.promise;
     }
 
 }])
 
-.controller('DisplayWorkCtrl', ['$scope', '$filter', '$mdDialog', function ($scope, $filter, $mdDialog) {
+.controller('DisplayWorkCtrl', ['$scope', '$filter', '$mdDialog', 'DisplayWorkService', function ($scope, $filter, $mdDialog, DisplayWorkService) {
 
     console.log('displaying lab assistants worked hours');
 
@@ -57,13 +64,13 @@ angular.module('computingServices.displaywork', ['ngRoute'])
             clockedInTime: "08:00 AM",
             clockedOutTime: "12:00 PM",
             total: 4
-        },{
+        }, {
             clockedInDate: "Jan 2,2016",
             clockedOutDate: "Jan 2,2016",
             clockedInTime: "08:00 AM",
             clockedOutTime: "12:00 PM",
             total: 4
-        },{
+        }, {
             clockedInDate: "Jan 3,2016",
             clockedOutDate: "Jan 2,2016",
             clockedInTime: "08:00 AM",
@@ -73,36 +80,32 @@ angular.module('computingServices.displaywork', ['ngRoute'])
     };
 
     //monitor for form validity
-    $scope.$watch('showLAWork.$valid', function(rawStartDate, rawEndDate) {
+    $scope.$watch('showLAWork.$valid', function (rawStartDate, rawEndDate) {
         //if form valid, then make a server call
-        if($scope.rawStartDate && $scope.rawEndDate) {
-            console.log('calling server to fetch details for ',$scope.labAsst);
-            //displayWork($scope.labAsst);
+        if ($scope.rawStartDate && $scope.rawEndDate) {
+            displayWork();
             $scope.isDataFetched = true;
         }
     });
 
-    function displayWork(labAsst) {
-
-        console.log('making service call: ', labasst);
-
-        /*
-        //make service call
-        var promise = ManageLabScheduleService.saveLabSchedule(labSchedule);
+    // service call
+    function displayWork() {
+        var startDate = moment($scope.rawStartDate).format('MMM DD, YYYY');
+        var endDate = moment($scope.rawEndDate).format('MMM DD, YYYY');
+        var promise = DisplayWorkService.displayWork("468415", startDate, endDate);
         promise.then(function (result) {
-            console.log('Operation Done.', result);
+            $scope.labAsstDetails = result.response;
+            console.log('Shift schedule details: ', $scope.labAsstDetails);
         });
-        notifyUser('You have '+operation+' successfully at '+timeTonotify);
-        */
     }
 
-    $scope.print = function(divName) {
-        if($scope.labAsstDetails) {
+    $scope.print = function (divName) {
+        if ($scope.labAsstDetails) {
             console.log('printing....');
             var printContents = document.getElementById(divName).innerHTML;
-            var popupWin = window.open('','_blank','width=400,height=400');
+            var popupWin = window.open('', '_blank', 'width=400,height=400');
             popupWin.document.open();
-            popupWin.document.write('<html><head><link rel="stylesheet" type="text/css" href="app.css"/></head><body onload="window.print()">'+ printContents + '</body></html>');
+            popupWin.document.write('<html><head><link rel="stylesheet" type="text/css" href="app.css"/></head><body onload="window.print()">' + printContents + '</body></html>');
             popupWin.document.close();
         } else {
             notifyUser('Please select the dates to print');
