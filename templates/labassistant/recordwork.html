@@ -54,7 +54,7 @@
                                         <span ng-bind="item.labName"></span>
                                     </td>
                                     <td>
-                                        <span ng-bind="item.date"></span>
+                                        <span ng-bind="item.date | date: 'MMM dd, yyyy'"></span>
                                     </td>
                                     <td>
                                         <span ng-bind="item.start"></span>
@@ -69,12 +69,12 @@
                                         <span ng-bind="item.timesheet.clockedOutDateTime | date: 'HH:mm'"></span>
                                     </td>
                                     <td>
-                                        <button type="button" class="btn btn-success" ng-click="isClockInDisabled(item.timesheet.isClockedIn, item.timesheet.isClockedOut, item.start, item.end, item._id.$oid)">
+                                        <button type="button" class="btn btn-success" ng-click="isClockInDisabled(item.timesheet.isClockedIn, item.timesheet.isClockedOut, item.start, item.end, item._id)">
                                             <i class="fa fa-sign-in"></i>
                                             <md-tooltip>Clock In</md-tooltip>
                                         </button>
 
-                                        <button type="button" class="btn btn-danger" ng-click="isClockOutDisabled(item.timesheet.isClockedOut, item.timesheet.isClockedIn, item.start, item.end, item._id.$oid)">
+                                        <button type="button" class="btn btn-danger" ng-click="isClockOutDisabled(item.timesheet.isClockedOut, item.timesheet.isClockedIn, item.start, item.end, item._id)">
                                             <i class="fa fa-sign-in"></i>
                                             <md-tooltip>Clock Out</md-tooltip>
                                         </button>
