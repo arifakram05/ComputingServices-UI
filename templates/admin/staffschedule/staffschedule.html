@@ -5,11 +5,7 @@
         <label>Filters</label>
         <md-select ng-model="filteredLabs" md-on-close="clearSearchTerm()" data-md-container-class="selectdemoSelectHeader" multiple="">
             <md-select-header class="demo-select-header">
-                <input ng-model="searchTerm"
-                       type="search"
-                       placeholder="Search for a lab..."
-                       class="demo-header-searchbox md-text"
-                       ng-keydown="onSearchChange($event)" >
+                <input ng-model="searchTerm" type="search" placeholder="Search for a lab..." class="demo-header-searchbox md-text" ng-keydown="onSearchChange($event)">
             </md-select-header>
             <md-optgroup label="labs">
                 <md-option ng-value="lab.labName" ng-repeat="lab in labs |
@@ -53,6 +49,15 @@
                                         <option ng-repeat="lab in labs" value="{{lab.labName}}">{{lab.labName}}</option>
                                     </select>
                                 </div>
+
+                                <md-input-container flex="10"></md-input-container>
+
+                                <div layout="row" layout-align="center center" flex="50">
+                                    <select ng-model="color" flex="">
+                                        <option value="">Color</option>
+                                        <option ng-repeat="color in colors" value="{{color}}">{{color}}</option>
+                                    </select>
+                                </div>
                             </div>
 
                             <md-input-container flex="10"></md-input-container>
@@ -84,7 +89,7 @@
                             <i class="fa fa-times-circle"></i> Close
                         </a>
                         <md-input-container flex="1" ng-if="isNewEvent === true"></md-input-container>
-                        <a class="btn btn-primary" id="create" ng-style="{'height':'35px'}"  ng-click="create()" ng-if="isNewEvent === true && !shouldEnableButtonForCreate()">
+                        <a class="btn btn-primary" id="create" ng-style="{'height':'35px'}" ng-click="create()" ng-if="isNewEvent === true && !shouldEnableButtonForCreate()">
                             <i class="fa fa-plus-square-o"></i> Create
                         </a>
                         <md-input-container flex="1"></md-input-container>

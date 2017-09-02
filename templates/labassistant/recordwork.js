@@ -89,7 +89,7 @@ angular.module('computingServices.recordwork', ['ngRoute'])
 
     function getShiftDetailsForClocking() {
         var date = moment(new Date()).format('MMM DD, YYYY');
-        var promise = RecordWorkService.getShiftDetailsForClocking("468415", date);
+        var promise = RecordWorkService.getShiftDetailsForClocking(SharedService.getUserId(), date);
         promise.then(function (result) {
             $scope.shifts = result.response;
             console.log('Shift timings: ', $scope.shifts);
@@ -134,7 +134,7 @@ angular.module('computingServices.recordwork', ['ngRoute'])
             if (!isClockedOut) {
                 console.log("shiftstarttime < rightnow i.e. shift has already begun; can clock-in");
                 // call a function to save clock-in time
-                $scope.recordWork('clock-in', '468415', id);
+                $scope.recordWork('clock-in', SharedService.getUserId(), id);
                 //return false;
                 return;
             } else {
@@ -182,7 +182,7 @@ angular.module('computingServices.recordwork', ['ngRoute'])
             // also, user can only clock-out within the shift end time + 15 mins
             console.log("shiftstarttime < rightnow i.e. shift has already begun and its been more than 15 mins; can clock-out");
             // call a function to save clock-out time
-            $scope.recordWork('clock-out', '468415', id);
+            $scope.recordWork('clock-out', SharedService.getUserId(), id);
             //return false;
         } else {
             // user if not clocked-out and startTime refers to past time, but endTime is also past time, then user can't clock-out

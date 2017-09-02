@@ -171,14 +171,14 @@ angular.module('computingServices.login', ['ngRoute'])
         console.log('User details for login: ', user);
         var deferred = $q.defer();
 
-        if (user.userId === 1643568) {
+        if (user.userId === 468415) {
             console.log('control inside testing method : ', user.userId);
             var userDetails = {
                 "authToken": "shfulig{}}#@aelf734769q8rp3278",
                 "name": "Arif Akram",
-                "userId": "1643568",
-                //"role": "Lab Assistant",
-                "role": "Admin",
+                "userId": "468415",
+                "role": "Lab Assistant",
+                //"role": "Admin",
                 "code": 200
             };
         } else {

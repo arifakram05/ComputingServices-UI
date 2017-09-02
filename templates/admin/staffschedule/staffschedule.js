@@ -181,6 +181,10 @@ angular.module('computingServices.manageStaffSchedule', ['ngRoute', 'ui.calendar
 
 .controller('manageStaffScheduleCtrl', ['$scope', '$http', 'uiCalendarConfig', '$mdDialog', 'SharedService', 'ManageStaffScheduleService', '$location', function ($scope, $http, uiCalendarConfig, $mdDialog, SharedService, ManageStaffScheduleService, $location) {
 
+    $scope.colors = [
+        'black', 'blueviolet', 'brown', 'darkslateblue', 'lightcoral', 'red', 'steelblue', 'burlywood', 'cadetblue', 'chocolate', 'coral', 'dimgrey', 'olive', 'seagreen', 'teal', 'crimson', 'darkcyan', 'green', 'firebrick', 'purple', 'sienna'
+    ];
+
     $scope.isNewEvent = false;
 
     $scope.selLab = undefined;
@@ -548,15 +552,15 @@ angular.module('computingServices.manageStaffSchedule', ['ngRoute', 'ui.calendar
                 //delete the below object once the UI is ready
                 $scope.SelectedEvent = {
                     title: "Arif Akram",
-                    studentId: "468415",
-                    color: "green"
+                    studentId: "468415"
+                    //color: "green"
                 };
 
                 var event = {};
 
                 event.title = $scope.SelectedEvent.title; // title is lab assistant's name
                 event.studentId = $scope.SelectedEvent.studentId;
-                event.backgroundColor = $scope.SelectedEvent.color;
+                event.backgroundColor = $scope.color;
                 event.allDay = false;
                 event.day = day.getDay();
                 event.labName = $scope.selLab;
@@ -607,7 +611,7 @@ angular.module('computingServices.manageStaffSchedule', ['ngRoute', 'ui.calendar
 
         event.title = $scope.SelectedEvent.title;
         event.studentId = $scope.SelectedEvent.studentId;
-        event.backgroundColor = $scope.SelectedEvent.color;
+        event.backgroundColor = $scope.color;
         event.allDay = false;
         event.labName = $scope.selLab;
         event._id = $scope.SelectedEvent._id;
@@ -681,7 +685,7 @@ angular.module('computingServices.manageStaffSchedule', ['ngRoute', 'ui.calendar
 
         event.title = $scope.SelectedEvent.title;
         event.studentId = $scope.SelectedEvent.studentId;
-        event.backgroundColor = $scope.SelectedEvent.color;
+        event.backgroundColor = $scope.color;
         event.allDay = false;
         event.labName = $scope.selLab;
         event.groupId = $scope.SelectedEvent.groupId;
