@@ -95,11 +95,41 @@ angular.module('computingServices.displaywork', ['ngRoute'])
         var promise = DisplayWorkService.displayWork(id, startDate, endDate);
         promise.then(function (result) {
             $scope.loggedWorkDetails = result.response;
+            processHoursWorked();
             console.log('Shift schedule details: ', $scope.loggedWorkDetails);
             if ($scope.loggedWorkDetails.length > 0) {
                 $scope.isDataFetched = true;
             } else {
                 $scope.isDataFetched = false;
+            }
+        });
+    }
+
+    // process hours worked
+    function processHoursWorked() {
+        angular.forEach($scope.loggedWorkDetails, function (value, key) {
+            var t1;
+            var t2;
+            if (value.timesheet.clockedInDateTime != null) {
+                t1 = moment(value.timesheet.clockedInDateTime).format('MMM DD, YYYY HH:mm')
+                console.log('time 1 ', t1);
+            }
+            if (value.timesheet.clockedOutDateTime != null) {
+                t2 = moment(value.timesheet.clockedOutDateTime).format('MMM DD, YYYY HH:mm')
+                console.log('time 2 ', t2);
+            }
+            if (t1 != null && t2 != null) {
+                var timeStart = new Date(t1).getTime();
+                var timeEnd = new Date(t2).getTime();
+                var msDiff = timeEnd - timeStart; //in milliseconds
+                var secDiff = msDiff / 1000; //in seconds
+                var minDiff = msDiff / 60 / 1000; //in minutes
+                var hDiff = msDiff / 3600 / 1000; //in hours
+                var humanReadable = {};
+                humanReadable.hours = Math.floor(hDiff);
+                humanReadable.minutes = minDiff - 60 * humanReadable.hours;
+                value.hoursWorked = humanReadable.hours + ':' + humanReadable.minutes;
+                console.log(value.hoursWorked);
             }
         });
     }

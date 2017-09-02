@@ -549,18 +549,13 @@ angular.module('computingServices.manageStaffSchedule', ['ngRoute', 'ui.calendar
         for (var day = startDate; day <= endDate;) {
             if (selectedDays.includes(day.getDay())) {
 
-                //delete the below object once the UI is ready
-                $scope.SelectedEvent = {
-                    title: "Arif Akram",
-                    studentId: "468415"
-                    //color: "green"
-                };
-
                 var event = {};
 
-                event.title = $scope.SelectedEvent.title; // title is lab assistant's name
-                event.studentId = $scope.SelectedEvent.studentId;
-                event.backgroundColor = $scope.color;
+                /*event.title = $scope.SelectedEvent.title; // title is lab assistant's name
+                event.studentId = $scope.SelectedEvent.studentId;*/
+                event.title = "Arif Akram"; // title is lab assistant's name
+                event.studentId = "468415";
+                event.backgroundColor = $scope.SelectedEvent.color;
                 event.allDay = false;
                 event.day = day.getDay();
                 event.labName = $scope.selLab;
@@ -611,7 +606,7 @@ angular.module('computingServices.manageStaffSchedule', ['ngRoute', 'ui.calendar
 
         event.title = $scope.SelectedEvent.title;
         event.studentId = $scope.SelectedEvent.studentId;
-        event.backgroundColor = $scope.color;
+        event.backgroundColor = $scope.SelectedEvent.color;
         event.allDay = false;
         event.labName = $scope.selLab;
         event._id = $scope.SelectedEvent._id;
@@ -685,7 +680,7 @@ angular.module('computingServices.manageStaffSchedule', ['ngRoute', 'ui.calendar
 
         event.title = $scope.SelectedEvent.title;
         event.studentId = $scope.SelectedEvent.studentId;
-        event.backgroundColor = $scope.color;
+        event.backgroundColor = $scope.SelectedEvent.color;
         event.allDay = false;
         event.labName = $scope.selLab;
         event.groupId = $scope.SelectedEvent.groupId;
