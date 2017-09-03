@@ -177,8 +177,8 @@ angular.module('computingServices.login', ['ngRoute'])
                 "authToken": "shfulig{}}#@aelf734769q8rp3278",
                 "name": "Arif Akram",
                 "userId": "468415",
-                "role": "Lab Assistant",
-                //"role": "Admin",
+                //"role": "Lab Assistant",
+                "role": "Admin",
                 "code": 200
             };
         } else {

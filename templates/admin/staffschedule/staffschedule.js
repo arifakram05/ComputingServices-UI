@@ -1,4 +1,4 @@
-angular.module('computingServices.manageStaffSchedule', ['ngRoute', 'ui.calendar', 'daterangepicker'])
+angular.module('computingServices.manageStaffSchedule', ['ngRoute', 'ui.calendar', 'daterangepicker', 'ngSanitize', 'ui.select'])
 
 .config(['$routeProvider', function ($routeProvider) {
     $routeProvider.when('/manageStaffSchedule', {
@@ -181,13 +181,31 @@ angular.module('computingServices.manageStaffSchedule', ['ngRoute', 'ui.calendar
 
 .controller('manageStaffScheduleCtrl', ['$scope', '$http', 'uiCalendarConfig', '$mdDialog', 'SharedService', 'ManageStaffScheduleService', '$location', function ($scope, $http, uiCalendarConfig, $mdDialog, SharedService, ManageStaffScheduleService, $location) {
 
+    // to search for a student/Lab Assistant
+    $scope.search = function (searchText) {
+        console.log('searching for ... ', searchText);
+        var promise = SharedService.searchUsers(searchText);
+        promise.then(function (result) {
+                console.log('got the result from searching users :', result);
+                if (result.statusCode === 200) {
+                    $scope.users = result.response;
+                } else {
+                    SharedService.showError('Failed to retreive users');
+                }
+
+            })
+            .catch(function (resError) {
+                console.log('search for users failed :: ', resError);
+                //show failure message to the user
+                SharedService.showError('Error ocurred while searching for users');
+            });
+    }
+
     $scope.colors = [
         'black', 'blueviolet', 'brown', 'darkslateblue', 'lightcoral', 'red', 'steelblue', 'burlywood', 'cadetblue', 'chocolate', 'coral', 'dimgrey', 'olive', 'seagreen', 'teal', 'crimson', 'darkcyan', 'green', 'firebrick', 'purple', 'sienna'
     ];
 
     $scope.isNewEvent = false;
-
-    $scope.selLab = undefined;
 
     $scope.items = [{
         name: 'Sun',
@@ -466,7 +484,7 @@ angular.module('computingServices.manageStaffSchedule', ['ngRoute', 'ui.calendar
                 $scope.SelectedEvent.title = event.title;
                 $scope.SelectedEvent.color = event.backgroundColor;
                 $scope.SelectedEvent.studentId = event.studentId;
-                $scope.selLab = event.labName;
+                $scope.SelectedEvent.labName = event.labName;
                 $scope._id = event._id;
                 $scope.SelectedEvent._id = event._id;
                 $scope.SelectedEvent.groupId = event.groupId;
@@ -501,8 +519,7 @@ angular.module('computingServices.manageStaffSchedule', ['ngRoute', 'ui.calendar
         var selectedDays = $scope.selectedDays.map(function (a) {
             return a.value;
         });
-
-        if (Object.keys($scope.event).length !== 2 || selectedDays.length < 1 || $scope.selLab === '' || $scope.selLab === undefined) {
+        if (Object.keys($scope.event).length !== 2 || selectedDays.length < 1 || Object.keys($scope.SelectedEvent).length != 3) {
             return true;
         }
         return false;
@@ -551,14 +568,12 @@ angular.module('computingServices.manageStaffSchedule', ['ngRoute', 'ui.calendar
 
                 var event = {};
 
-                /*event.title = $scope.SelectedEvent.title; // title is lab assistant's name
-                event.studentId = $scope.SelectedEvent.studentId;*/
-                event.title = "Arif Akram"; // title is lab assistant's name
-                event.studentId = "468415";
+                event.title = $scope.SelectedEvent.user.firstName + ' ' + $scope.SelectedEvent.user.lastName; // title is lab assistant's name
+                event.studentId = $scope.SelectedEvent.user.userId;
                 event.backgroundColor = $scope.SelectedEvent.color;
                 event.allDay = false;
                 event.day = day.getDay();
-                event.labName = $scope.selLab;
+                event.labName = $scope.SelectedEvent.labName;
 
                 var date = moment(day).format('MMM DD, YYYY');
                 event.start = date + ' ' + startTime;
@@ -608,7 +623,7 @@ angular.module('computingServices.manageStaffSchedule', ['ngRoute', 'ui.calendar
         event.studentId = $scope.SelectedEvent.studentId;
         event.backgroundColor = $scope.SelectedEvent.color;
         event.allDay = false;
-        event.labName = $scope.selLab;
+        event.labName = $scope.SelectedEvent.labName;
         event._id = $scope.SelectedEvent._id;
         event.groupId = $scope.SelectedEvent.groupId;
         event.start = calculateStartDateTime();
@@ -682,7 +697,7 @@ angular.module('computingServices.manageStaffSchedule', ['ngRoute', 'ui.calendar
         event.studentId = $scope.SelectedEvent.studentId;
         event.backgroundColor = $scope.SelectedEvent.color;
         event.allDay = false;
-        event.labName = $scope.selLab;
+        event.labName = $scope.SelectedEvent.labName;
         event.groupId = $scope.SelectedEvent.groupId;
         event.start = calculateStartDateTime();
         event.end = calculateEndDateTime();
@@ -761,8 +776,6 @@ angular.module('computingServices.manageStaffSchedule', ['ngRoute', 'ui.calendar
     $scope.clear = function () {
         //reset selected days
         $scope.selectedDays = [];
-        //reset selected lab
-        $scope.selLab = undefined;
     }
 
     // This data has to be obtained from service call

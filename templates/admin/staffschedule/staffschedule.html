@@ -42,22 +42,53 @@
                         <!--Days of a week-->
                         <div layout="column" flex="" class="PaddingAllAround">
 
+                            <!--first row-->
                             <div layout="row" layout-align="center">
-                                <div layout="row" layout-align="center center" flex="50">
-                                    <select ng-model="selLab" flex="">
-                                        <option value="">Select Campus</option>
-                                        <option ng-repeat="lab in labs" value="{{lab.labName}}">{{lab.labName}}</option>
-                                    </select>
-                                </div>
+                                <md-input-container flex="10"></md-input-container>
+
+                                <ui-select flex="50" ng-model="SelectedEvent.labName">
+                                    <ui-select-match placeholder="Campus">
+                                        {{SelectedEvent.labName}}
+                                    </ui-select-match>
+                                    <ui-select-choices repeat="lab.labName as lab in labs | filter: $select.search">
+                                        {{lab.labName}}
+                                    </ui-select-choices>
+                                </ui-select>
 
                                 <md-input-container flex="10"></md-input-container>
 
-                                <div layout="row" layout-align="center center" flex="50">
-                                    <select ng-model="SelectedEvent.color" flex="">
-                                        <option value="">Color</option>
-                                        <option ng-repeat="color in colors" value="{{color}}">{{color}}</option>
-                                    </select>
-                                </div>
+                                <ui-select flex="50" ng-model="SelectedEvent.color">
+                                    <ui-select-match placeholder="Color">
+                                        {{SelectedEvent.color}}
+                                    </ui-select-match>
+                                    <ui-select-choices repeat="color in colors | filter: $select.search">
+                                        {{color}}
+                                    </ui-select-choices>
+                                </ui-select>
+
+                                <md-input-container flex="10"></md-input-container>
+                            </div>
+
+                            <md-input-container flex="10"></md-input-container>
+
+                            <!--second row-->
+                            <div layout="row" layout-align="center" ng-if="isNewEvent === true">
+                                <md-input-container flex="10"></md-input-container>
+
+                                <ui-select flex="50" ng-model="SelectedEvent.user">
+                                    <ui-select-match placeholder="Search Lab Assistant...">
+                                        {{SelectedEvent.user.lastName}}, {{SelectedEvent.user.firstName}}
+                                    </ui-select-match>
+                                    <ui-select-choices refresh="search($select.search)" repeat="user in users | filter: $select.search">
+                                        {{user.lastName}}, {{user.firstName}}
+                                    </ui-select-choices>
+                                </ui-select>
+
+                                <md-input-container flex="10"></md-input-container>
+
+                                <md-input-container flex="50"></md-input-container>
+
+                                <md-input-container flex="10"></md-input-container>
                             </div>
 
                             <md-input-container flex="10"></md-input-container>
