@@ -44,12 +44,11 @@
                             </td>
 
                             <td>
-                                <md-select name="status" ng-model="applicant.status" ng-style="{'width':'80%', 'padding':'0', 'margin':'0'}">
-                                    <md-option value="Submitted">Submitted</md-option>
-                                    <md-option value="InReview">In Review</md-option>
-                                    <md-option value="InProgress">Interview in progress</md-option>
-                                    <md-option value="Selected">Selected</md-option>
-                                    <md-option value="Rejected">No longer in consideration</md-option>
+                                <md-select name="status" ng-model="applicant.status" ng-style="{'width':'80%', 'padding':'0', 'margin':'0'}" ng-change="updateJobApplicantStatus(applicant.status, applicant.studentId)">
+                                    <md-option value="SUBMITTED">Submitted</md-option>
+                                    <md-option value="IN REVIEW">In Review</md-option>
+                                    <md-option value="IN PROGRESS">In Progress</md-option>
+                                    <md-option value="NO LONGER IN CONSIDERATION">Reject</md-option>
                                 </md-select>
                             </td>
 
@@ -186,7 +185,7 @@
 
                             <div layout="row" layout-align="center" flex>
                                 <md-button class="md-raised md-default" ng-click="cancel(selectedApplicant)" data-dismiss="modal">close</md-button>
-                                <md-button class="md-raised md-primary" ng-click="update(selectedApplicant)">Submit</md-button>
+                                <!--<md-button class="md-raised md-primary" ng-click="update(selectedApplicant)">Submit</md-button>-->
                             </div>
 
                         </form>

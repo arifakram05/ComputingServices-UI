@@ -15,6 +15,7 @@ angular.module('computingServices.manageJobApplicants', ['ngRoute'])
     var DELETE_JOB_APPLICANT_URI = constants.url + 'admin/deleteJobApplicant';
     var UPDATE_JOB_APPLICANT_URI = constants.url + 'admin/updateJobApplicant';
     var HIRE_JOB_APPLICANT_URI = constants.url + 'admin/hireJobApplicant';
+    var UPDATE_JOB_APPLICANT_STATUS_URI = constants.url + 'admin/update-job-applicant-status';
     var EMAIL_JOB_APPLICANT_URI = constants.url + 'services/emailJobApplicant';
 
     //define all factory methods
@@ -23,7 +24,8 @@ angular.module('computingServices.manageJobApplicants', ['ngRoute'])
         deleteJobApplicant: deleteJobApplicant,
         updateJobApplicant: updateJobApplicant,
         hireJobApplicant: hireJobApplicant,
-        emailJobApplicant: emailJobApplicant
+        emailJobApplicant: emailJobApplicant,
+        updateJobApplicantStatus: updateJobApplicantStatus
     };
 
     return factory;
@@ -146,6 +148,30 @@ angular.module('computingServices.manageJobApplicants', ['ngRoute'])
         return deferred.promise;
     }
 
+    // update job applicant status
+    function updateJobApplicantStatus(status, studentId) {
+        var deferred = $q.defer();
+        $http({
+                method: 'PUT',
+                url: UPDATE_JOB_APPLICANT_STATUS_URI,
+                params: {
+                    status: status,
+                    studentId: studentId
+                }
+            })
+            .then(
+                function success(response) {
+                    console.log('Job applicant status updated: ', response);
+                    deferred.resolve(response.data);
+                },
+                function error(errResponse) {
+                    console.error('Error while updating job applicant status: ', errResponse);
+                    deferred.reject(errResponse);
+                }
+            );
+        return deferred.promise;
+    }
+
 }])
 
 .controller('ManageJobApplicantsCtrl', ['$scope', 'ManageJobApplicantsService', 'SharedService', '$filter', '$mdDialog', function ($scope, ManageJobApplicantsService, SharedService, $filter, $mdDialog) {
@@ -235,6 +261,20 @@ angular.module('computingServices.manageJobApplicants', ['ngRoute'])
         });
     }
 
+    // Update job applicant status
+    $scope.updateJobApplicantStatus = function (status, studentId) {
+        console.log('status ', status, ' studentId ', studentId);
+        //call service method to update edited details
+        var promise = ManageJobApplicantsService.updateJobApplicantStatus(status, studentId);
+        promise.then(function (result) {
+            console.log('Operation success, refershing job applicants table');
+            //refresh table contents
+            fetchAllJobApplicants();
+            // show message
+            SharedService.showSuccess("Status of applicant with Id " + studentId + " has been updated successfully");
+        });
+    }
+
     //Delete a job applicant
     $scope.delete = function (studentId) {
         console.log('Deleting job applicant with id: ', studentId);
@@ -272,7 +312,7 @@ angular.module('computingServices.manageJobApplicants', ['ngRoute'])
         console.log('Hiring applicant', labAssistant);
 
         var confirm = $mdDialog.confirm()
-        .title('Hiring job applicant with ID ' + labAssistant.studentId)
+            .title('Hiring job applicant with ID ' + labAssistant.studentId)
             .textContent('Do you want to proceed with hiring this candidate?')
             .ok('Yes')
             .cancel('No');
