@@ -171,7 +171,7 @@ angular.module('computingServices.login', ['ngRoute'])
         console.log('User details for login: ', user);
         var deferred = $q.defer();
 
-        if (user.userId === 468415) {
+        /*if (user.userId === 468415) {
             console.log('control inside testing method : ', user.userId);
             var userDetails = {
                 "authToken": "shfulig{}}#@aelf734769q8rp3278",
@@ -188,10 +188,10 @@ angular.module('computingServices.login', ['ngRoute'])
             };
         }
         deferred.resolve(userDetails);
-        return deferred.promise;
+        return deferred.promise;*/
 
         // Real http call to server
-        /*$http({
+        $http({
                 method: 'POST',
                 url: LOGIN_USER_URI,
                 headers: {
@@ -200,7 +200,7 @@ angular.module('computingServices.login', ['ngRoute'])
 
                 transformRequest: function (data) {
                     var formData = new FormData();
-                    formData.append("userDetails", angular.toJson(associate));
+                    formData.append("userDetails", angular.toJson(user));
                     return formData;
                 }
             })
@@ -213,7 +213,7 @@ angular.module('computingServices.login', ['ngRoute'])
                 deferred.reject(data);
             });
 
-        return deferred.promise;*/
+        return deferred.promise;
 
     }
 
@@ -339,23 +339,11 @@ angular.module('computingServices.login', ['ngRoute'])
         promise.then(function (result) {
                 console.log('Login Success, data retrieved :', result);
 
-                if (result.code === 403) {
-                    SharedService.showError(result.message);
-                    $scope.dataLoading = false;
-                    return;
-                }
-
-                if (result.code === 500) {
-                    SharedService.showError('Error occurred while logging you in. Please contact administrator');
-                    $scope.dataLoading = false;
-                    return;
-                }
-
                 //Stop spinner
                 $scope.dataLoading = false;
 
                 //Make the data available to all controllers
-                setApplicationLevelData(result);
+                setApplicationLevelData(result.response[0]);
 
                 //Clear Form
                 //clearForm();
@@ -369,9 +357,17 @@ angular.module('computingServices.login', ['ngRoute'])
             })
             .catch(function (resError) {
                 console.log('LOGIN FAILURE :: ', resError);
-                //show failure message to the user
-                SharedService.showError('Server Error. System could not log you in.');
-                $scope.dataLoading = false;
+                if (resError.statusCode === 403 || resError.statusCode === 404) {
+                    SharedService.showError(resError.message);
+                    $scope.dataLoading = false;
+                    return;
+                }
+
+                if (resError.statusCode === 500) {
+                    SharedService.showError('Error occurred while logging you in. Please contact administrator');
+                    $scope.dataLoading = false;
+                    return;
+                }
             });
     }
 
@@ -530,4 +526,4 @@ angular.module('computingServices.login', ['ngRoute'])
             .ok('Got it!')
         );
     }
-}]);
+            }]);
