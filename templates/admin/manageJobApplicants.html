@@ -130,7 +130,7 @@
                             <div layout="row">
                                 <md-input-container flex="50">
                                     <label>First Name</label>
-                                    <input type="text" name="firstName" ng-model="selectedApplicant.firstName" required/>
+                                    <input type="text" name="firstName" ng-model="selectedApplicant.firstName" required disabled/>
                                     <div class="validation-messages" ng-messages="editjaForm.firstName.$error">
                                         <div ng-message="required">Required</div>
                                     </div>
@@ -140,7 +140,7 @@
 
                                 <md-input-container flex="50">
                                     <label>Last Name</label>
-                                    <input type="text" name="lastName" ng-model="selectedApplicant.lastName" required/>
+                                    <input type="text" name="lastName" ng-model="selectedApplicant.lastName" required disabled/>
                                     <div class="validation-messages" ng-messages="editjaForm.lastName.$error">
                                         <div ng-message="required">Required</div>
                                     </div>
@@ -151,7 +151,7 @@
                             <div layout="row">
                                 <md-input-container flex="50">
                                     <label>Email</label>
-                                    <input type="email" name="email" ng-model="selectedApplicant.email" required/>
+                                    <input type="email" name="email" ng-model="selectedApplicant.email" required disabled/>
                                     <div class="validation-messages" ng-messages="editjaForm.email.$error">
                                         <div ng-message="required">Required</div>
                                     </div>
@@ -161,7 +161,7 @@
 
                                 <md-input-container flex="50">
                                     <label>Phone</label>
-                                    <input name="phone" ng-model="selectedApplicant.phone" ng-pattern="/^[0-9]{3}[0-9]{3}[0-9]{4}$/" required/>
+                                    <input name="phone" ng-model="selectedApplicant.phone" ng-pattern="/^[0-9]{3}[0-9]{3}[0-9]{4}$/" required disabled/>
                                     <div ng-messages="editjaForm.phone.$error">
                                         <div ng-message="pattern">Phone number format is ##########</div>
                                     </div>
@@ -179,7 +179,7 @@
 
                                 <md-input-container flex="50" md-no-float class="md-block">
                                     <label>LinkedIn Profile</label>
-                                    <input name="linkedInProfile" ng-model="selectedApplicant.linkedInProfile" type="url">
+                                    <input name="linkedInProfile" ng-model="selectedApplicant.linkedInProfile" type="url" disabled>
                                 </md-input-container>
                             </div>
 
