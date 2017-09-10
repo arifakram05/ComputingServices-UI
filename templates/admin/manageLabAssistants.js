@@ -16,11 +16,13 @@ angular.module('computingServices.manageLabAssistants', ['ngRoute'])
     var DELETE_LAB_ASSISTANT_URI = constants.url + 'admin/deleteLabAssistant';
     var UPDATE_LAB_ASSISTANT_URI = constants.url + 'admin/updateLabAssistant';
     var DOWNLOAD_URI = constants.url + 'admin/download';
+    var UPDATE_LAB_ASST_STATUS_URI = constants.url + 'admin/update-lab-assistant-status';
 
     var factory = {
         getAllLabAssistants: getAllLabAssistants,
         deleteLabAssistant: deleteLabAssistant,
-        updateLabAssistant: updateLabAssistant
+        updateLabAssistant: updateLabAssistant,
+        updateLabApplicantStatus: updateLabApplicantStatus
     };
 
     return factory;
@@ -97,7 +99,29 @@ angular.module('computingServices.manageLabAssistants', ['ngRoute'])
         return deferred.promise;
     }
 
-
+    // update lab assistant status
+    function updateLabApplicantStatus(status, studentId) {
+        var deferred = $q.defer();
+        $http({
+                method: 'PUT',
+                url: UPDATE_LAB_ASST_STATUS_URI,
+                params: {
+                    status: status,
+                    studentId: studentId
+                }
+            })
+            .then(
+                function success(response) {
+                    console.log('Lab assistant status updated: ', response);
+                    deferred.resolve(response.data);
+                },
+                function error(errResponse) {
+                    console.error('Error while updating lab assistant status: ', errResponse);
+                    deferred.reject(errResponse);
+                }
+            );
+        return deferred.promise;
+    }
 
     /*function createUser(user) {
         var deferred = $q.defer();
@@ -162,6 +186,7 @@ angular.module('computingServices.manageLabAssistants', ['ngRoute'])
             .then(
                 function (data) {
                     $scope.las = data;
+                    $scope.backuplas = angular.copy(data);
                 },
                 function (errResponse) {
                     console.error('Error while fetching Users');
@@ -175,19 +200,6 @@ angular.module('computingServices.manageLabAssistants', ['ngRoute'])
         $scope.selectedLA = la;
         $('#ladModal').modal('show');
         console.log('preparing to show detail in modal ', $scope.selectedLA);
-    }
-
-    //Edit lab assistant
-    $scope.edit = function edit(la) {
-        console.log('id to be edited', la.studentId);
-        createBackup(la);
-    }
-
-    //Cancel the edit operation
-    $scope.cancel = function (la) {
-        console.log('Cancelling edit operation for ', la);
-        restore(la);
-        deleteBackup(la);
     }
 
     //Update lab assistant
@@ -281,22 +293,51 @@ angular.module('computingServices.manageLabAssistants', ['ngRoute'])
             });
     }
 
+    // Update job applicant status
+    $scope.updateLabApplicantStatus = function (status, studentId) {
+        console.log('status ', status, ' studentId ', studentId);
+        //call service method to update edited details
+        var promise = ManageLabAssistantsService.updateLabApplicantStatus(status, studentId);
+        promise.then(function (result) {
+                console.log('Operation success, refershing lab applicants table');
+                //refresh table contents
+                fetchAllUsers();
+                // show message
+                SharedService.showSuccess("Status of Lab Assistant with Id " + studentId + " has been updated successfully");
+            })
+            .catch(function (resError) {
+                console.log('UPDATE FAILURE :: ', resError);
+                SharedService.showError('Error occurred while updating status');
+                $scope.las = angular.copy($scope.backuplas);
+            });
+    }
+
+    //Edit lab assistant
+    $scope.edit = function edit(la) {
+        console.log('id to be edited', la);
+        createBackup(la);
+    }
+
+    //Cancel the edit operation
+    $scope.cancel = function (la) {
+        console.log('Cancelling edit operation for ', la);
+        restore(la);
+        deleteBackup(la);
+    }
+
     //Create backup
     function createBackup(la) {
-        la.backupStatus = angular.copy(la.status);
         la.backupComments = angular.copy(la.comments);
     }
 
     //Restore backup
     function restore(la) {
-        la.status = angular.copy(la.backupStatus);
-        la.comments = angular.copy(la.backupStatus);
+        la.comments = angular.copy(la.backupComments);
     }
 
     //Delete backup fields
     function deleteBackup(la) {
-        delete la.backupStatus;
-        delete la.backupStatus;
+        delete la.backupComments;
     }
 
 }]);

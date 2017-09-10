@@ -272,6 +272,9 @@ angular.module('computingServices.manageJobApplicants', ['ngRoute'])
             fetchAllJobApplicants();
             // show message
             SharedService.showSuccess("Status of applicant with Id " + studentId + " has been updated successfully");
+        }).catch(function (resError) {
+            console.log('UPDATE FAILURE :: ', resError);
+            SharedService.showError('Error occurred while updating status');
         });
     }
 
