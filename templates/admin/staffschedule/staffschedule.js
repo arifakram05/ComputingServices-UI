@@ -496,7 +496,12 @@ angular.module('computingServices.manageStaffSchedule', ['ngRoute', 'ui.calendar
             eventMouseover: function (event, jsEvent, view) {
                 var startTime = moment(event.start).format('h:mm A');
                 var endTime = moment(event.end).format('h:mm A');
-                var tooltip = '<div class="tooltiptopicevent" style="width:auto;height:auto;background:rgb(16,108,200);color:#fff;position:absolute;z-index:10001;padding: 5px; line-height: 150%;border-top-right-radius: 15px;border-bottom-left-radius: 15px;">' + startTime + ' - ' + endTime + '</br>' + event.title + '</br>' + event.studentId + '</br>' + event.labName + '</div>';
+
+                var shiftStartDateTime = constructDateTime(new Date(event.date), moment(event.start).format('H:mm'));
+                var shiftEndDateTime = constructDateTime(new Date(event.date), moment(event.end).format('H:mm'));
+                var shiftDuration = calculateHours(shiftStartDateTime, shiftEndDateTime);
+
+                var tooltip = '<div class="tooltiptopicevent" style="width:auto;height:auto;background:rgb(16,108,200);color:#fff;position:absolute;z-index:10001;padding: 5px; line-height: 150%;border-top-right-radius: 15px;border-bottom-left-radius: 15px;">' + startTime + ' - ' + endTime + '</br>' + event.title + '</br>' + event.studentId + '</br>' + event.labName + '</br>' + shiftDuration + '</br>' + '</div>';
                 $("body").append(tooltip);
                 $(this).mouseover(function (e) {
                     $(this).css('z-index', 10000);
@@ -513,6 +518,32 @@ angular.module('computingServices.manageStaffSchedule', ['ngRoute', 'ui.calendar
             }
         }
     };
+
+    // given date as Date object and time as string, construct date object with time
+    function constructDateTime(date, time) {
+        var timeTokens = time.split(':');
+        date.setHours(timeTokens[0]);
+        date.setMinutes(timeTokens[1]);
+        return date;
+    }
+
+    // given a start and end date and time object, calculate the difference in terms of hours:minutes
+    function calculateHours(start, end) {
+        var timeStart = start.getTime();
+        var timeEnd = end.getTime();
+        var msDiff = timeEnd - timeStart; //in milliseconds
+        var secDiff = msDiff / 1000; //in seconds
+        var minDiff = msDiff / 60 / 1000; //in minutes
+        var hDiff = msDiff / 3600 / 1000; //in hours
+        var humanReadable = {};
+        humanReadable.hours = Math.floor(hDiff);
+        humanReadable.minutes = minDiff - 60 * humanReadable.hours;
+        if (humanReadable.minutes == 0) {
+            return humanReadable.hours + ':' + humanReadable.minutes + '0' + ' hours';
+        } else {
+            return humanReadable.hours + ':' + humanReadable.minutes + ' hours';
+        }
+    }
 
     //determines whether to enable 'Create' event button
     $scope.shouldEnableButtonForCreate = function () {
