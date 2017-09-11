@@ -508,7 +508,7 @@ angular.module('computingServices.manageStaffSchedule', ['ngRoute', 'ui.calendar
                     $('.tooltiptopicevent').fadeIn('500');
                     $('.tooltiptopicevent').fadeTo('10', 1.9);
                 }).mousemove(function (e) {
-                    $('.tooltiptopicevent').css('top', e.pageY + 10);
+                    $('.tooltiptopicevent').css('top', e.pageY + (-40));
                     $('.tooltiptopicevent').css('left', e.pageX + 20);
                 });
             },
