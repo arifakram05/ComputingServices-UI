@@ -31,9 +31,8 @@
 </head>
 
 <body>
-
     <!--<nav class="navbar navbar-inverse navbar-fixed-top">-->
-    <nav class="navbar navbar-default" ng-controller="mainCtrl">
+    <nav class="navbar navbar-default navbar-fixed-top" ng-controller="mainCtrl">
         <div class="container-fluid" ng-style="{'background-color': '#fff'}">
             <div class="navbar-header">
                 <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#navbar" aria-expanded="false" aria-controls="navbar">
@@ -70,7 +69,6 @@
                             <li ng-if="isExists('/recordwork')"><a href="#/recordwork">Clock In/Clock out</a></li>
                             <li ng-if="isExists('/displaywork')"><a href="#/displaywork">Schedule/Timesheet</a></li>
                             <li ng-if="isExists('/manageprofile')"><a href="#/manageprofile">Manage Profile</a></li>
-                            <!--<li><a href="#/viewworkschedule">Work Schedule</a></li>-->
                         </ul>
                     </li>
 
@@ -155,7 +153,6 @@
     <!--Lab Assistant scripts-->
     <script src="templates/labassistant/recordwork.js"></script>
     <script src="templates/labassistant/displaywork.js"></script>
-    <script src="templates/labassistant/viewworkschedule.js"></script>
     <script src="templates/labassistant/manageprofile.js"></script>
 
     <script src="templates/general/login/login.js"></script>

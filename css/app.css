@@ -10,6 +10,7 @@
 .jumbotron {
     background-color: #fff;
     padding: 0 0;
+    margin-top: 50px;
 }
 
 .no-bullets {
@@ -139,6 +140,10 @@
 
 .topPadding30 {
     padding-top: 30px;
+}
+
+.topPadding60 {
+    padding-top: 60px;
 }
 
 .centWidth {

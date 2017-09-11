@@ -1,23 +1,23 @@
 <div ng-controller="manageStaffScheduleCtrl" class="topPadding30">
 
-    <!--Filter-->
-    <md-input-container flex="" md-no-float class="md-block">
-        <label>Filters</label>
-        <md-select ng-model="filteredLabs" md-on-close="clearSearchTerm()" data-md-container-class="selectdemoSelectHeader" multiple="">
-            <md-select-header class="demo-select-header">
-                <input ng-model="searchTerm" type="search" placeholder="Search for a lab..." class="demo-header-searchbox md-text" ng-keydown="onSearchChange($event)">
-            </md-select-header>
-            <md-optgroup label="labs">
-                <md-option ng-value="lab.labName" ng-repeat="lab in labs |
-                                                             filter:searchTerm">{{lab.labName}} </md-option>
-            </md-optgroup>
-        </md-select>
-    </md-input-container>
-
     <!--Calendar-->
     <div class="row styleCal">
         <div class="col-md-12">
             <div id="calendar" ui-calendar="uiConfig.calendar" ng-model="eventSources" calendar="myCalendar"></div>
+            <br/>
+            <!--Filter-->
+            <md-input-container flex="" md-no-float class="md-block">
+                <label>Filters</label>
+                <md-select ng-model="filteredLabs" md-on-close="clearSearchTerm()" data-md-container-class="selectdemoSelectHeader" multiple="">
+                    <md-select-header class="demo-select-header">
+                        <input ng-model="searchTerm" type="search" placeholder="Search for a lab..." class="demo-header-searchbox md-text" ng-keydown="onSearchChange($event)">
+                    </md-select-header>
+                    <md-optgroup label="labs">
+                        <md-option ng-value="lab.labName" ng-repeat="lab in labs |
+                                                                     filter:searchTerm">{{lab.labName}} </md-option>
+                    </md-optgroup>
+                </md-select>
+            </md-input-container>
         </div>
     </div>
 

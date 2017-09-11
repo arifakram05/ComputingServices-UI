@@ -21,7 +21,6 @@ var computingServicesApp = angular.module('computingServices', [
     /*lab assistant modules*/
     'computingServices.recordwork',
     'computingServices.displaywork',
-    'computingServices.viewworkschedule',
     'computingServices.manageprofile',
 
     /*'computingServices.logout',*/
