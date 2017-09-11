@@ -83,6 +83,9 @@
                             End Time
                         </th>
                         <th ng-style="{'text-align':'left'}">
+                            Hours Assigned
+                        </th>
+                        <th ng-style="{'text-align':'left'}">
                             Clocked In At
                         </th>
                         <th ng-style="{'text-align':'left'}">
@@ -106,6 +109,9 @@
                         </td>
                         <td>
                             <span ng-bind="item.end"></span>
+                        </td>
+                        <td>
+                            <span ng-bind="item.hoursAssigned"></span>
                         </td>
                         <td>
                             <span ng-bind="item.timesheet.clockedInDateTime | date: 'HH:mm'"></span>

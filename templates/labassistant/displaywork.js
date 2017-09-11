@@ -105,9 +105,44 @@ angular.module('computingServices.displaywork', ['ngRoute'])
         });
     }
 
+    // given date as Date object and time as string, construct date object with time
+    function constructDateTime(date, time) {
+        var timeTokens = time.split(':');
+        date.setHours(timeTokens[0]);
+        date.setMinutes(timeTokens[1]);
+        return date;
+    }
+
+    // given a start and end date and time object, calculate the difference in terms of hours:minutes
+    function calculateHours(start, end) {
+        var timeStart = start.getTime();
+        var timeEnd = end.getTime();
+        var msDiff = timeEnd - timeStart; //in milliseconds
+        var secDiff = msDiff / 1000; //in seconds
+        var minDiff = msDiff / 60 / 1000; //in minutes
+        var hDiff = msDiff / 3600 / 1000; //in hours
+        var humanReadable = {};
+        humanReadable.hours = Math.floor(hDiff);
+        humanReadable.minutes = minDiff - 60 * humanReadable.hours;
+        if (humanReadable.minutes == 0) {
+            return humanReadable.hours + ':' + humanReadable.minutes + '0';
+        } else {
+            return humanReadable.hours + ':' + humanReadable.minutes;
+        }
+    }
+
     // process hours worked
     function processHoursWorked() {
         angular.forEach($scope.loggedWorkDetails, function (value, key) {
+            // calculate hours assigned to work
+            if (value.start != null && value.end != null && value.date != null) {
+                var shiftStartDateTime = constructDateTime(new Date(value.date), value.start);
+                console.log('shiftStartDateTime: ', shiftStartDateTime);
+                var shiftEndDateTime = constructDateTime(new Date(value.date), value.end);
+                console.log('shiftEndDateTime: ', shiftEndDateTime);
+                value.hoursAssigned = calculateHours(shiftStartDateTime, shiftEndDateTime);
+            }
+            // calculate time worked
             var t1;
             var t2;
             if (value.timesheet.clockedInDateTime != null) {
@@ -119,7 +154,7 @@ angular.module('computingServices.displaywork', ['ngRoute'])
                 console.log('time 2 ', t2);
             }
             if (t1 != null && t2 != null) {
-                var timeStart = new Date(t1).getTime();
+                /*var timeStart = new Date(t1).getTime();
                 var timeEnd = new Date(t2).getTime();
                 var msDiff = timeEnd - timeStart; //in milliseconds
                 var secDiff = msDiff / 1000; //in seconds
@@ -128,7 +163,8 @@ angular.module('computingServices.displaywork', ['ngRoute'])
                 var humanReadable = {};
                 humanReadable.hours = Math.floor(hDiff);
                 humanReadable.minutes = minDiff - 60 * humanReadable.hours;
-                value.hoursWorked = humanReadable.hours + ':' + humanReadable.minutes;
+                value.hoursWorked = humanReadable.hours + ':' + humanReadable.minutes;*/
+                value.hoursWorked = calculateHours(new Date(t1), new Date(t2));
                 console.log(value.hoursWorked);
             }
         });
