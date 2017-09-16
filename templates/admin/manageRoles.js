@@ -76,12 +76,12 @@ angular.module('computingServices.manageRoles', ['ngRoute'])
     }
 
     //update existing role
-    function updateRole(role) {
+    function updateRole(role, backupRoleName) {
         console.log('role details to update : ', role);
         var deferred = $q.defer();
 
         $http({
-            method: 'POST',
+            method: 'PUT',
             url: UPDATE_ROLES_URI,
             headers: {
                 'Content-Type': undefined
@@ -90,6 +90,7 @@ angular.module('computingServices.manageRoles', ['ngRoute'])
             transformRequest: function (data) {
                 var formData = new FormData();
                 formData.append("role", angular.toJson(role));
+                formData.append("originalRoleName", backupRoleName);
                 return formData;
             }
         }).success(function (data, status, headers, config) {
@@ -296,14 +297,13 @@ angular.module('computingServices.manageRoles', ['ngRoute'])
             notifyUser('Please rename the role to continue');
             return;
         }
-        deleteBackup(role);
         //role._id = "58e5cb737205d5669ea48a06";
         role._id = role._id.$oid;
         console.log('updating role details ', role);
         $scope.editingRole = false;
 
         //call service method to save roles and privs
-        var promise = ManageRolesService.updateRole(role);
+        var promise = ManageRolesService.updateRole(role, role.backupRoleName);
         promise.then(function (result) {
                 if (result.statusCode === 200) {
                     SharedService.showSuccess(result.message);
@@ -318,6 +318,9 @@ angular.module('computingServices.manageRoles', ['ngRoute'])
                 console.log('UPDATE ROLE CALL FAILURE :: ', resError);
                 //show failure message to the user
                 SharedService.showError('Failed to update the role and privileges');
+            })
+            .finally(function () {
+                deleteBackup(role);
             });
     }
 
