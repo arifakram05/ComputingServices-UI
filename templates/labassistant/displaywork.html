@@ -16,11 +16,22 @@
     <md-content class="md-no-momentum">
 
         <form name="showLAWork" role="form">
-            <div layout="row">
+            <div layout="row" layout-align="center center">
 
                 <md-input-container md-no-float class="md-block">
                     <label>LA Id</label>
-                    <input name="student Id" ng-model="labAsst.id"  ng-disabled="!isUserAdmin" type="text" required/>
+                    <input name="student Id" ng-model="labAsst.id"  ng-if="!isUserAdmin" ng-disabled="!isUserAdmin" type="text" required/>
+                </md-input-container>
+
+                <md-input-container flex="50" md-no-float class="md-block" ng-if="isUserAdmin">
+                    <md-select placeholder="ID Number or Name" ng-model="labAsst.id" md-on-close="clearSearchTerm()" data-md-container-class="selectdemoSelectHeader" md-container-class="mySelect">
+                        <md-select-header class="demo-select-header">
+                            <input ng-model="searchTerm" ng-change="search(searchTerm)" type="search" placeholder="Search for a Id Number or name of LA..." class="demo-header-searchbox md-text" ng-keydown="onSearchChange($event)" required>
+                        </md-select-header>
+                        <md-optgroup label="users">
+                            <md-option ng-value="user.userId" ng-repeat="user in users | filter:searchTerm">{{user.lastName}}, {{user.firstName}} </md-option>
+                        </md-optgroup>
+                    </md-select>
                 </md-input-container>
 
                 <md-input-container flex="10"></md-input-container>

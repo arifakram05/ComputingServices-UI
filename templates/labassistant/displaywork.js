@@ -81,12 +81,17 @@ angular.module('computingServices.displaywork', ['ngRoute'])
     // clear form
     $scope.clear = function () {
         $scope.labAsst = undefined;
+        $scope.users = undefined;
         $scope.showLAWork.$setPristine();
         $scope.showLAWork.$setUntouched();
     };
 
     // retrieve recorded work
     $scope.fetch = function (labAsst) {
+        if(labAsst.id == null || labAsst.id == undefined) {
+            notifyUser('Please select a valid Lab Assistant from the drop down list');
+            return;
+        }
         $scope.isSubmitClicked = true;
         var id = labAsst.id;
         var startDate = moment(labAsst.startDate).format('MMM DD, YYYY');
@@ -168,6 +173,33 @@ angular.module('computingServices.displaywork', ['ngRoute'])
                 console.log(value.hoursWorked);
             }
         });
+    }
+
+    $scope.search = function (searchText) {
+        var promise = SharedService.searchUsers(searchText);
+        promise.then(function (result) {
+            console.log('got the result from searching users :', result);
+            if (result.statusCode === 200) {
+                $scope.users = result.response;
+            } else {
+                SharedService.showError('Failed to retreive users');
+            }
+
+        })
+            .catch(function (resError) {
+            console.log('search for users failed :: ', resError);
+            //show failure message to the user
+            SharedService.showError('Error ocurred while searching for users');
+        });
+    }
+
+    //related to filter
+    $scope.searchTerm;
+    $scope.clearSearchTerm = function () {
+        $scope.searchTerm = '';
+    };
+    $scope.onSearchChange = function ($event) {
+        $event.stopPropagation();
     }
 
     //alerts to user
