@@ -42,10 +42,13 @@
                     <span class="icon-bar"></span>
                 </button>
                 <a ng-if="!isUserLoggedIn"class="navbar-brand" href="#/home">Computing Services</a>
-                <a ng-if="isUserLoggedIn" class="navbar-brand" href="#/home">Welcome to Computing Services, {{userDetails.firstName}}</a>
+                <a ng-if="isUserLoggedIn" class="navbar-brand" href="#/home">Welcome, {{userDetails.firstName}}</a>
             </div>
             <div id="navbar" class="navbar-collapse collapse">
                 <ul class="nav navbar-nav navbar-right">
+
+                    <!--Show logged in user's role-->
+                    <li ng-if="isUserLoggedIn" class="active"><a>{{userDetails.role}}</a></li>
 
                     <!--General public features-->
                     <li><a href="#/staffSchedule">Staff Schedule</a></li>
