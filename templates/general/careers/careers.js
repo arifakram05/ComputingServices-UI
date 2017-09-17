@@ -1,6 +1,6 @@
 'use strict';
 
-angular.module('computingServices.careers', ['ngRoute'])
+angular.module('computingServices.careers', ['ngRoute', 'ngResource'])
 
 .config(['$routeProvider', function ($routeProvider) {
     $routeProvider.when('/careers', {
@@ -9,12 +9,14 @@ angular.module('computingServices.careers', ['ngRoute'])
     });
 }])
 
-.factory('CareersService', ['$http', '$q', function ($http, $q) {
+.factory('CareersService', ['$http', '$q', '$resource', function ($http, $q, $resource) {
 
     var APPLY_JOB_URI = constants.url + 'general/careers';
+    var CHECK_STATUS = constants.url + 'general/check-status';
 
     var factory = {
-        applyJob: applyJob
+        applyJob: applyJob,
+        checkStatus: checkStatus
     };
 
     return factory;
@@ -56,6 +58,22 @@ angular.module('computingServices.careers', ['ngRoute'])
             deferred.reject(data);
         });
 
+        return deferred.promise;
+    }
+
+    function checkStatus(studentId) {
+        var deferred = $q.defer();
+        var url = $resource(CHECK_STATUS + "/:id");
+        url.get({
+            id: studentId
+        }).$promise.then(function success(response) {
+                console.log('Retrieved status: ', response);
+                deferred.resolve(response);
+            },
+            function error(errResponse) {
+                console.error('Error while retrieving status: ', errResponse);
+                deferred.reject(errResponse);
+            });
         return deferred.promise;
     }
 }])
@@ -117,6 +135,25 @@ angular.module('computingServices.careers', ['ngRoute'])
         $scope.userForm.$setPristine();
         $scope.userForm.$setUntouched();
     };
+
+    // check status
+    $scope.checkStatus = function (studentId) {
+        if (studentId == null || studentId == undefined) {
+            notifyUser('Please enter a valid ID Number to proceed.');
+            return;
+        }
+        var promise = CareersService.checkStatus(studentId);
+        promise.then(function (result) {
+                console.log('fetched the status of job applicant :', result);
+                $scope.displayObtainedJobStatus = true;
+                $scope.obtainedJobStatus = result.message;
+            })
+            .catch(function (resError) {
+                console.log('job applicant status fetch operation failure :: ', resError);
+                $scope.displayObtainedJobStatus = true;
+                $scope.obtainedJobStatus = "Error occurred while trying to check job status. Please contact Lab Assistant or Lab Manager.";
+            });
+    }
 
     //alerts to user
     function notifyUser(message) {
