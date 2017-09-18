@@ -12,9 +12,11 @@ angular.module('computingServices.manageStaffSchedule', ['ngRoute', 'ui.calendar
     var GET_LAB_SCHEDULE_URI = constants.url + 'staff-schedule/fetch';
     var SAVE_LAB_SCHEDULE_URI = constants.url + 'staff-schedule/save';
     var UPDATE_LAB_SCHEDULE_URI = constants.url + 'staff-schedule/update';
+    var APPROVE_LAB_SCHEDULE_URI = constants.url + 'staff-schedule/approve';
     var DELETE_LAB_SCHEDULE_URI = constants.url + 'staff-schedule/delete';
     var UPDATE_ALL_LAB_SCHEDULE_URI = constants.url + 'staff-schedule/update-all';
     var DELETE_ALL_LAB_SCHEDULE_URI = constants.url + 'staff-schedule/delete-all';
+    var APPROVE_ALL_LAB_SCHEDULE_URI = constants.url + 'staff-schedule/approve-all';
 
     //define all factory methods
     var factory = {
@@ -23,7 +25,8 @@ angular.module('computingServices.manageStaffSchedule', ['ngRoute', 'ui.calendar
         updateLabSchedule: updateLabSchedule,
         deleteLabSchedule: deleteLabSchedule,
         updateAllEvents: updateAllEvents,
-        deleteAllEvents: deleteAllEvents
+        deleteAllEvents: deleteAllEvents,
+        approveLabSchedule: approveLabSchedule
     };
 
     return factory;
@@ -102,6 +105,33 @@ angular.module('computingServices.manageStaffSchedule', ['ngRoute', 'ui.calendar
         return deferred.promise;
     }
 
+    //approve existing event
+    function approveLabSchedule(schedule) {
+        console.log('schedule details to approve : ', schedule);
+        var deferred = $q.defer();
+
+        $http({
+            method: 'POST',
+            url: APPROVE_LAB_SCHEDULE_URI,
+            headers: {
+                'Content-Type': undefined
+            },
+            transformRequest: function (data) {
+                var formData = new FormData();
+                formData.append("staffschedule", angular.toJson(schedule));
+                return formData;
+            }
+        }).success(function (data, status, headers, config) {
+            console.log('Approved schedule: ', data);
+            deferred.resolve(data);
+        }).error(function (data, status, headers, config) {
+            console.log('Failed to approve the schedule: ', status);
+            deferred.reject(data);
+        });
+
+        return deferred.promise;
+    }
+
     //delete existing event
     function deleteLabSchedule(eventId) {
         var deferred = $q.defer();
@@ -147,6 +177,33 @@ angular.module('computingServices.manageStaffSchedule', ['ngRoute', 'ui.calendar
             deferred.resolve(data);
         }).error(function (data, status, headers, config) {
             console.log('Failed to update the schedule: ', status);
+            deferred.reject(data);
+        });
+
+        return deferred.promise;
+    }
+
+    //approve all events
+    function approveAllEvents(schedule) {
+        console.log('all schedule details to approve : ', schedule);
+        var deferred = $q.defer();
+
+        $http({
+            method: 'POST',
+            url: APPROVE_ALL_LAB_SCHEDULE_URI,
+            headers: {
+                'Content-Type': undefined
+            },
+            transformRequest: function (data) {
+                var formData = new FormData();
+                formData.append("staffschedule", angular.toJson(schedule));
+                return formData;
+            }
+        }).success(function (data, status, headers, config) {
+            console.log('Aprpoved schedule: ', data);
+            deferred.resolve(data);
+        }).error(function (data, status, headers, config) {
+            console.log('Failed to approve the schedule: ', status);
             deferred.reject(data);
         });
 
@@ -202,10 +259,16 @@ angular.module('computingServices.manageStaffSchedule', ['ngRoute', 'ui.calendar
     }
 
     $scope.colors = [
-        'black', 'blueviolet', 'brown', 'darkslateblue', 'lightcoral', 'red', 'steelblue', 'burlywood', 'cadetblue', 'chocolate', 'coral', 'dimgrey', 'olive', 'seagreen', 'teal', 'crimson', 'darkcyan', 'green', 'firebrick', 'purple', 'sienna'
+        'black', 'blueviolet', 'brown', 'darkslateblue', 'lightcoral', 'steelblue', 'burlywood', 'cadetblue', 'chocolate', 'coral', 'dimgrey', 'olive', 'seagreen', 'teal', 'deeppink', 'darkcyan', 'green', 'bluevoilet', 'purple', 'sienna'
     ];
 
     $scope.isNewEvent = false;
+
+    // TODO: check if the user has privileges to create a new event or not. If not, a user can only create an event for themselves, and this needs to be approved by someone who has the privilege (priv name: CreateEventForOthers)
+    $scope.canCreateEventForOthers = false;
+
+    // get logged in user details
+    $scope.userDetails = SharedService.getUserDetails();
 
     $scope.items = [{
         name: 'Sun',
@@ -471,6 +534,11 @@ angular.module('computingServices.manageStaffSchedule', ['ngRoute', 'ui.calendar
             },
             //event to trigger when an event on calendar is clicked
             eventClick: function (event) {
+                if($scope.canCreateEventForOthers === false && event.studentId !== $scope.userDetails.userId) {
+                    SharedService.showInfo('You can only click on your shifts');
+                    return;
+                }
+
                 console.log('event selected : ', event);
 
                 //clicked on existing new event
@@ -488,6 +556,9 @@ angular.module('computingServices.manageStaffSchedule', ['ngRoute', 'ui.calendar
                 $scope._id = event._id;
                 $scope.SelectedEvent._id = event._id;
                 $scope.SelectedEvent.groupId = event.groupId;
+                $scope.SelectedEvent.approved = event.approved;
+
+                console.log('clicked event details: ', $scope.SelectedEvent);
 
                 //show modal
                 $('#las_modal').modal('show');
@@ -550,10 +621,17 @@ angular.module('computingServices.manageStaffSchedule', ['ngRoute', 'ui.calendar
         var selectedDays = $scope.selectedDays.map(function (a) {
             return a.value;
         });
-        if (Object.keys($scope.event).length !== 2 || selectedDays.length < 1 || Object.keys($scope.SelectedEvent).length != 3) {
+        if ($scope.canCreateEventForOthers && (Object.keys($scope.event).length !== 2 || selectedDays.length < 1 || Object.keys($scope.SelectedEvent).length != 3)) {
+            return true;
+        } else if (!$scope.canCreateEventForOthers && (Object.keys($scope.event).length !== 2 || selectedDays.length < 1 || Object.keys($scope.SelectedEvent).length != 1)) {
+            return true;
+        } else {
+            return false;
+        }
+        /*if (Object.keys($scope.event).length !== 2 || selectedDays.length < 1 || Object.keys($scope.SelectedEvent).length != 3) {
             return true;
         }
-        return false;
+        return false;*/
     }
 
     //create an event
@@ -599,9 +677,17 @@ angular.module('computingServices.manageStaffSchedule', ['ngRoute', 'ui.calendar
 
                 var event = {};
 
-                event.title = $scope.SelectedEvent.user.firstName + ' ' + $scope.SelectedEvent.user.lastName; // title is lab assistant's name
-                event.studentId = $scope.SelectedEvent.user.userId;
-                event.backgroundColor = $scope.SelectedEvent.color;
+                if ($scope.canCreateEventForOthers) {
+                    event.title = $scope.SelectedEvent.user.firstName + ' ' + $scope.SelectedEvent.user.lastName; // title is lab assistant's name
+                    event.studentId = $scope.SelectedEvent.user.userId;
+                    event.backgroundColor = $scope.SelectedEvent.color;
+                    event.isApproved = true;
+                } else {
+                    event.title = $scope.userDetails.firstName + ' ' + $scope.userDetails.lastName; // title is lab assistant's name
+                    event.studentId = $scope.userDetails.userId;
+                    event.backgroundColor = 'red';
+                    event.isApproved = false;
+                }
                 event.allDay = false;
                 event.day = day.getDay();
                 event.labName = $scope.SelectedEvent.labName;
@@ -646,6 +732,42 @@ angular.module('computingServices.manageStaffSchedule', ['ngRoute', 'ui.calendar
             });
     }
 
+    //approve an event
+    $scope.approve = function () {
+
+        if ($scope.SelectedEvent.color === 'red') {
+            SharedService.showInfo('Please change color of the event to approve.');
+            return;
+        }
+
+        var event = {};
+
+        event.isApproved = true;
+        event.backgroundColor = $scope.SelectedEvent.color;
+        event._id = $scope.SelectedEvent._id;
+
+        console.log('Record to approve: ', event);
+
+        //call service method to update event
+        var promise = ManageStaffScheduleService.approveLabSchedule(event);
+        promise.then(function (result) {
+                if (result.statusCode === 200) {
+                    SharedService.showSuccess(result.message);
+                    //clear modal contents
+                    $scope.clear();
+                    // reload calendar
+                    getLabSchedule();
+                } else {
+                    SharedService.showError(result.message);
+                }
+            })
+            .catch(function (resError) {
+                console.log('APPROVE CALL FAILURE :: ', resError);
+                //show failure message to the user
+                SharedService.showError('Failed to approve the lab schedule');
+            });
+    }
+
     //update an event
     $scope.update = function () {
         var event = {};
@@ -654,11 +776,17 @@ angular.module('computingServices.manageStaffSchedule', ['ngRoute', 'ui.calendar
         event.studentId = $scope.SelectedEvent.studentId;
         event.backgroundColor = $scope.SelectedEvent.color;
         event.allDay = false;
+        event.isApproved = $scope.SelectedEvent.approved;
         event.labName = $scope.SelectedEvent.labName;
         event._id = $scope.SelectedEvent._id;
         event.groupId = $scope.SelectedEvent.groupId;
         event.start = calculateStartDateTime();
         event.end = calculateEndDateTime();
+
+        if(event.isApproved === false && event.backgroundColor !== 'red') {
+            SharedService.showInfo('You cannot change the color of an unapproved shift');
+            return;
+        }
 
         console.log('Record to update: ', event);
 
@@ -728,10 +856,16 @@ angular.module('computingServices.manageStaffSchedule', ['ngRoute', 'ui.calendar
         event.studentId = $scope.SelectedEvent.studentId;
         event.backgroundColor = $scope.SelectedEvent.color;
         event.allDay = false;
+        event.isApproved = $scope.SelectedEvent.approved;
         event.labName = $scope.SelectedEvent.labName;
         event.groupId = $scope.SelectedEvent.groupId;
         event.start = calculateStartDateTime();
         event.end = calculateEndDateTime();
+
+        if(event.isApproved === false && event.backgroundColor !== 'red') {
+            SharedService.showInfo('You cannot change the color of an unapproved shift');
+            return;
+        }
 
         console.log('Record to update: ', event);
 
@@ -752,6 +886,42 @@ angular.module('computingServices.manageStaffSchedule', ['ngRoute', 'ui.calendar
                 console.log('UPDATE CALL FAILURE :: ', resError);
                 //show failure message to the user
                 SharedService.showError('Failed to update the lab schedule');
+            });
+    }
+
+    //approve all related events
+    $scope.approveAll = function () {
+
+        if ($scope.SelectedEvent.color === 'red') {
+            SharedService.showInfo('Please change color of the event to approve.');
+            return;
+        }
+
+        var event = {};
+
+        event.isApproved = true;
+        event.backgroundColor = $scope.SelectedEvent.color;
+        event.groupId = $scope.SelectedEvent.groupId;
+
+        console.log('Record to approve: ', event);
+
+        //call service method to update event
+        var promise = ManageStaffScheduleService.approveAllEvents(event);
+        promise.then(function (result) {
+                if (result.statusCode === 200) {
+                    SharedService.showSuccess(result.message);
+                    //clear modal contents
+                    $scope.clear();
+                    // reload calendar
+                    getLabSchedule();
+                } else {
+                    SharedService.showError(result.message);
+                }
+            })
+            .catch(function (resError) {
+                console.log('APPROVE CALL FAILURE :: ', resError);
+                //show failure message to the user
+                SharedService.showError('Failed to approve the lab schedule');
             });
     }
 
