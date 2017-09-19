@@ -26,7 +26,8 @@ angular.module('computingServices.manageStaffSchedule', ['ngRoute', 'ui.calendar
         deleteLabSchedule: deleteLabSchedule,
         updateAllEvents: updateAllEvents,
         deleteAllEvents: deleteAllEvents,
-        approveLabSchedule: approveLabSchedule
+        approveLabSchedule: approveLabSchedule,
+        approveAllEvents: approveAllEvents
     };
 
     return factory;
@@ -259,13 +260,13 @@ angular.module('computingServices.manageStaffSchedule', ['ngRoute', 'ui.calendar
     }
 
     $scope.colors = [
-        'black', 'blueviolet', 'brown', 'darkslateblue', 'lightcoral', 'steelblue', 'burlywood', 'cadetblue', 'chocolate', 'coral', 'dimgrey', 'olive', 'seagreen', 'teal', 'deeppink', 'darkcyan', 'green', 'bluevoilet', 'purple', 'sienna'
+        'black', 'blueviolet', 'brown', 'darkslateblue', 'lightcoral', 'steelblue', 'burlywood', 'cadetblue', 'chocolate', 'coral', 'dimgrey', 'olive', 'seagreen', 'teal', 'deeppink', 'darkcyan', 'green', 'purple', 'sienna'
     ];
 
     $scope.isNewEvent = false;
 
     // TODO: check if the user has privileges to create a new event or not. If not, a user can only create an event for themselves, and this needs to be approved by someone who has the privilege (priv name: CreateEventForOthers)
-    $scope.canCreateEventForOthers = false;
+    $scope.canCreateEventForOthers = true;
 
     // get logged in user details
     $scope.userDetails = SharedService.getUserDetails();
