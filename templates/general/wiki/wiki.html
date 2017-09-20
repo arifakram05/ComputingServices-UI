@@ -1,0 +1,92 @@
+<div class="topPadding60" ng-controller="WikiCtrl">
+    <md-toolbar class="md-primary">
+        <div class="toolbar">
+            <div class="md-toolbar-tools">
+                <h2 class="md-flex">Wiki Documents</h2>
+                <div layout="row" layout-align="end" flex>
+                    <md-button class="md-raised md-default" ng-click="openUploadDialog = true" ng-disabled="openUploadDialog">
+                        <i class="fa fa-upload lg"></i> Upload
+                    </md-button>
+                </div>
+            </div>
+        </div>
+    </md-toolbar>
+
+    <md-content flex layout-padding>
+        <!--Upload Dialog-->
+        <form layout="column" flex="" name="wikiUploadForm" md-no-float class="md-block" ng-style="{'color':'green', 'border': '1px solid'}" ng-if="openUploadDialog == true">
+            <div class="fileUpload md-button md-raised md-default" flex="50" required>
+                <span ng-hide="fileData">Upload File</span>
+                <span ng-show="fileData">To Upload: </span><span ng-show="fileData" ng-style="{'color':'green'}">{{fileData.name}}</span>
+                <input flex="50" id="wikiPage" name="wikiPage" type="file" class="upload" file-model="fileData" required/>
+            </div>
+
+            <div layout="row" layout-align="center" flex>
+                <md-input-container md-no-float class="md-block" flex="50">
+                    <label>Description</label>
+                    <input name="description" ng-model="description" min-length="1" required/>
+                </md-input-container>
+
+                <md-input-container flex="10"></md-input-container>
+
+                <!--Button-->
+                <md-input-container md-no-float class="md-block">
+                    <div layout="row" layout-align="center" flex>
+                        <md-button class="md-raised md-default" ng-click="closeUploadForm()">Cancel</md-button>
+
+                        <md-button class="md-raised md-primary" ng-disabled="!wikiUploadForm.$valid" ng-click="uploadWiki(fileData)">Upload</md-button>
+                    </div>
+                </md-input-container>
+            </div>
+        </form>
+
+        <!--Table-->
+        <div class="tablecontainer" ng-style="{'overflow':'auto'}">
+            <table class="table borderless">
+                <thead>
+                    <tr>
+                        <th ng-style="{'text-align':'center', 'width':'25%'}">Document</th>
+                        <th ng-style="{'text-align':'center', 'width':'50%'}">Description</th>
+                        <th ng-style="{'text-align':'center', 'width':'25%'}">Actions</th>
+                    </tr>
+                </thead>
+
+                <tbody dir-paginate="wiki in wikis | filter : search | itemsPerPage : pageSize">
+                    <tr ng-style="{'text-align':'center'}">
+                        <td ng-style="{'text-align':'center', 'width':'25%'}">
+                            <span ng-bind="wiki.fileName"></span>
+                        </td>
+
+                        <td ng-style="{'text-align':'center', 'width':'50%'}">
+                            <span ng-bind="wiki.description"></span>
+                        </td>
+
+                        <td ng-style="{'text-align':'center', 'width':'25%'}">
+                            <div class="btn-group">
+                                <button type="button" class="btn btn-default btn" ng-click="viewWiki(wiki._id)">
+                                    <i class="fa fa-binoculars"></i>
+                                    <md-tooltip>View Page</md-tooltip>
+                                </button>
+
+                                <button type="button" class="btn btn-primary btn" ng-click="downloadWiki(wiki._id)">
+                                    <i class="fa fa-download"></i>
+                                    <md-tooltip>Download Page</md-tooltip>
+                                </button>
+
+                                <button type="button" class="btn btn-danger btn" ng-click="deleteWiki(wiki._id)">
+                                    <i class="fa fa-trash-o"></i>
+                                    <md-tooltip>Delete Page</md-tooltip>
+                                </button>
+                            </div>
+                        </td>
+                    </tr>
+                </tbody>
+            </table>
+            <div>
+                <div class="text-center">
+                    <dir-pagination-controls max-size="5" boundary-links="true" direction-links="true" on-page-change="pageChangeHandler(newPageNumber)" template-url="core/dirPagination.tpl.html"></dir-pagination-controls>
+                </div>
+            </div>
+        </div>
+    </md-content>
+</div>
