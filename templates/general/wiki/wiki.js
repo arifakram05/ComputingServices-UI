@@ -11,7 +11,7 @@ angular.module('computingServices.wiki', ['ngRoute', 'ngResource'])
 
 .factory('WikiService', ['$http', '$q', '$resource', function ($http, $q, $resource) {
 
-    var UPLOAD_URI = constants.url + 'general/upload-wiki';
+    var UPLOAD_URI = constants.url + 'admin/upload-wiki';
     var DELETE_URI = constants.url + 'general/delete-wiki';
 
     var factory = {
@@ -75,7 +75,7 @@ angular.module('computingServices.wiki', ['ngRoute', 'ngResource'])
     }
 }])
 
-.controller('WikiCtrl', ['$scope', 'WikiService', '$filter', '$mdDialog', 'SharedService', function ($scope, WikiService, $filter, $mdDialog, SharedService) {
+.controller('WikiCtrl', ['$scope', 'WikiService', '$filter', '$mdDialog', 'SharedService', '$window', function ($scope, WikiService, $filter, $mdDialog, SharedService, $window) {
 
     $scope.wikis = [{
         "fileName": "Important Instructions",
@@ -147,7 +147,7 @@ angular.module('computingServices.wiki', ['ngRoute', 'ngResource'])
                 var fileLength = response.data.byteLength;
 
                 if (fileLength !== 0) {
-                    var url = URL.createObjectURL(new Blob([response.data]));
+                    var url = URL.createObjectURL(new Blob([response.data], {type: 'application/pdf'}));
                     var a = document.createElement('a');
                     a.href = url;
                     a.download = response.filename;
@@ -155,6 +155,8 @@ angular.module('computingServices.wiki', ['ngRoute', 'ngResource'])
                     a.click();
                     //show success message
                     SharedService.showSuccess("Download Complete");
+                    // open in new tab
+                    $window.open(url);
                 } else {
                     //notify that file does not exist for requested user
                     SharedService.showWarning("File does not exist");
