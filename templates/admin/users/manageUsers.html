@@ -1,0 +1,120 @@
+<div class="topPadding60" ng-controller="ManageUsersCtrl">
+    <md-toolbar class="md-primary">
+        <div class="toolbar">
+            <div class="md-toolbar-tools">
+                <h2 class="md-flex">Users</h2>
+                <div layout="row" layout-align="end" flex>
+                    <md-button class="md-raised md-default" ng-click="openAddDialog = true; getRoles()" ng-disabled="openAddDialog">
+                        <i class="fa fa-plus lg"></i> Add User
+                    </md-button>
+                </div>
+            </div>
+        </div>
+    </md-toolbar>
+
+    <md-content flex layout-padding>
+        <!--Upload Dialog-->
+        <form flex="" name="addUserForm" md-no-float class="md-block" ng-style="{'color':'green', 'border': '1px solid'}" ng-if="openAddDialog == true">
+            <div layout="row" layout-align="center">
+                <md-input-container md-no-float class="md-block" flex="50">
+                    <label>First Name</label>
+                    <input name="firstName" ng-model="user.firstName" min-length="1" required/>
+                </md-input-container>
+
+                <md-input-container flex="5"></md-input-container>
+
+                <md-input-container md-no-float class="md-block" flex="50">
+                    <label>Last Name</label>
+                    <input name="lastName" ng-model="user.lastName" min-length="1" required/>
+                </md-input-container>
+
+                <md-input-container flex="5"></md-input-container>
+
+                <md-input-container flex="50" md-no-float class="md-block">
+                <label>ID Number</label>
+                <input type="number" name="studentId" ng-model="user.userId" min="1" ng-pattern="/^[0-9]*$/" required/>
+                </md-input-container>
+
+                <md-input-container flex="5"></md-input-container>
+
+                <md-input-container flex="50">
+                    <label>Role</label>
+                    <md-select name="role" ng-model="user.role" required>
+                        <md-option ng-value="role.roleName" ng-repeat="role in roles">{{ role.roleName }}</md-option>
+                    </md-select>
+                </md-input-container>
+
+                <md-input-container flex="5"></md-input-container>
+
+                <!--Button-->
+                <md-input-container md-no-float class="md-block">
+                    <div layout="row" layout-align="center" flex>
+                        <md-button class="md-raised md-default" ng-click="closeAddUserForm(addUserForm)">Cancel</md-button>
+
+                        <md-button class="md-raised md-primary" ng-disabled="!addUserForm.$valid" ng-click="addUser(user, addUserForm)">Add User</md-button>
+                    </div>
+                </md-input-container>
+            </div>
+
+        </form>
+
+        <!--Table-->
+        <div class="tablecontainer" ng-style="{'overflow':'auto'}">
+            <table class="table borderless">
+                <thead>
+                    <tr>
+                        <th ng-style="{'text-align':'left', 'width':'20%'}">ID</th>
+                        <th ng-style="{'text-align':'left', 'width':'20%'}">Last Name</th>
+                        <th ng-style="{'text-align':'left', 'width':'20%'}">First Name</th>
+                        <th ng-style="{'text-align':'left', 'width':'20%'}">Role</th>
+                        <th ng-style="{'text-align':'center', 'width':'20%'}">Actions</th>
+                    </tr>
+                </thead>
+
+                <tbody dir-paginate="user in users | filter : search | itemsPerPage : pageSize">
+                    <tr ng-style="{'text-align':'left'}">
+                        <td ng-style="{'text-align':'left', 'width':'20%'}">
+                            <span ng-bind="user.userId"></span>
+                        </td>
+
+                        <td ng-style="{'text-align':'left', 'width':'20%'}">
+                            <span ng-bind="user.lastName"></span>
+                        </td>
+
+                        <td ng-style="{'text-align':'left', 'width':'20%'}">
+                            <span ng-bind="user.firstName"></span>
+                        </td>
+
+                        <td ng-style="{'text-align':'left', 'width':'20%'}">
+                            <span ng-bind="user.role"></span>
+                        </td>
+
+                        <td ng-style="{'text-align':'center', 'width':'20%'}">
+                            <div class="btn-group">
+                                <button type="button" class="btn btn-primary btn" ng-click="blockUser(user._id, user.userId)" ng-disabled="user.blocked">
+                                    <i class="fa fa-lock"></i>
+                                    <md-tooltip>Block User</md-tooltip>
+                                </button>
+
+                                <button type="button" class="btn btn-default btn" ng-click="unblockUser(user._id, user.userId)" ng-disabled="!user.blocked">
+                                    <i class="fa fa-unlock"></i>
+                                    <md-tooltip>UnBlock User</md-tooltip>
+                                </button>
+
+                                <button type="button" class="btn btn-danger btn" ng-click="deleteUser(user._id, user.userId)">
+                                    <i class="fa fa-trash-o"></i>
+                                    <md-tooltip>Delete User</md-tooltip>
+                                </button>
+                            </div>
+                        </td>
+                    </tr>
+                </tbody>
+            </table>
+            <div>
+                <div class="text-center">
+                    <dir-pagination-controls max-size="5" boundary-links="true" direction-links="true" on-page-change="pageChangeHandler(newPageNumber)" template-url="core/dirPagination.tpl.html"></dir-pagination-controls>
+                </div>
+            </div>
+        </div>
+    </md-content>
+</div>
