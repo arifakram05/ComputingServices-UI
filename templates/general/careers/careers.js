@@ -88,10 +88,10 @@ angular.module('computingServices.careers', ['ngRoute', 'ngResource'])
         console.log('file data: ', $scope.files_resume);
         console.log('file name: ', $scope.files_resume.name);
         // permitted file extensions
-        var allowedExtns = ['pdf', 'doc', 'docx', 'odt'];
+        var allowedExtns = ['pdf'];
         var fileExtn = $scope.files_resume.name.split('.');
         if (fileExtn.length === 1 || (fileExtn[0] === "" && a.length === 2) || fileExtn.length > 2 || allowedExtns.indexOf(fileExtn[1]) === -1) {
-            notifyUser('Only the files with extensions .pdf .doc .docx .odt are permitted for upload. Please upload a valid file');
+            notifyUser('Only the files with extensions .pdf are permitted for upload. Please upload a valid file');
             return;
         }
         console.log('resume extn ', fileExtn[1]);

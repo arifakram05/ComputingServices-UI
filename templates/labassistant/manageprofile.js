@@ -54,7 +54,7 @@ angular.module('computingServices.manageprofile', ['ngRoute'])
 
 }])
 
-.controller('ManageProfileCtrl', ['$scope', '$filter', 'ManageProfileService', 'SharedService', function ($scope, $filter, ManageProfileService, SharedService) {
+.controller('ManageProfileCtrl', ['$scope', '$filter', 'ManageProfileService', 'SharedService', '$mdDialog', function ($scope, $filter, ManageProfileService, SharedService, $mdDialog) {
 
     console.log('manage LA profile...');
 
@@ -69,9 +69,28 @@ angular.module('computingServices.manageprofile', ['ngRoute'])
         console.log('resume ', $scope.files_resume);
         console.log('photo ', $scope.files_photo);
 
-        console.log('profile to be saved is ', labAsst, $scope.files, $scope.files_photo);
+        // permitted file extensions for resume
+        if ($scope.files_resume !== undefined) {
+            var fileExtn = $scope.files_resume.name.split('.');
+            if (fileExtn.length === 1 || (fileExtn[0] === "" && a.length === 2) || fileExtn.length > 2 || 'pdf'.indexOf(fileExtn[1]) === -1) {
+                notifyUser('Only the files with extensions .pdf are permitted for upload. Please upload a valid file');
+                return;
+            }
+        }
+
+        // permitted file extns for photo
+        if ($scope.files_photo !== undefined) {
+            var allowedExtns = ['jpg', 'jpeg'];
+            fileExtn = $scope.files_photo.name.split('.');
+            if (fileExtn.length === 1 || (fileExtn[0] === "" && a.length === 2) || fileExtn.length > 2 || allowedExtns.indexOf(fileExtn[1]) === -1) {
+                notifyUser('Only the files with extensions .jpg and .jpeg are permitted for upload. Please upload a valid file');
+                return;
+            }
+        }
 
         labAsst.studentId = $scope.userId
+
+        console.log('profile to be saved is ', labAsst, $scope.files_resume, $scope.files_photo);
 
         //make service call
         var promise = ManageProfileService.updateProfile(labAsst, $scope.files_resume, $scope.files_photo);
@@ -101,6 +120,15 @@ angular.module('computingServices.manageprofile', ['ngRoute'])
         $scope.laProfileForm.$setUntouched();
     };
 
+    //alerts to user
+    function notifyUser(message) {
+        $mdDialog.show(
+            $mdDialog.alert()
+            .clickOutsideToClose(true)
+            .textContent(message)
+            .ok('Got it!')
+        );
+    }
 }])
 
 .directive('fileModel', ['$parse', function ($parse) {
