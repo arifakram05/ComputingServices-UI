@@ -125,10 +125,10 @@ angular.module('computingServices.wiki', ['ngRoute', 'ngResource'])
         console.log('file data: ', fileData);
         console.log('file name: ', fileData.name);
         // permitted file extensions
-        var allowedExtns = ['pdf', 'doc', 'docx', 'odt'];
+        var allowedExtns = ['pdf'];
         var fileExtn = fileData.name.split('.');
         if (fileExtn.length === 1 || (fileExtn[0] === "" && a.length === 2) || fileExtn.length > 2 || allowedExtns.indexOf(fileExtn[1]) === -1) {
-            notifyUser('Only the files with extensions .pdf .doc .docx .odt are permitted for upload. Please upload a valid file');
+            notifyUser('Only the files with extensions .pdf are permitted for upload. Please upload a valid file');
             return;
         }
 
@@ -169,9 +169,41 @@ angular.module('computingServices.wiki', ['ngRoute', 'ngResource'])
     // download a document
     $scope.downloadWiki = function (fileId) {
 
-        console.log('downloading wiki with ID: ', fileId);
+        console.log('downloading wiki with ID: ', fileId.$oid);
         //call service to download
-        var promise = SharedService.download(fileId, 'wikipages');
+        var promise = SharedService.download(fileId.$oid, 'wikipages');
+        promise.then(function (response) {
+                console.log('result : ', response);
+
+                var fileLength = response.data.byteLength;
+
+                if (fileLength !== 0) {
+                    var url = URL.createObjectURL(new Blob([response.data]));
+                    var a = document.createElement('a');
+                    a.href = url;
+                    a.download = response.filename;
+                    a.target = '_blank';
+                    a.click();
+
+                    //show success message
+                    SharedService.showSuccess("Download Complete");
+                } else {
+                    //notify that file does not exist for requested user
+                    SharedService.showWarning("File does not exist");
+                }
+            })
+            .catch(function (resError) {
+                console.log('DOWNLOAD FAILURE :: ', resError);
+                SharedService.showError('Error occurred while downloading requested file');
+            });
+    }
+
+    // download a document
+    $scope.viewWiki = function (fileId) {
+
+        console.log('viewing wiki with ID: ', fileId.$oid);
+        //call service to download
+        var promise = SharedService.download(fileId.$oid, 'wikipages');
         promise.then(function (response) {
                 console.log('result : ', response);
 
@@ -181,13 +213,6 @@ angular.module('computingServices.wiki', ['ngRoute', 'ngResource'])
                     var url = URL.createObjectURL(new Blob([response.data], {
                         type: 'application/pdf'
                     }));
-                    var a = document.createElement('a');
-                    a.href = url;
-                    a.download = response.filename;
-                    a.target = '_blank';
-                    a.click();
-                    //show success message
-                    SharedService.showSuccess("Download Complete");
                     // open in new tab
                     $window.open(url);
                 } else {
