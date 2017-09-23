@@ -58,6 +58,8 @@ angular.module('computingServices.manageprofile', ['ngRoute'])
 
     console.log('manage LA profile...');
 
+    $scope.userId = SharedService.getUserDetails().userId;
+
     $scope.labAsst = {};
     //update form
     $scope.updateProfile = function (labAsst) {
@@ -69,10 +71,7 @@ angular.module('computingServices.manageprofile', ['ngRoute'])
 
         console.log('profile to be saved is ', labAsst, $scope.files, $scope.files_photo);
 
-        //Testing Only
-        labAsst._id = "590138b3218de207b7ed018f";
-        labAsst.firstName = "Allan";
-        labAsst.lastName = "Donald";
+        labAsst.studentId = $scope.userId
 
         //make service call
         var promise = ManageProfileService.updateProfile(labAsst, $scope.files_resume, $scope.files_photo);
