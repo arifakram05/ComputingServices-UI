@@ -182,17 +182,14 @@ angular.module('computingServices.manageLabAssistants', ['ngRoute'])
     fetchAllUsers();
 
     function fetchAllUsers() {
-        ManageLabAssistantsService.getAllLabAssistants()
-            .then(
-                function (data) {
-                    $scope.las = data;
-                    $scope.backuplas = angular.copy(data);
-                },
-                function (errResponse) {
-                    console.error('Error while fetching Users');
-                    SharedService.showError('Failed to load lab assistants');
-                }
-            );
+        var promise = ManageLabAssistantsService.getAllLabAssistants();
+        promise.then(function (data) {
+            $scope.las = data;
+            $scope.backuplas = angular.copy(data);
+        }).catch(function (resError) {
+            console.error('Error while fetching Users');
+            SharedService.showError('Failed to load lab assistants');
+        });
     }
 
     //show LA details in a modal

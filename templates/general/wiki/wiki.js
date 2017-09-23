@@ -11,18 +11,41 @@ angular.module('computingServices.wiki', ['ngRoute', 'ngResource'])
 
 .factory('WikiService', ['$http', '$q', '$resource', function ($http, $q, $resource) {
 
-    var UPLOAD_URI = constants.url + 'admin/upload-wiki';
+    var FETCH_URI = constants.url + 'general/wiki'; // Done
+    var UPLOAD_URI = constants.url + 'admin/upload-wiki'; // Done
     var DELETE_URI = constants.url + 'general/delete-wiki';
 
     var factory = {
+        fetchWiki: fetchWiki,
         uploadWiki: uploadWiki,
         deleteWiki: deleteWiki
     };
 
     return factory;
 
-    function uploadWiki(submittedData, submittedFile) {
+    // load all wikis
+    function fetchWiki() {
+        var deferred = $q.defer();
 
+        $http({
+                method: 'GET',
+                url: FETCH_URI
+            })
+            .then(
+                function (response) {
+                    console.log('Fetched Wikis: ', response);
+                    deferred.resolve(response.data);
+                },
+                function (errResponse) {
+                    console.error('Error while fetching Wikis: ', errResponse);
+                    deferred.reject(errResponse);
+                }
+            );
+        return deferred.promise;
+    }
+
+    // upload a wiki
+    function uploadWiki(submittedData, submittedFile) {
         console.log('Data to be sent to the server (Raw): ', submittedData);
         console.log('Just the file data: ', submittedFile);
 
@@ -58,38 +81,44 @@ angular.module('computingServices.wiki', ['ngRoute', 'ngResource'])
         return deferred.promise;
     }
 
+    // delete a wiki
     function deleteWiki(fileId) {
-        /*var deferred = $q.defer();
-        var url = $resource(CHECK_STATUS + "/:id");
+        var deferred = $q.defer();
+        var url = $resource(DELETE_URI + "/:id");
         url.delete({
-            id: studentId
+            id: fileId
         }).$promise.then(function success(response) {
-                console.log('Retrieved status: ', response);
+                console.log('Delete success: ', response);
                 deferred.resolve(response);
             },
             function error(errResponse) {
-                console.error('Error while retrieving status: ', errResponse);
+                console.error('Error while deleting: ', errResponse);
                 deferred.reject(errResponse);
             });
-        return deferred.promise;*/
+        return deferred.promise;
     }
 }])
 
 .controller('WikiCtrl', ['$scope', 'WikiService', '$filter', '$mdDialog', 'SharedService', '$window', function ($scope, WikiService, $filter, $mdDialog, SharedService, $window) {
 
-    $scope.wikis = [{
-        "fileName": "Important Instructions",
-        "_id": "5609786",
-        "description": "This file contains important instructions"
-    }, {
-        "fileName": "Forgot Password",
-        "_id": "0779693",
-        "description": "This file contains important instructions. Also, it contains very important instructions. Also, it contains very important instructions."
-    }];
     $scope.wiki = {};
     $scope.currentPage = 1;
     $scope.pageSize = 10;
     $scope.closeUploadForm = false;
+
+    fetchAllWikis();
+
+    // load wikis
+    function fetchAllWikis() {
+        var promise = WikiService.fetchWiki();
+        promise.then(function (result) {
+            $scope.wikis = result;
+            console.log('Wikis :', $scope.wikis);
+        }).catch(function (resError) {
+            console.error('Error while fetching Wikis');
+            SharedService.showError('Failed to load Wiki pages');
+        });
+    }
 
     // upload a document
     $scope.uploadWiki = function (fileData, description) {
@@ -108,7 +137,7 @@ angular.module('computingServices.wiki', ['ngRoute', 'ngResource'])
         $scope.wiki.fileExtn = fileExtn[1];
         $scope.wiki.fileName = fileData.name;
         $scope.wiki.uploadedBy = SharedService.getUserId();
-        $scope.wiki.uploadedDate = $filter('date')(new Date(), 'mediumDate');
+        $scope.wiki.uploadedOn = moment(new Date()).format('MMM DD, YYYY');
         $scope.wiki.description = description;
 
         console.log('Wiki data : ', $scope.wiki);
@@ -117,6 +146,8 @@ angular.module('computingServices.wiki', ['ngRoute', 'ngResource'])
         promise.then(function (result) {
                 if (result.statusCode === 200) {
                     SharedService.showSuccess(result.message);
+                    // reload page
+                    fetchAllWikis();
                 } else {
                     SharedService.showError(result.message);
                 }
@@ -147,7 +178,9 @@ angular.module('computingServices.wiki', ['ngRoute', 'ngResource'])
                 var fileLength = response.data.byteLength;
 
                 if (fileLength !== 0) {
-                    var url = URL.createObjectURL(new Blob([response.data], {type: 'application/pdf'}));
+                    var url = URL.createObjectURL(new Blob([response.data], {
+                        type: 'application/pdf'
+                    }));
                     var a = document.createElement('a');
                     a.href = url;
                     a.download = response.filename;
@@ -167,6 +200,32 @@ angular.module('computingServices.wiki', ['ngRoute', 'ngResource'])
                 SharedService.showError('Error occurred while downloading requested file');
             });
     }
+
+    //Delete wiki
+    $scope.deleteWiki = function (fileId) {
+        var confirm = $mdDialog.confirm()
+            .title('Are you sure you want to delete this file?')
+            .textContent('You cannot retrieve the data once it is deleted. Continue?')
+            .ok('Yes')
+            .cancel('No');
+
+        $mdDialog.show(confirm).then(function () {
+            console.log('this shows up because user clicked YES');
+            console.log('Data to delete: ', fileId);
+
+            var promise = WikiService.deleteWiki(fileId.$oid);
+            promise.then(function (result) {
+                    SharedService.showSuccess("Deleted");
+                    // reload wikis
+                    fetchAllWikis();
+                })
+                .catch(function (resError) {
+                    console.log('DELETE WIKI CALL FAILURE :: ', resError);
+                    //show failure message to the user
+                    SharedService.showError('Failed to delete the document');
+                });
+        });
+    };
 
     //alerts to user
     function notifyUser(message) {
