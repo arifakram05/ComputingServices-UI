@@ -11,10 +11,10 @@ angular.module('computingServices.manageUsers', ['ngRoute', 'ngResource'])
 
 .factory('ManageUsersService', ['$http', '$q', '$resource', function ($http, $q, $resource) {
 
-    var FETCH_URI = constants.url + 'admin/users';
-    var DELETE_URI = constants.url + 'admin/delete-user';
-    var BLOCK_URI = constants.url + 'users/block';
-    var UNBLOCK_URI = constants.url + 'users/unblock';
+    var FETCH_URI = constants.url + 'users';
+    var DELETE_URI = constants.url + 'delete';
+    var BLOCK_URI = constants.url + 'block';
+    var UNBLOCK_URI = constants.url + 'unblock';
     var ADD_URI = constants.url + 'users';
 
     var factory = {
@@ -38,7 +38,7 @@ angular.module('computingServices.manageUsers', ['ngRoute', 'ngResource'])
             .then(
                 function (response) {
                     console.log('Fetched users: ', response);
-                    deferred.resolve(response.data);
+                    deferred.resolve(response.data.response);
                 },
                 function (errResponse) {
                     console.error('Error while fetching users: ', errResponse);
@@ -49,13 +49,11 @@ angular.module('computingServices.manageUsers', ['ngRoute', 'ngResource'])
 
     // block a user
     function blockUser(id) {
+        console.log('blocking user with id ', id);
         var deferred = $q.defer();
         $http({
                 method: 'PUT',
-                url: BLOCK_URI,
-                params: {
-                    id: id
-                }
+                url: BLOCK_URI + '/' + id
             })
             .then(
                 function success(response) {
@@ -71,14 +69,11 @@ angular.module('computingServices.manageUsers', ['ngRoute', 'ngResource'])
 
     // unblock a user
     function unblockUser(id) {
+        console.log('unblocking user with id ', id);
         var deferred = $q.defer();
-
         $http({
                 method: 'PUT',
-                url: BLOCK_URI,
-                params: {
-                    id: id
-                }
+                url: UNBLOCK_URI + '/' + id
             })
             .then(function success(response) {
                     console.log('UnBlock success: ', response);
@@ -92,11 +87,12 @@ angular.module('computingServices.manageUsers', ['ngRoute', 'ngResource'])
     }
 
     // delete a user
-    function deleteUser(userId) {
+    function deleteUser(id) {
+        console.log('deleting user with id ', id);
         var deferred = $q.defer();
         var url = $resource(DELETE_URI + "/:id");
         url.delete({
-            id: userId
+            id: id
         }).$promise.then(function success(response) {
                 console.log('Delete success: ', response);
                 deferred.resolve(response);
@@ -147,7 +143,7 @@ angular.module('computingServices.manageUsers', ['ngRoute', 'ngResource'])
 
     // load users
     function fetchAllUsers() {
-        $scope.users = [{
+        /*$scope.users = [{
             "_id": "790yjdads9pa7o3hn",
             "userId": "5",
             "firstName": "michael",
@@ -187,21 +183,21 @@ angular.module('computingServices.manageUsers', ['ngRoute', 'ngResource'])
             "role": "Lab Assistant",
             "password": "1",
             "blocked": true
-        }];
-        /*var promise = ManageUsersService.fetchUsers();
+        }];*/
+        var promise = ManageUsersService.fetchUsers();
         promise.then(function (result) {
             $scope.users = result;
             console.log('Users :', $scope.users);
         }).catch(function (resError) {
             console.error('Error while fetching users');
             SharedService.showError('Failed to load user');
-        });*/
+        });
     }
 
     //Block user
     $scope.blockUser = function (id, userId) {
-
-        var promise = ManageUsersService.blockUser(userId.$oid);
+        console.log('blocking ', id);
+        var promise = ManageUsersService.blockUser(id.$oid);
         promise.then(function (result) {
                 SharedService.showSuccess("Blocked user " + userId);
                 // reload user
@@ -216,7 +212,7 @@ angular.module('computingServices.manageUsers', ['ngRoute', 'ngResource'])
 
     //UnBlock user
     $scope.unblockUser = function (id, userId) {
-        var promise = ManageUsersService.unblockUser(userId.$oid);
+        var promise = ManageUsersService.unblockUser(id.$oid);
         promise.then(function (result) {
                 SharedService.showSuccess("UnBlocked user " + userId);
                 // reload user
