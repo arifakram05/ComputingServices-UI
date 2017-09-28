@@ -19,6 +19,7 @@ var computingServicesApp = angular.module('computingServices', [
     'computingServices.authorize',
     'computingServices.manageStaffSchedule',
     'computingServices.manageUsers',
+    'computingServices.settings',
 
     /*lab assistant modules*/
     'computingServices.recordwork',
