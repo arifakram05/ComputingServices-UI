@@ -12,17 +12,39 @@ angular.module('computingServices.settings', ['ngRoute'])
 
 .factory('SettingsService', ['$http', '$q', function ($http, $q) {
 
+    var SETTINGS_URI = constants.url + 'settings';
     var UPDATE_FROM_EMAIL_URI = constants.url + 'email';
     var RESET_PASSWORD_URI = constants.url + 'reset/password';
 
     //define all factory methods
     var factory = {
+        loadSettings: loadSettings,
         fromEmail: fromEmail,
         resetPassword: resetPassword,
         changePassword: changePassword
     };
 
     return factory;
+
+    // load settings
+    function loadSettings() {
+        var deferred = $q.defer();
+
+        $http({
+                method: 'GET',
+                url: SETTINGS_URI
+            })
+            .then(
+                function (response) {
+                    console.log('Fetched settings: ', response);
+                    deferred.resolve(response.data);
+                },
+                function (errResponse) {
+                    console.error('Error while fetching settings: ', errResponse);
+                    deferred.reject(errResponse);
+                });
+        return deferred.promise;
+    }
 
     // from email address
     function fromEmail(email) {
@@ -98,6 +120,14 @@ angular.module('computingServices.settings', ['ngRoute'])
 
     function loadSettings() {
         $scope.selectOption($scope.options[0]);
+        var promise = SettingsService.loadSettings();
+        promise.then(function (result) {
+            $scope.email = result.email;
+            console.log('Settings :', result);
+        }).catch(function (resError) {
+            console.error('Error while fetching settings');
+            SharedService.showError('Failed to load settings');
+        });
     }
 
     // submit from email
