@@ -58,7 +58,7 @@
                     <md-input-container flex="10"></md-input-container>
 
                     <md-input-container flex="50" md-no-float class="md-block">
-                        <md-select placeholder="ID Number or Name" ng-model="user.id" md-on-close="clearSearchTerm()" data-md-container-class="selectdemoSelectHeader" md-container-class="mySelect">
+                        <md-select placeholder="ID Number or Name" ng-model="user.userId" md-on-close="clearSearchTerm()" data-md-container-class="selectdemoSelectHeader" md-container-class="mySelect">
                             <md-select-header class="demo-select-header">
                                 <input ng-model="searchTerm" ng-change="search(searchTerm)" type="search" placeholder="Search for a Id Number or name of LA..." class="demo-header-searchbox md-text" ng-keydown="onSearchChange($event)" required>
                             </md-select-header>
@@ -73,7 +73,7 @@
                     <!--Button-->
                     <md-input-container md-no-float class="md-block">
                         <div layout="row" layout-align="center center" flex>
-                            <md-button class="md-raised md-primary" ng-disabled="!resetPasswordForm.$valid" ng-click="resetPassword(user)">Submit</md-button>
+                            <md-button class="md-raised md-primary" ng-disabled="!resetPasswordForm.$valid" ng-click="resetPassword(user.userId)">Submit</md-button>
                         </div>
                     </md-input-container>
                 </div>

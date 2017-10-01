@@ -117,15 +117,10 @@ angular.module('computingServices.authorize', ['ngRoute'])
     }];*/
 
     $scope.search = function (searchText) {
-        var promise = SharedService.searchUsers(searchText);
+        var promise = SharedService.searchLabAssistants(searchText);
         promise.then(function (result) {
                 console.log('got the result from searching users :', result);
-                if (result.statusCode === 200) {
-                    $scope.users = result.response;
-                } else {
-                    SharedService.showError('Failed to retreive users');
-                }
-
+                $scope.users = result;
             })
             .catch(function (resError) {
                 console.log('search for users failed :: ', resError);
@@ -153,7 +148,7 @@ angular.module('computingServices.authorize', ['ngRoute'])
     }
 
     //check if button can be enabled
-    $scope.canContinue = function() {
+    $scope.canContinue = function () {
         if ($scope.user != null && $scope.role != null) {
             return false;
         } else {

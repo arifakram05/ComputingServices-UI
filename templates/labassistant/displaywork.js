@@ -56,7 +56,7 @@ angular.module('computingServices.displaywork', ['ngRoute'])
         $scope.labAsst = {};
         $scope.isSubmitClicked = false;
         console.log("user role is ", SharedService.getUserRole());
-        if (SharedService.getUserRole() === 'Admin') {
+        if (SharedService.getUserRole() === 'Lab Manager') {
             $scope.isUserAdmin = true;
         } else {
             $scope.labAsst.id = SharedService.getUserId();
@@ -88,7 +88,7 @@ angular.module('computingServices.displaywork', ['ngRoute'])
 
     // retrieve recorded work
     $scope.fetch = function (labAsst) {
-        if(labAsst.id == null || labAsst.id == undefined) {
+        if (labAsst.id == null || labAsst.id == undefined) {
             notifyUser('Please select a valid Lab Assistant from the drop down list');
             return;
         }
@@ -176,21 +176,17 @@ angular.module('computingServices.displaywork', ['ngRoute'])
     }
 
     $scope.search = function (searchText) {
-        var promise = SharedService.searchUsers(searchText);
+        var promise = SharedService.searchLabAssistants(searchText);
+        console.log('searching for ', searchText);
         promise.then(function (result) {
-            console.log('got the result from searching users :', result);
-            if (result.statusCode === 200) {
-                $scope.users = result.response;
-            } else {
-                SharedService.showError('Failed to retreive users');
-            }
-
-        })
+                console.log('got the result from searching users :', result);
+                $scope.users = result;
+            })
             .catch(function (resError) {
-            console.log('search for users failed :: ', resError);
-            //show failure message to the user
-            SharedService.showError('Error ocurred while searching for users');
-        });
+                console.log('search for users failed :: ', resError);
+                //show failure message to the user
+                SharedService.showError('Error ocurred while searching for users');
+            });
     }
 
     //related to filter

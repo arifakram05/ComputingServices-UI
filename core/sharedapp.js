@@ -2,7 +2,8 @@ angular.module('computingServices.shared', ['ngRoute'])
 
 .service('SharedService', ['growl', '$http', '$q', '$window', '$location', function (growl, $http, $q, $window, $location) {
 
-    var SEARCH_USERS_URI = constants.url + 'general/search';
+    var SEARCH_USERS_URI = constants.url + 'search/users';
+    var SEARCH_LAB_ASSISTANTS_URI = constants.url + 'search/labassistants';
     var GET_ROLES_URI = constants.url + 'admin/role-names';
     var DOWNLOAD_URI = constants.url + 'admin/download';
 
@@ -40,6 +41,7 @@ angular.module('computingServices.shared', ['ngRoute'])
 
         //common service calls
         searchUsers: searchUsers,
+        searchLabAssistants: searchLabAssistants,
         getRoles: getRoles,
         download: download
     };
@@ -180,6 +182,28 @@ angular.module('computingServices.shared', ['ngRoute'])
                 },
                 function error(errResponse) {
                     console.error('Error while making service call to search for users ', errResponse);
+                    deferred.reject(errResponse);
+                }
+            );
+        return deferred.promise;
+    }
+
+    function searchLabAssistants(searchText) {
+        var deferred = $q.defer();
+        $http({
+                method: 'GET',
+                url: SEARCH_LAB_ASSISTANTS_URI,
+                params: {
+                    labAssistant: searchText
+                }
+            })
+            .then(
+                function success(response) {
+                    console.log('LAs retrieved per search criteria: ', response);
+                    deferred.resolve(response.data);
+                },
+                function error(errResponse) {
+                    console.error('Error while making service call to search for LAs ', errResponse);
                     deferred.reject(errResponse);
                 }
             );

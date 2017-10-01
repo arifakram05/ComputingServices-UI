@@ -15,7 +15,7 @@ angular.module('computingServices.settings', ['ngRoute'])
     var SETTINGS_URI = constants.url + 'settings';
     var UPDATE_FROM_EMAIL_URI = constants.url + 'email';
     var CHANGE_PASSWORD_URI = constants.url + 'settings/password';
-    var RESET_PASSWORD_URI = constants.url + 'reset/password';
+    var RESET_PASSWORD_URI = constants.url + 'settings/password/reset';
 
     //define all factory methods
     var factory = {
@@ -199,12 +199,7 @@ angular.module('computingServices.settings', ['ngRoute'])
         var promise = SharedService.searchUsers(searchText);
         promise.then(function (result) {
                 console.log('got the result from searching users :', result);
-                if (result.statusCode === 200) {
-                    $scope.users = result.response;
-                } else {
-                    SharedService.showError('Failed to retreive users');
-                }
-
+                $scope.users = result;
             })
             .catch(function (resError) {
                 console.log('search for users failed :: ', resError);

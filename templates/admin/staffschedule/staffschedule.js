@@ -242,15 +242,10 @@ angular.module('computingServices.manageStaffSchedule', ['ngRoute', 'ui.calendar
     // to search for a student/Lab Assistant
     $scope.search = function (searchText) {
         console.log('searching for ... ', searchText);
-        var promise = SharedService.searchUsers(searchText);
+        var promise = SharedService.searchLabAssistants(searchText);
         promise.then(function (result) {
                 console.log('got the result from searching users :', result);
-                if (result.statusCode === 200) {
-                    $scope.users = result.response;
-                } else {
-                    SharedService.showError('Failed to retreive users');
-                }
-
+                $scope.users = result;
             })
             .catch(function (resError) {
                 console.log('search for users failed :: ', resError);
@@ -535,7 +530,7 @@ angular.module('computingServices.manageStaffSchedule', ['ngRoute', 'ui.calendar
             },
             //event to trigger when an event on calendar is clicked
             eventClick: function (event) {
-                if($scope.canCreateEventForOthers === false && event.studentId !== $scope.userDetails.userId) {
+                if ($scope.canCreateEventForOthers === false && event.studentId !== $scope.userDetails.userId) {
                     SharedService.showInfo('You can only click on your shifts');
                     return;
                 }
@@ -784,7 +779,7 @@ angular.module('computingServices.manageStaffSchedule', ['ngRoute', 'ui.calendar
         event.start = calculateStartDateTime();
         event.end = calculateEndDateTime();
 
-        if(event.isApproved === false && event.backgroundColor !== 'red') {
+        if (event.isApproved === false && event.backgroundColor !== 'red') {
             SharedService.showInfo('You cannot change the color of an unapproved shift');
             return;
         }
@@ -863,7 +858,7 @@ angular.module('computingServices.manageStaffSchedule', ['ngRoute', 'ui.calendar
         event.start = calculateStartDateTime();
         event.end = calculateEndDateTime();
 
-        if(event.isApproved === false && event.backgroundColor !== 'red') {
+        if (event.isApproved === false && event.backgroundColor !== 'red') {
             SharedService.showInfo('You cannot change the color of an unapproved shift');
             return;
         }
