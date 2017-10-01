@@ -14,6 +14,7 @@ angular.module('computingServices.settings', ['ngRoute'])
 
     var SETTINGS_URI = constants.url + 'settings';
     var UPDATE_FROM_EMAIL_URI = constants.url + 'email';
+    var CHANGE_PASSWORD_URI = constants.url + 'settings/password';
     var RESET_PASSWORD_URI = constants.url + 'reset/password';
 
     //define all factory methods
@@ -85,11 +86,19 @@ angular.module('computingServices.settings', ['ngRoute'])
     }
 
     // change user password
-    function changePassword(oldp, newp, confirmp) {
-        /*var deferred = $q.defer();
+    function changePassword(passwordDetails) {
+        var deferred = $q.defer();
         $http({
                 method: 'PUT',
-                url: RESET_PASSWORD_URI + '/' + id
+                url: CHANGE_PASSWORD_URI,
+                headers: {
+                    'Content-Type': undefined
+                },
+                transformRequest: function (data) {
+                    var formData = new FormData();
+                    formData.append("passwordDetails", angular.toJson(passwordDetails));
+                    return formData;
+                }
             })
             .then(
                 function success(response) {
@@ -100,7 +109,7 @@ angular.module('computingServices.settings', ['ngRoute'])
                     console.error('Error while resetting password: ', errResponse);
                     deferred.reject(errResponse);
                 });
-        return deferred.promise;*/
+        return deferred.promise;
     }
 
 }])
@@ -168,7 +177,13 @@ angular.module('computingServices.settings', ['ngRoute'])
         }
         console.log('Changing password of ', SharedService.getUserId());
 
-        var promise = SettingsService.changePassword(oldp, newp, confirmp);
+        var passwordDetails = {
+            oldPassword: oldp,
+            newPassword: newp,
+            userId: SharedService.getUserId()
+        };
+
+        var promise = SettingsService.changePassword(passwordDetails);
         promise.then(function (result) {
                 SharedService.showSuccess(result.message);
             })
