@@ -1,0 +1,26 @@
+{
+    "name": "computingservices-ui",
+    "version": "1.0.0",
+    "description": "Lab Management Application",
+    "main": "app/core/app.js",
+    "scripts": {
+        "start": "node app.js",
+        "test": "echo \"Error: no test specified\" && exit 1"
+    },
+    "repository": {
+        "type": "git",
+        "url": "git+https://github.com/arifakram05/ComputingServices-UI.git"
+    },
+    "author": "Arif Akram Mohammed",
+    "license": "ISC",
+    "dependencies": {
+        "express": "^4.13.3"
+    },
+    "engines": {
+        "node": "4.1.1"
+    },
+    "bugs": {
+        "url": "https://github.com/arifakram05/ComputingServices-UI/issues"
+    },
+    "homepage": "https://github.com/arifakram05/ComputingServices-UI#readme"
+}
