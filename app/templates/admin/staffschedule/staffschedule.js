@@ -261,7 +261,7 @@ angular.module('computingServices.manageStaffSchedule', ['ngRoute', 'ui.calendar
     $scope.isNewEvent = false;
 
     // TODO: check if the user has privileges to create a new event or not. If not, a user can only create an event for themselves, and this needs to be approved by someone who has the privilege (priv name: CreateEventForOthers)
-    $scope.canCreateEventForOthers = true;
+    $scope.canCreateEventForOthers = false;
 
     // get logged in user details
     $scope.userDetails = SharedService.getUserDetails();
@@ -520,6 +520,14 @@ angular.module('computingServices.manageStaffSchedule', ['ngRoute', 'ui.calendar
                     startDate: moment(start).format('MMM DD, YYYY HH:mm'),
                     endDate: moment(end).subtract(1, "days").format('MMM DD, YYYY HH:mm')
                 };
+
+                // ensure that user cannot click on past dates; this ensures that event cannot be created for the past
+                console.log('date now ', new Date().setHours(0,0,0,0), ' selected date ', new Date($scope.event.startDate).setHours(0,0,0,0));
+                if(new Date().setHours(0,0,0,0) > new Date($scope.event.startDate).setHours(0,0,0,0)) {
+                    SharedService.showInfo('Cannot select a past date');
+                    return;
+                }
+
                 //console.log('day is ',$scope.startDate.getDay());
                 //creating new event
                 $scope.isNewEvent = true;
@@ -532,6 +540,11 @@ angular.module('computingServices.manageStaffSchedule', ['ngRoute', 'ui.calendar
             eventClick: function (event) {
                 if ($scope.canCreateEventForOthers === false && event.studentId !== $scope.userDetails.userId) {
                     SharedService.showInfo('You can only click on your shifts');
+                    return;
+                }
+                // ensure that user cannot click on past events; this ensures that past event are not updated or deleted
+                if(new Date() > new Date(event.start)) {
+                    SharedService.showInfo('Cannot select a past event');
                     return;
                 }
 
