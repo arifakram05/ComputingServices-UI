@@ -47,7 +47,7 @@
                             <div layout="row" layout-align="center">
                                 <md-input-container flex="10"></md-input-container>
 
-                                <ui-select flex="50" ng-model="SelectedEvent.labName">
+                                <ui-select flex="50" ng-model="SelectedEvent.labName" ng-disabled="!(!SelectedEvent.approved || canCreateEventForOthers)">
                                     <ui-select-match placeholder="Campus">
                                         {{SelectedEvent.labName}}
                                     </ui-select-match>
@@ -136,25 +136,25 @@
 
                         <md-input-container flex="1"></md-input-container>
 
-                        <a class="btn btn-primary" data-dismiss="modal" ng-style="{'height':'35px'}" ng-click="update()" ng-if="isNewEvent === false">
+                        <a class="btn btn-primary" data-dismiss="modal" ng-style="{'height':'35px'}" ng-click="update()" ng-if="isNewEvent === false && (!SelectedEvent.approved || canCreateEventForOthers)">
                             <i class="fa fa-wrench"></i> Update
                         </a>
 
                         <md-input-container flex="1"></md-input-container>
 
-                        <a class="btn btn-danger" data-dismiss="modal" ng-style="{'height':'35px'}" ng-click="delete()" ng-if="isNewEvent === false">
+                        <a class="btn btn-danger" data-dismiss="modal" ng-style="{'height':'35px'}" ng-click="delete()" ng-if="isNewEvent === false && (!SelectedEvent.approved || canCreateEventForOthers)">
                             <i class="fa fa-trash-o"></i> Delete
                         </a>
 
                         <md-input-container flex="1"></md-input-container>
 
-                        <a class="btn btn-primary" data-dismiss="modal" ng-style="{'height':'35px'}" ng-click="updateAll()" ng-if="isNewEvent === false">
+                        <a class="btn btn-primary" data-dismiss="modal" ng-style="{'height':'35px'}" ng-click="updateAll()" ng-if="isNewEvent === false && (!SelectedEvent.approved || canCreateEventForOthers)">
                             <i class="fa fa-wrench"></i> Update All
                         </a>
 
                         <md-input-container flex="1"></md-input-container>
 
-                        <a class="btn btn-danger" data-dismiss="modal" ng-style="{'height':'35px'}" ng-click="deleteAll()" ng-if="isNewEvent === false">
+                        <a class="btn btn-danger" data-dismiss="modal" ng-style="{'height':'35px'}" ng-click="deleteAll()" ng-if="isNewEvent === false && (!SelectedEvent.approved || canCreateEventForOthers)">
                             <i class="fa fa-trash-o"></i> Delete All
                         </a>
                     </div>
