@@ -1,7 +1,7 @@
 'use strict';
 
 var computingServicesApp = angular.module('computingServices', [
-    'ngRoute', 'ngCookies', 'ngMaterial', 'ngMessages', 'angular-growl',
+    'ngRoute', 'ngCookies', 'ngMaterial', 'ngMessages', 'angular-growl', 'ActivityMonitor',
     'computingServices.login',
     'computingServices.home',
     'computingServices.careers',
@@ -70,7 +70,7 @@ var computingServicesApp = angular.module('computingServices', [
     };
 })
 
-.controller('mainCtrl', ['SharedService', '$scope', function (SharedService, $scope) {
+.controller('mainCtrl', ['SharedService', '$scope', 'ActivityMonitor', function (SharedService, $scope, ActivityMonitor) {
 
     $scope.$watch(function () {
         $scope.userDetails = SharedService.getUserDetails();
@@ -97,6 +97,12 @@ var computingServicesApp = angular.module('computingServices', [
     $scope.isExists = function(feature) {
         return ($scope.userPrivileges.indexOf(feature) != -1)
     }
+
+    // End session and auto logout after 10 mins of inactivity
+    ActivityMonitor.options.inactive = 60 * 10; // 600 seconds
+    ActivityMonitor.on('inactive', function() {
+        $scope.logout();
+    });
 
 }]);
 

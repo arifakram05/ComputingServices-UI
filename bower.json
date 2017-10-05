@@ -18,7 +18,8 @@
     "angular-ui-select": "0.19.4",
     "bootstrap": "3.3.7",
     "font-awesome": "4.3.0",
-    "express": "^4.16.1"
+    "express": "^4.16.1",
+    "angular-activity-monitor": "^1.1.0"
   },
   "homepage": "https://github.com/arifakram05/ComputingServices-UI",
   "authors": [
