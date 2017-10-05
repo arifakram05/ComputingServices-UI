@@ -99,7 +99,7 @@ var computingServicesApp = angular.module('computingServices', [
     }
 
     // End session and auto logout after 10 mins of inactivity
-    ActivityMonitor.options.inactive = 60 * 10; // 600 seconds
+    ActivityMonitor.options.inactive = 600; // 600 = 60 seconds * 10 mins
     ActivityMonitor.on('inactive', function() {
         $scope.logout();
     });

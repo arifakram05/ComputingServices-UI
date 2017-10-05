@@ -134,6 +134,7 @@ angular.module('computingServices.shared', ['ngRoute'])
     function logout() {
         this.userDetails = undefined;
         this.authToken = '';
+        this.privileges = [];
         $window.localStorage.removeItem('csUserDetails');
         $window.localStorage.removeItem('csAuthToken');
         $window.localStorage.removeItem('csPrivileges');

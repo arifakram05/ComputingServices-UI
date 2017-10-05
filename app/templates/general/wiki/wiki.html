@@ -4,7 +4,7 @@
             <div class="md-toolbar-tools">
                 <h2 class="md-flex">Wiki Documents</h2>
                 <div layout="row" layout-align="end" flex>
-                    <md-button class="md-raised md-default" ng-click="openUploadDialog = true" ng-disabled="openUploadDialog">
+                    <md-button class="md-raised md-default" ng-if="canUserUploadWiki" ng-click="showUploadDialog()" ng-disabled="openUploadDialog">
                         <i class="fa fa-upload lg"></i> Upload
                     </md-button>
                 </div>
@@ -14,7 +14,7 @@
 
     <md-content flex layout-padding>
         <!--Upload Dialog-->
-        <form layout="column" flex="" name="wikiUploadForm" md-no-float class="md-block" ng-style="{'color':'green', 'border': '1px solid'}" ng-if="openUploadDialog == true">
+        <form layout="column" flex="" name="wikiUploadForm" md-no-float class="md-block" ng-style="{'color':'green', 'border': '1px solid'}" ng-if="openUploadDialog">
             <div class="fileUpload md-button md-raised md-default" flex="50" required>
                 <span ng-hide="fileData">Upload File</span>
                 <span ng-show="fileData">To Upload: </span><span ng-show="fileData" ng-style="{'color':'green'}">{{fileData.name}}</span>
@@ -73,7 +73,7 @@
                                     <md-tooltip>Download Page</md-tooltip>
                                 </button>
 
-                                <button type="button" class="btn btn-danger btn" ng-click="deleteWiki(wiki._id)">
+                                <button type="button" class="btn btn-danger btn" ng-if="canUserDeleteWiki" ng-click="deleteWiki(wiki._id)">
                                     <i class="fa fa-trash-o"></i>
                                     <md-tooltip>Delete Page</md-tooltip>
                                 </button>
