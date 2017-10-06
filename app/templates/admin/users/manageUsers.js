@@ -134,12 +134,27 @@ angular.module('computingServices.manageUsers', ['ngRoute', 'ngResource'])
 
 .controller('ManageUsersCtrl', ['$scope', 'ManageUsersService', '$filter', '$mdDialog', 'SharedService', function ($scope, ManageUsersService, $filter, $mdDialog, SharedService) {
 
+    //Check if user is logged in, only then continue
+    if(!SharedService.isUserLoggedIn()) {
+        return;
+    }
+
+    if(!SharedService.isPrivilegePresent(constants.USERS)) {
+        SharedService.showWarning('You do not have privileges to view "Manage Users" page. Please contact Lab Manager');
+        SharedService.showLoginPage();
+        return;
+    }
+
     $scope.user = {};
     $scope.currentPage = 1;
     $scope.pageSize = 10;
     $scope.closeAddUserForm = false;
 
     fetchAllUsers();
+    $scope.canAddUser = SharedService.isPrivilegePresent(constants.ADD_USER);
+    $scope.canDeleteUser = SharedService.isPrivilegePresent(constants.DELETE_USER);
+    $scope.canBlockUser = SharedService.isPrivilegePresent(constants.BLOCK_USER);
+    $scope.canUnBlockUser = SharedService.isPrivilegePresent(constants.UNBLOCK_USER);
 
     // load users
     function fetchAllUsers() {
@@ -268,6 +283,12 @@ angular.module('computingServices.manageUsers', ['ngRoute', 'ngResource'])
                 //show failure message to the user
                 SharedService.showError('Error ocurred while retreiving roles');
             });
+    }
+
+    // show add user form
+    $scope.showAddUserForm = function () {
+        $scope.openAddDialog = true;
+        $scope.getRoles();
     }
 
     // close add user form

@@ -4,7 +4,7 @@
             <div class="md-toolbar-tools">
                 <h2 class="md-flex">Users</h2>
                 <div layout="row" layout-align="end" flex>
-                    <md-button class="md-raised md-default" ng-click="openAddDialog = true; getRoles()" ng-disabled="openAddDialog">
+                    <md-button class="md-raised md-default" ng-if="canAddUser" ng-click="showAddUserForm()" ng-disabled="openAddDialog">
                         <i class="fa fa-plus lg"></i> Add User
                     </md-button>
                 </div>
@@ -91,17 +91,17 @@
 
                         <td ng-style="{'text-align':'center', 'width':'20%'}">
                             <div class="btn-group">
-                                <button type="button" class="btn btn-primary btn" ng-click="blockUser(user._id, user.userId)" ng-disabled="user.blocked">
+                                <button type="button" class="btn btn-primary btn" ng-disabled="!canBlockUser" ng-click="blockUser(user._id, user.userId)" ng-disabled="user.blocked">
                                     <i class="fa fa-lock"></i>
                                     <md-tooltip>Block User</md-tooltip>
                                 </button>
 
-                                <button type="button" class="btn btn-default btn" ng-click="unblockUser(user._id, user.userId)" ng-disabled="!user.blocked">
+                                <button type="button" class="btn btn-default btn" ng-disabled="!canUnBlockUser" ng-click="unblockUser(user._id, user.userId)" ng-disabled="!user.blocked">
                                     <i class="fa fa-unlock"></i>
                                     <md-tooltip>UnBlock User</md-tooltip>
                                 </button>
 
-                                <button type="button" class="btn btn-danger btn" ng-click="deleteUser(user._id, user.userId)">
+                                <button type="button" class="btn btn-danger btn" ng-disabled="!canDeleteUser" ng-click="deleteUser(user._id, user.userId)">
                                     <i class="fa fa-trash-o"></i>
                                     <md-tooltip>Delete User</md-tooltip>
                                 </button>

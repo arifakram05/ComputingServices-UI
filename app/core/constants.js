@@ -27,5 +27,12 @@ var constants = {
     DELETE_ROLE: 'DeleteRole',
 
     // Authorize privs
-    AUTHORIZE: 'Authorize'
+    AUTHORIZE: 'Authorize',
+
+    // Users privs
+    USERS: 'Users',
+    ADD_USER: 'AddUser',
+    DELETE_USER: 'DeleteUser',
+    BLOCK_USER: 'BlockUser',
+    UNBLOCK_USER: 'UnBlockUser'
 }
