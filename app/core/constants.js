@@ -9,5 +9,14 @@ var constants = {
     changeApplicantStatus: 'ChangeApplicantStatus',
     emailApplicant: 'EmailApplicant',
     viewApplicantDetails: 'ViewApplicantDetails',
-    viewApplicantResume: 'ViewApplicantResume'
+    viewApplicantResume: 'ViewApplicantResume',
+
+    // Lab applicants privs
+    LABASSISTANTS: 'LabAssistants',
+    CHANGE_LA_STATUS: 'ChangeLAStatus',
+    DOWNLOAD_LA_RESUME: 'DownloadLAResume',
+    VIEW_LA_RESUME: 'ViewLAResume',
+    DELETE_LA: 'DeleteLabAssistant',
+    EMAIL_LA: 'EmailLabAssistant',
+    COMMENT_LA: 'CommentOnLabAssistant'
 }

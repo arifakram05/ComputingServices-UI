@@ -178,13 +178,7 @@ angular.module('computingServices.manageJobApplicants', ['ngRoute'])
     console.log('clicked on manage job applicants');
 
     //Check if user is logged in, only then continue
-    if (!SharedService.isUserAuthenticated()) {
-        console.log("Is user authenticated : ", SharedService.isUserAuthenticated());
-        SharedService.logout();
-        SharedService.showLoginPage();
-        SharedService.showError('Please login to continue');
-        return;
-    }
+    SharedService.verifyUserLogin();
 
     if(!SharedService.isPrivilegePresent(constants.jobApplicants)) {
         SharedService.showWarning('You do not have privileges to view this page. Please contact Lab Manager');

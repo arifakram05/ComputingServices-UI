@@ -173,6 +173,14 @@ angular.module('computingServices.manageLabAssistants', ['ngRoute'])
 
 .controller('ManageLabAssistantsCtrl', ['$scope', 'ManageLabAssistantsService', 'SharedService', '$filter', '$mdDialog', function ($scope, ManageLabAssistantsService, SharedService, $filter, $mdDialog) {
 
+    //Check if user is logged in, only then continue
+    SharedService.verifyUserLogin();
+
+    if(!SharedService.isPrivilegePresent(constants.LABASSISTANTS)) {
+        SharedService.showWarning('You do not have privileges to view this page. Please contact Lab Manager');
+        return;
+    }
+
     $scope.user = {};
     $scope.las = [];
     $scope.currentPage = 1;
@@ -180,6 +188,12 @@ angular.module('computingServices.manageLabAssistants', ['ngRoute'])
     $scope.deleteConfirm = false;
 
     fetchAllUsers();
+    $scope.canChangeStatus = SharedService.isPrivilegePresent(constants.CHANGE_LA_STATUS);
+    $scope.canDownloadResume = SharedService.isPrivilegePresent(constants.DOWNLOAD_LA_RESUME);
+    $scope.canViewResume = SharedService.isPrivilegePresent(constants.VIEW_LA_RESUME);
+    $scope.canDeleteLA = SharedService.isPrivilegePresent(constants.DELETE_LA);
+    $scope.canEmailLA = SharedService.isPrivilegePresent(constants.EMAIL_LA);
+    $scope.canCommentLA = SharedService.isPrivilegePresent(constants.COMMENT_LA);
 
     function fetchAllUsers() {
         var promise = ManageLabAssistantsService.getAllLabAssistants();

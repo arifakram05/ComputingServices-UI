@@ -28,6 +28,7 @@ angular.module('computingServices.shared', ['ngRoute'])
         getUserPrivileges: getUserPrivileges,
 
         isPrivilegePresent: isPrivilegePresent,
+        verifyUserLogin: verifyUserLogin,
 
         showLoginPage: showLoginPage,
         navigateToHome: navigateToHome,
@@ -167,11 +168,23 @@ angular.module('computingServices.shared', ['ngRoute'])
         });
     }
 
+    // check if given privilege is present for the logged in user
     function isPrivilegePresent(priv) {
         if (getUserPrivileges()) {
             return getUserPrivileges().indexOf(priv) > -1;
         } else {
             return false;
+        }
+    }
+
+    // verify if user is logged in before showing the view
+    function verifyUserLogin() {
+        if (!isUserAuthenticated()) {
+            console.log("Is user authenticated : ", isUserAuthenticated());
+            logout();
+            showLoginPage();
+            showError('Please login to continue');
+            return;
         }
     }
 

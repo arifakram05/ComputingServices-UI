@@ -52,7 +52,7 @@
                             <span ng-bind="u.education"></span>
                         </td>
                         <td ng-style="{'text-align':'left', 'width':'15%'}">
-                            <md-select name="status" ng-model="u.status" ng-style="{'width':'80%', 'padding':'0', 'margin':'0'}" ng-change="updateLabApplicantStatus(u.status, u.studentId)">
+                            <md-select name="status" ng-model="u.status" ng-disabled="!canChangeStatus" ng-style="{'width':'80%', 'padding':'0', 'margin':'0'}" ng-change="updateLabApplicantStatus(u.status, u.studentId)">
                                 <md-option value="NEW">New</md-option>
                                 <md-option value="ACTIVE">Active</md-option>
                                 <md-option value="INACTIVE">In Active</md-option>
@@ -61,17 +61,17 @@
                         </td>
                         <td ng-style="{'text-align':'left', 'width':'20%'}">
                             <div class="btn-group">
-                                <button type="button" class="btn btn-primary btn" ng-click="download(u.studentId)">
+                                <button type="button" class="btn btn-primary btn" ng-disabled="!canDownloadResume" ng-click="download(u.studentId)">
                                     <i class="fa fa-download"></i>
                                     <md-tooltip>Download Resume</md-tooltip>
                                 </button>
 
-                                <button type="button" class="btn btn-default btn" ng-click="email(u)">
+                                <button type="button" class="btn btn-default btn" ng-disabled="!canEmailLA" ng-click="email(u)">
                                     <i class="fa fa-envelope-o"></i>
                                     <md-tooltip>Email Lab Assistant</md-tooltip>
                                 </button>
 
-                                <button type="button" class="btn btn-danger btn" ng-click="deleteLA(u.studentId)">
+                                <button type="button" class="btn btn-danger btn" ng-disabled="!canDeleteLA" ng-click="deleteLA(u.studentId)">
                                     <i class="fa fa-trash-o"></i>
                                     <md-tooltip>Delete from records</md-tooltip>
                                 </button>
@@ -164,7 +164,7 @@
                             <!--Buttons-->
                             <div layout="row" layout-align="center" flex>
                                 <md-button class="md-raised md-default" ng-click="cancel(selectedLA)" data-dismiss="modal">close</md-button>
-                                <md-button class="md-raised md-primary" ng-click="update(selectedLA)">Update</md-button>
+                                <md-button class="md-raised md-primary" ng-disabled="!canCommentLA" ng-click="update(selectedLA)">Update</md-button>
                             </div>
 
                         </form>

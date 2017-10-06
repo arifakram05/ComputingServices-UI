@@ -291,7 +291,7 @@ angular.module('computingServices.login', ['ngRoute'])
         var deferred = $q.defer();
 
         //mock data
-        var privileges = ["UploadWiki", "DeleteWiki", "/manageJobApplicants", "/manageLabAssistants", "/authorize", "/manageRoles", "/managelabschedule", "/manageStaffSchedule", "/displaywork", "/recordwork", "/manageprofile", "/manageUsers", "/settings", "ViewApplicantDetails", "JobApplicants"];
+        var privileges = ["UploadWiki", "DeleteWiki", "/manageJobApplicants", "/manageLabAssistants", "/authorize", "/manageRoles", "/managelabschedule", "/manageStaffSchedule", "/displaywork", "/recordwork", "/manageprofile", "/manageUsers", "/settings", "ViewApplicantDetails", "JobApplicants", "LabAssistants"];
         deferred.resolve(privileges);
 
         //real server call
