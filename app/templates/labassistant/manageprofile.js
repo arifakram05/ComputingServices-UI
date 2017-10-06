@@ -58,6 +58,17 @@ angular.module('computingServices.manageprofile', ['ngRoute'])
 
     console.log('manage LA profile...');
 
+    //Check if user is logged in, only then continue
+    if(!SharedService.isUserLoggedIn()) {
+        return;
+    }
+
+    if(!SharedService.isPrivilegePresent(constants.UPDATE_PROFILE)) {
+        SharedService.showWarning('You do not have privileges to view "Manage Profile" page. Please contact Lab Manager');
+        SharedService.showLoginPage();
+        return;
+    }
+
     $scope.userId = SharedService.getUserDetails().userId;
 
     $scope.labAsst = {};

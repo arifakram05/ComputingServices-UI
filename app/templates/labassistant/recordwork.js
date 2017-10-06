@@ -82,6 +82,18 @@ angular.module('computingServices.recordwork', ['ngRoute'])
 .controller('RecordWorkCtrl', ['$scope', '$filter', '$mdDialog', 'RecordWorkService', 'SharedService', function ($scope, $filter, $mdDialog, RecordWorkService, SharedService) {
 
     console.log('record work page for lab assistant');
+
+    //Check if user is logged in, only then continue
+    if(!SharedService.isUserLoggedIn()) {
+        return;
+    }
+
+    if(!SharedService.isPrivilegePresent(constants.CLOCK_IN_OUT)) {
+        SharedService.showWarning('You do not have privileges to view "Clock-In/Clock-Out" page. Please contact Lab Manager');
+        SharedService.showLoginPage();
+        return;
+    }
+
     $scope.shifts = [];
 
     // get shift details for today, if any

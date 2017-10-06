@@ -50,18 +50,26 @@ angular.module('computingServices.displaywork', ['ngRoute'])
 
 .controller('DisplayWorkCtrl', ['$scope', '$filter', '$mdDialog', 'SharedService', 'DisplayWorkService', function ($scope, $filter, $mdDialog, SharedService, DisplayWorkService) {
 
+    //Check if user is logged in, only then continue
+    if(!SharedService.isUserLoggedIn()) {
+        return;
+    }
+
+    if(!SharedService.isPrivilegePresent(constants.SCHEDULE_AND_TIMESHEET)) {
+        SharedService.showWarning('You do not have privileges to view "Schedule and Timesheet" page. Please contact Lab Manager');
+        SharedService.showLoginPage();
+        return;
+    }
+
     setup();
+    $scope.isUserAdmin = SharedService.isPrivilegePresent(constants.SEE_ANY_TIMESHEET);
+    if (!$scope.isUserAdmin) {
+        $scope.labAsst.id = SharedService.getUserId();
+    }
 
     function setup() {
         $scope.labAsst = {};
         $scope.isSubmitClicked = false;
-        console.log("user role is ", SharedService.getUserRole());
-        if (SharedService.getUserRole() === 'Lab Manager') {
-            $scope.isUserAdmin = true;
-        } else {
-            $scope.labAsst.id = SharedService.getUserId();
-            $scope.isUserAdmin = false;
-        }
     }
 
     // print

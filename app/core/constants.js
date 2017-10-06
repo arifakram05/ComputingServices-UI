@@ -41,5 +41,15 @@ var constants = {
     UPDATE_FROM_EMAIL_ADDRESS: 'FromAddress',
     RESET_PASSWORD: 'ResetPassword',
     SUBNET_RANGE: 'SubnetRange',
-    CHANGE_PASSWORD: 'ChangePassword'
+    CHANGE_PASSWORD: 'ChangePassword',
+
+    // Schedule and Timesheet
+    SCHEDULE_AND_TIMESHEET: 'ScheduleAndTimesheet',
+    SEE_ANY_TIMESHEET: 'ViewAnyTimesheet',
+
+    // ClockIn/ClockOut
+    CLOCK_IN_OUT: 'ClockInAndOut',
+
+    // Update Profile
+    UPDATE_PROFILE: 'UpdateProfile'
 }
