@@ -107,8 +107,8 @@ angular.module('computingServices.wiki', ['ngRoute', 'ngResource'])
     $scope.closeUploadForm = false;
 
     fetchAllWikis();
-    doesUserHavePrivilegesToUploadWiki();
-    doesUserHavePrivilegesToDeleteWiki();
+    $scope.canUserUploadWiki = SharedService.isPrivilegePresent('UploadWiki');
+    $scope.canUserDeleteWiki = SharedService.isPrivilegePresent('DeleteWiki');
 
     // load wikis
     function fetchAllWikis() {
@@ -120,28 +120,6 @@ angular.module('computingServices.wiki', ['ngRoute', 'ngResource'])
             console.error('Error while fetching Wikis');
             SharedService.showError('Failed to load Wiki pages');
         });
-    }
-
-    // check if user has privileges to upload wiki - UploadWiki
-    function doesUserHavePrivilegesToUploadWiki() {
-        if (SharedService.getUserPrivileges()) {
-            $scope.canUserUploadWiki = SharedService.getUserPrivileges().indexOf('UploadWiki') > -1;
-        } else {
-            $scope.canUserUploadWiki = false;
-        }
-        console.log('doesUserHavePrivilegesToUploadWiki ', $scope.canUserUploadWiki);
-        return $scope.canUserUploadWiki;
-    }
-
-    // check if user has privileges to delete a wiki - DeleteWiki
-    function doesUserHavePrivilegesToDeleteWiki() {
-        if (SharedService.getUserPrivileges()) {
-            $scope.canUserDeleteWiki = SharedService.getUserPrivileges().indexOf('DeleteWiki') > -1;
-        } else {
-            $scope.canUserDeleteWiki = false;
-        }
-        console.log('doesUserHavePrivilegesToDeleteWiki ', $scope.canUserDeleteWiki);
-        return $scope.canUserDeleteWiki;
     }
 
     // upload a document
