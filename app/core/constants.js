@@ -24,5 +24,8 @@ var constants = {
     ROLES: 'Roles',
     EDIT_PRIVILEGES: 'EditPrivileges',
     CREATE_ROLE: 'CreateRole',
-    DELETE_ROLE: 'DeleteRole'
+    DELETE_ROLE: 'DeleteRole',
+
+    // Authorize privs
+    AUTHORIZE: 'Authorize'
 }
