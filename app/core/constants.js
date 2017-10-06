@@ -34,5 +34,12 @@ var constants = {
     ADD_USER: 'AddUser',
     DELETE_USER: 'DeleteUser',
     BLOCK_USER: 'BlockUser',
-    UNBLOCK_USER: 'UnBlockUser'
+    UNBLOCK_USER: 'UnBlockUser',
+
+    // Settings privs
+    SETTINGS: 'Settings',
+    UPDATE_FROM_EMAIL_ADDRESS: 'FromAddress',
+    RESET_PASSWORD: 'ResetPassword',
+    SUBNET_RANGE: 'SubnetRange',
+    CHANGE_PASSWORD: 'ChangePassword'
 }

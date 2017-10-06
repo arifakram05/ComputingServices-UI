@@ -117,7 +117,23 @@ angular.module('computingServices.settings', ['ngRoute'])
 .controller('SettingsCtrl', ['$scope', 'SettingsService', '$filter', 'SharedService', '$mdDialog', function ($scope, SettingsService, $filter, SharedService, $mdDialog) {
     console.log('loading settings ...');
 
+    //Check if user is logged in, only then continue
+    if (!SharedService.isUserLoggedIn()) {
+        return;
+    }
+
+    if (!SharedService.isPrivilegePresent(constants.SETTINGS)) {
+        SharedService.showWarning('You do not have privileges to view "Settings" page. Please contact Lab Manager');
+        SharedService.showLoginPage();
+        return;
+    }
+
     $scope.options = ['Email', 'Password Reset', 'Subnet Range', 'Change Password'];
+
+    $scope.canUpdateFromAddress = SharedService.isPrivilegePresent(constants.UPDATE_FROM_EMAIL_ADDRESS);
+    $scope.canResetPassword = SharedService.isPrivilegePresent(constants.RESET_PASSWORD);
+    $scope.canSetSubnetRange = SharedService.isPrivilegePresent(constants.SUBNET_RANGE);
+    $scope.canChangePassword = SharedService.isPrivilegePresent(constants.CHANGE_PASSWORD);
 
     // when selected an option
     $scope.selectOption = function (option) {
