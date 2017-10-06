@@ -134,10 +134,13 @@ angular.module('computingServices.manageRoles', ['ngRoute'])
     console.log('clicked on manage roles');
 
     //Check if user is logged in, only then continue
-    SharedService.verifyUserLogin();
+    if(!SharedService.isUserLoggedIn()) {
+        return;
+    }
 
     if(!SharedService.isPrivilegePresent(constants.ROLES)) {
-        SharedService.showWarning('You do not have privileges to view this page. Please contact Lab Manager');
+        SharedService.showWarning('You do not have privileges to "Roles" this page. Please contact Lab Manager');
+        SharedService.showLoginPage();
         return;
     }
 

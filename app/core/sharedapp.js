@@ -28,7 +28,7 @@ angular.module('computingServices.shared', ['ngRoute'])
         getUserPrivileges: getUserPrivileges,
 
         isPrivilegePresent: isPrivilegePresent,
-        verifyUserLogin: verifyUserLogin,
+        isUserLoggedIn: isUserLoggedIn,
 
         showLoginPage: showLoginPage,
         navigateToHome: navigateToHome,
@@ -178,14 +178,15 @@ angular.module('computingServices.shared', ['ngRoute'])
     }
 
     // verify if user is logged in before showing the view
-    function verifyUserLogin() {
+    function isUserLoggedIn() {
         if (!isUserAuthenticated()) {
             console.log("Is user authenticated : ", isUserAuthenticated());
             logout();
             showLoginPage();
             showError('Please login to continue');
-            return;
+            return false;
         }
+        return true;
     }
 
     //Common service calls

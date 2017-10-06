@@ -51,10 +51,13 @@ angular.module('computingServices.authorize', ['ngRoute'])
 .controller('AuthorizeCtrl', ['$scope', 'AuthorizeService', 'SharedService', function ($scope, AuthorizeService, SharedService) {
 
     //Check if user is logged in, only then continue
-    SharedService.verifyUserLogin();
+    if(!SharedService.isUserLoggedIn()) {
+        return;
+    }
 
     if(!SharedService.isPrivilegePresent(constants.AUTHORIZE)) {
-        SharedService.showWarning('You do not have privileges to view this page. Please contact Lab Manager');
+        SharedService.showWarning('You do not have privileges to view "Authorize" page. Please contact Lab Manager');
+        SharedService.showLoginPage();
         return;
     }
 

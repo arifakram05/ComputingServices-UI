@@ -174,10 +174,13 @@ angular.module('computingServices.manageLabAssistants', ['ngRoute'])
 .controller('ManageLabAssistantsCtrl', ['$scope', 'ManageLabAssistantsService', 'SharedService', '$filter', '$mdDialog', function ($scope, ManageLabAssistantsService, SharedService, $filter, $mdDialog) {
 
     //Check if user is logged in, only then continue
-    SharedService.verifyUserLogin();
+    if(!SharedService.isUserLoggedIn()) {
+        return;
+    }
 
     if(!SharedService.isPrivilegePresent(constants.LABASSISTANTS)) {
-        SharedService.showWarning('You do not have privileges to view this page. Please contact Lab Manager');
+        SharedService.showWarning('You do not have privileges to "Lab Assistants" this page. Please contact Lab Manager');
+        SharedService.showLoginPage();
         return;
     }
 
