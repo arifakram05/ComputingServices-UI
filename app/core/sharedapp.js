@@ -27,6 +27,8 @@ angular.module('computingServices.shared', ['ngRoute'])
         setUserPrivileges: setUserPrivileges,
         getUserPrivileges: getUserPrivileges,
 
+        isPrivilegePresent: isPrivilegePresent,
+
         showLoginPage: showLoginPage,
         navigateToHome: navigateToHome,
         isUserAuthenticated: isUserAuthenticated,
@@ -163,6 +165,14 @@ angular.module('computingServices.shared', ['ngRoute'])
         growl.info(message, {
             title: 'Info!'
         });
+    }
+
+    function isPrivilegePresent(priv) {
+        if (getUserPrivileges()) {
+            return getUserPrivileges().indexOf(priv) > -1;
+        } else {
+            return false;
+        }
     }
 
     //Common service calls

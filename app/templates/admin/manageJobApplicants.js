@@ -177,11 +177,32 @@ angular.module('computingServices.manageJobApplicants', ['ngRoute'])
 .controller('ManageJobApplicantsCtrl', ['$scope', 'ManageJobApplicantsService', 'SharedService', '$filter', '$mdDialog', function ($scope, ManageJobApplicantsService, SharedService, $filter, $mdDialog) {
     console.log('clicked on manage job applicants');
 
+    //Check if user is logged in, only then continue
+    if (!SharedService.isUserAuthenticated()) {
+        console.log("Is user authenticated : ", SharedService.isUserAuthenticated());
+        SharedService.logout();
+        SharedService.showLoginPage();
+        SharedService.showError('Please login to continue');
+        return;
+    }
+
+    if(!SharedService.isPrivilegePresent(constants.jobApplicants)) {
+        SharedService.showWarning('You do not have privileges to view this page. Please contact Lab Manager');
+        return;
+    }
+
     $scope.jobApplicants = [];
     $scope.currentPage = 1;
     $scope.pageSize = 10
 
     fetchAllJobApplicants();
+    $scope.canDownloadResume = SharedService.isPrivilegePresent(constants.downloadApplicantResume);
+    $scope.canDeleteApplicant = SharedService.isPrivilegePresent(constants.deleteApplicant);
+    $scope.canHireApplicant = SharedService.isPrivilegePresent(constants.hireApplicant);
+    $scope.canChangeApplicantStatus = SharedService.isPrivilegePresent(constants.changeApplicantStatus);
+    $scope.canEmailApplicant = SharedService.isPrivilegePresent(constants.emailApplicant);
+    $scope.canViewApplicantDetails = SharedService.isPrivilegePresent(constants.viewApplicantDetails);
+    $scope.canViewResume = SharedService.isPrivilegePresent(constants.viewApplicantResume);
 
     function fetchAllJobApplicants() {
         var promise = ManageJobApplicantsService.getAllJobApplicants();

@@ -44,7 +44,7 @@
                             </td>
 
                             <td>
-                                <md-select name="status" ng-model="applicant.status" ng-style="{'width':'80%', 'padding':'0', 'margin':'0'}" ng-change="updateJobApplicantStatus(applicant.status, applicant.studentId)">
+                                <md-select name="status" ng-model="applicant.status" ng-disabled="!canChangeApplicantStatus" ng-style="{'width':'80%', 'padding':'0', 'margin':'0'}" ng-change="updateJobApplicantStatus(applicant.status, applicant.studentId)">
                                     <md-option value="SUBMITTED">Submitted</md-option>
                                     <md-option value="IN REVIEW">In Review</md-option>
                                     <md-option value="IN PROGRESS">In Progress</md-option>
@@ -53,7 +53,7 @@
                             </td>
 
                             <td>
-                                <a class="btn btn-default btn" ng-click="download(applicant.studentId)">
+                                <a class="btn btn-default btn" ng-disabled="!canDownloadResume" ng-click="download(applicant.studentId)">
                                     <i class="fa fa-download"></i>
                                     <md-tooltip>Download Resume</md-tooltip>
                                 </a>
@@ -61,22 +61,22 @@
 
                             <td>
                                 <div class="btn-group">
-                                    <button type="button" class="btn btn-danger btn" ng-click="delete(applicant.studentId)">
+                                    <button type="button" class="btn btn-danger btn" ng-disabled="!canDeleteApplicant" ng-click="delete(applicant.studentId)">
                                         <i class="fa fa-trash-o"></i>
                                         <md-tooltip>Delete Applicant</md-tooltip>
                                     </button>
 
-                                    <button type="button" class="btn btn-default btn" ng-click="email(applicant)">
+                                    <button type="button" class="btn btn-default btn" ng-disabled="!canEmailApplicant" ng-click="email(applicant)">
                                         <i class="fa fa-envelope-o"></i>
                                         <md-tooltip>Email Applicant</md-tooltip>
                                     </button>
 
-                                    <button type="button" class="btn btn-primary btn" ng-click="hire(applicant)">
+                                    <button type="button" class="btn btn-primary btn" ng-disabled="!canHireApplicant" ng-click="hire(applicant)">
                                         <i class="fa fa-star-o"></i>
                                         <md-tooltip>Hire Applicant</md-tooltip>
                                     </button>
 
-                                    <button type="button" class="btn btn-default btn" ng-click="edit(applicant); showDetails(applicant)">
+                                    <button type="button" class="btn btn-default btn" ng-disabled="!canViewApplicantDetails" ng-click="edit(applicant); showDetails(applicant)">
                                         <i class="fa fa-binoculars"></i>
                                         <md-tooltip>Details</md-tooltip>
                                     </button>
