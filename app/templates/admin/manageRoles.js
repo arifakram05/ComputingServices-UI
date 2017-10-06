@@ -133,14 +133,21 @@ angular.module('computingServices.manageRoles', ['ngRoute'])
 .controller('ManageRolesCtrl', ['$scope', 'ManageRolesService', '$filter', 'SharedService', '$mdDialog', function ($scope, ManageRolesService, $filter, SharedService, $mdDialog) {
     console.log('clicked on manage roles');
 
-    /*$scope.expandRoleItem(role) {
-        console.log('detailing role: ',role);
-    }*/
+    //Check if user is logged in, only then continue
+    SharedService.verifyUserLogin();
+
+    if(!SharedService.isPrivilegePresent(constants.ROLES)) {
+        SharedService.showWarning('You do not have privileges to view this page. Please contact Lab Manager');
+        return;
+    }
 
     $scope.editingRole = false;
     $scope.creatingRole = false;
 
     getRoles();
+    $scope.canEditPrivileges = SharedService.isPrivilegePresent(constants.EDIT_PRIVILEGES);
+    $scope.canCreateRole = SharedService.isPrivilegePresent(constants.CREATE_ROLE);
+    $scope.canDeleteRole = SharedService.isPrivilegePresent(constants.DELETE_ROLE);
 
     function getRoles() {
         console.log('making a server call to get all roles and privs');
@@ -382,6 +389,7 @@ angular.module('computingServices.manageRoles', ['ngRoute'])
         }
         delete role.available;
         delete role.backupRoleName;
+        $scope.editingRole = false;
         //call service method to save roles and privs
         var promise = ManageRolesService.saveRole(role);
         promise.then(function (result) {

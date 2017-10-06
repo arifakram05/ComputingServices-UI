@@ -18,5 +18,11 @@ var constants = {
     VIEW_LA_RESUME: 'ViewLAResume',
     DELETE_LA: 'DeleteLabAssistant',
     EMAIL_LA: 'EmailLabAssistant',
-    COMMENT_LA: 'CommentOnLabAssistant'
+    COMMENT_LA: 'CommentOnLabAssistant',
+
+    // Roles privs
+    ROLES: 'Roles',
+    EDIT_PRIVILEGES: 'EditPrivileges',
+    CREATE_ROLE: 'CreateRole',
+    DELETE_ROLE: 'DeleteRole'
 }

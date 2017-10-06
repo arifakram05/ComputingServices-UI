@@ -28,50 +28,50 @@
                     <input name="roleName" type="text" ng-model="selRoleToShow.roleName" required>
                 </md-input-container>
                 <div layout="row" layout-align="end" flex>
-                    <a class="btn" ng-if="!editingRole" ng-click="editRoleName(selRoleToShow)">
+                    <button class="btn btn-info" ng-if="!editingRole" ng-disabled="!canEditPrivileges && !canCreateRole" ng-click="editRoleName(selRoleToShow)">
                         <i class="fa fa-pencil fa-lg"></i>
-                        <md-tooltip>Edit Role Name</md-tooltip>
-                    </a>
+                        <md-tooltip>Edit Role Names</md-tooltip>
+                    </button>
 
-                    <a class="btn" ng-if="editingRole" ng-click="cancelRoleNameEdit(selRoleToShow)">
+                    <button class="btn btn-default" ng-if="editingRole" ng-click="cancelRoleNameEdit(selRoleToShow)">
                         <i class="fa fa-times fa-lg"></i>
                         <md-tooltip>Cancel Role Name</md-tooltip>
-                    </a>
+                    </button>
 
                     <md-input-container flex="1"></md-input-container>
 
-                    <a class="btn" ng-click="resetPrivs(selRoleToShow)">
+                    <button class="btn btn-default" ng-click="resetPrivs(selRoleToShow)">
                         <i class="fa fa-ban fa-lg"></i>
                         <md-tooltip>Reset Privileges</md-tooltip>
-                    </a>
+                    </button>
 
                     <md-input-container flex="1"></md-input-container>
 
-                    <a class="btn" ng-if="creatingRole === false" ng-click="updateRole(selRoleToShow)">
+                    <button class="btn btn-warning" ng-if="creatingRole === false" ng-disabled="!canEditPrivileges" ng-click="updateRole(selRoleToShow)">
                         <i class="fa fa-wrench fa-lg"></i>
                         <md-tooltip>Update Role and Privileges</md-tooltip>
-                    </a>
+                    </button>
 
                     <md-input-container flex="1"></md-input-container>
 
-                    <a class="btn" ng-if="creatingRole === true" ng-click="saveRole(selRoleToShow)">
+                    <button class="btn btn-success" ng-disabled="!canCreateRole" ng-if="creatingRole === true" ng-click="saveRole(selRoleToShow)">
                         <i class="fa fa-floppy-o fa-lg"></i>
                         <md-tooltip>Save Role</md-tooltip>
-                    </a>
+                    </button>
 
                     <md-input-container flex="1"></md-input-container>
 
-                    <a class="btn" ng-if="creatingRole === false" ng-click="createRole()">
+                    <button class="btn btn-primary" ng-disabled="!canCreateRole" ng-if="creatingRole === false" ng-click="createRole()">
                         <i class="fa fa-plus fa-lg"></i>
                         <md-tooltip>Create Role</md-tooltip>
-                    </a>
+                    </button>
 
                     <md-input-container flex="1"></md-input-container>
 
-                    <a class="btn" ng-if="creatingRole === false" ng-click="deleteRole(selRoleToShow)">
+                    <button class="btn btn-danger" ng-disabled="!canDeleteRole" ng-if="creatingRole === false" ng-click="deleteRole(selRoleToShow)">
                         <i class="fa fa-trash-o fa-lg"></i>
                         <md-tooltip>Delete Role</md-tooltip>
-                    </a>
+                    </button>
                 </div>
             </div>
 
@@ -88,17 +88,17 @@
                 <div ng-style="{'width': '15%'}" layout="column">
                     <md-input-container flex="10"></md-input-container>
 
-                    <a class="btn btn-primary" ng-click="moveItem(selRoleToShow.available, selRoleToShow.availablePrivs, selRoleToShow.assignedPrivs)">
+                    <button class="btn btn-primary" ng-disabled="!canEditPrivileges && !canCreateRole" ng-click="moveItem(selRoleToShow.available, selRoleToShow.availablePrivs, selRoleToShow.assignedPrivs)">
                         <i class="fa fa-arrow-right fa-lg" aria-label="add priv"></i>
                         <md-tooltip>Add Privilege</md-tooltip>
-                    </a>
+                    </button>
 
                     <md-input-container flex="5"></md-input-container>
 
-                    <a class="btn btn-danger" ng-click="moveItem(selRoleToShow.selected, selRoleToShow.assignedPrivs, selRoleToShow.availablePrivs)">
+                    <button class="btn btn-danger" ng-disabled="!canEditPrivileges && !canCreateRole" ng-click="moveItem(selRoleToShow.selected, selRoleToShow.assignedPrivs, selRoleToShow.availablePrivs)">
                         <i class="fa fa-arrow-left fa-lg" aria-label="remove priv"></i>
                         <md-tooltip>Remove Privilege</md-tooltip>
-                    </a>
+                    </button>
                 </div>
 
                 <md-input-container flex="5"></md-input-container>
