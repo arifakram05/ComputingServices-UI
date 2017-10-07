@@ -315,7 +315,7 @@ angular.module('computingServices.login', ['ngRoute'])
 
 }])
 
-.controller('LoginCtrl', ['$scope', 'LoginService', '$location', 'SharedService', '$mdDialog', function ($scope, LoginService, $location, SharedService, $mdDialog) {
+.controller('LoginCtrl', ['$scope', 'LoginService', '$location', 'SharedService', '$mdDialog', '$rootScope', function ($scope, LoginService, $location, SharedService, $mdDialog, $rootScope) {
 
     navigateToHomeIfAlreadyLoggedIn();
 
@@ -353,6 +353,8 @@ angular.module('computingServices.login', ['ngRoute'])
                 //Navigate to home page
                 SharedService.navigateToHome();
 
+                // set active page
+                $rootScope.clicked = undefined;
             })
             .catch(function (resError) {
                 console.log('LOGIN FAILURE :: ', resError);

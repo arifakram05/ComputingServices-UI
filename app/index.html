@@ -51,7 +51,7 @@
                     <span class="icon-bar"></span>
                 </button>
                 <a ng-if="!isUserLoggedIn"class="navbar-brand" href="#/home">Computing Services</a>
-                <a ng-if="isUserLoggedIn" class="navbar-brand" href="#/home" ng-class="{selectedLinkOnNavBar : clicked == undefined || clicked == 'home'}" ng-click="navBarClicked('home')">Welcome, {{userDetails.firstName}}</a>
+                <a ng-if="isUserLoggedIn" class="navbar-brand" href="#/home" ng-class="{selectedLinkOnNavBar : $root.clicked == undefined || $root.clicked == 'home'}" ng-click="navBarClicked('home')">Welcome, {{userDetails.firstName}}</a>
             </div>
             <div id="navbar" class="navbar-collapse collapse">
                 <ul class="nav navbar-nav navbar-right">
@@ -61,12 +61,12 @@
 
                     <!--General public features-->
                     <li ng-class="{selectedLinkOnNavBar : clicked == 'staffschedule'}"><a href="#/manageStaffSchedule" ng-click="navBarClicked('staffschedule')">Staff Schedule</a></li>
-                    <li ng-class="{selectedLinkOnNavBar : clicked == 'staff'}"><a href="#/staff" ng-click="navBarClicked('staff')">Staff</a></li>
-                    <li ng-class="{selectedLinkOnNavBar : clicked == 'faq'}"><a href="#/faq" ng-click="navBarClicked('faq')">FAQ</a></li>
-                    <li ng-class="{selectedLinkOnNavBar : clicked == 'about'}"><a href="#/about" ng-click="navBarClicked('about')">About</a></li>
-                    <li ng-class="{selectedLinkOnNavBar : clicked == 'wiki'}"><a href="#/wiki" ng-click="navBarClicked('wiki')">Wiki</a></li>
-                    <li ng-class="{selectedLinkOnNavBar : clicked == 'contact'}"><a href="#/contact" ng-click="navBarClicked('contact')">Contact</a></li>
-                    <li ng-class="{selectedLinkOnNavBar : clicked == 'jobs'}"><a href="#/careers" ng-click="navBarClicked('jobs')">Jobs</a></li>
+                    <li ng-class="{selectedLinkOnNavBar : $root.clicked == 'staff'}"><a href="#/staff" ng-click="navBarClicked('staff')">Staff</a></li>
+                    <li ng-class="{selectedLinkOnNavBar : $root.clicked == 'faq'}"><a href="#/faq" ng-click="navBarClicked('faq')">FAQ</a></li>
+                    <li ng-class="{selectedLinkOnNavBar : $root.clicked == 'about'}"><a href="#/about" ng-click="navBarClicked('about')">About</a></li>
+                    <li ng-class="{selectedLinkOnNavBar : $root.clicked == 'wiki'}"><a href="#/wiki" ng-click="navBarClicked('wiki')">Wiki</a></li>
+                    <li ng-class="{selectedLinkOnNavBar : $root.clicked == 'contact'}"><a href="#/contact" ng-click="navBarClicked('contact')">Contact</a></li>
+                    <li ng-class="{selectedLinkOnNavBar : $root.clicked == 'jobs'}"><a href="#/careers" ng-click="navBarClicked('jobs')">Jobs</a></li>
 
                     <!--Admin only features-->
                     <li class="dropdown" ng-if="isUserLoggedIn" ng-class="{selectedLinkOnNavBar : clicked == 'features'}">

@@ -70,7 +70,7 @@ var computingServicesApp = angular.module('computingServices', [
     };
 })
 
-.controller('mainCtrl', ['SharedService', '$scope', 'ActivityMonitor', function (SharedService, $scope, ActivityMonitor) {
+.controller('mainCtrl', ['SharedService', '$scope', '$rootScope', 'ActivityMonitor', function (SharedService, $scope, $rootScope, ActivityMonitor) {
 
     $scope.$watch(function () {
         $scope.userDetails = SharedService.getUserDetails();
@@ -86,8 +86,8 @@ var computingServicesApp = angular.module('computingServices', [
     console.log('is user logged in : ',$scope.isUserLoggedIn);
     console.log('user role : ',$scope.userRole);
 
-    $scope.navBarClicked = function(linkName) {
-        $scope.clicked = linkName;
+    $scope.navBarClicked = function(pageName) {
+        $rootScope.clicked = pageName;
     }
 
     // user logout
@@ -96,7 +96,7 @@ var computingServicesApp = angular.module('computingServices', [
         SharedService.navigateToHome();
         SharedService.logout();
         SharedService.showSuccess("Logged out");
-        $scope.clicked = undefined;
+        $rootScope.clicked = undefined;
     }
 
     $scope.isExists = function(feature) {
