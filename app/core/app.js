@@ -96,6 +96,7 @@ var computingServicesApp = angular.module('computingServices', [
         SharedService.navigateToHome();
         SharedService.logout();
         SharedService.showSuccess("Logged out");
+        $scope.clicked = undefined;
     }
 
     $scope.isExists = function(feature) {
