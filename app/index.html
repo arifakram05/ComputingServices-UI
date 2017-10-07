@@ -51,7 +51,7 @@
                     <span class="icon-bar"></span>
                 </button>
                 <a ng-if="!isUserLoggedIn"class="navbar-brand" href="#/home">Computing Services</a>
-                <a ng-if="isUserLoggedIn" class="navbar-brand" href="#/home">Welcome, {{userDetails.firstName}}</a>
+                <a ng-if="isUserLoggedIn" class="navbar-brand" href="#/home" ng-class="{selectedLinkOnNavBar : clicked == undefined || clicked == 'home'}" ng-click="navBarClicked('home')">Welcome, {{userDetails.firstName}}</a>
             </div>
             <div id="navbar" class="navbar-collapse collapse">
                 <ul class="nav navbar-nav navbar-right">
@@ -60,30 +60,30 @@
                     <li ng-if="isUserLoggedIn" class="active"><a>{{userDetails.role}}</a></li>
 
                     <!--General public features-->
-                    <li><a href="#/manageStaffSchedule">Staff Schedule</a></li>
-                    <li><a href="#/staff">Staff</a></li>
-                    <li><a href="#/faq">FAQ</a></li>
-                    <li><a href="#/about">About</a></li>
-                    <li><a href="#/wiki">Wiki</a></li>
-                    <li><a href="#/contact">Contact</a></li>
-                    <li><a href="#/careers">Jobs</a></li>
+                    <li ng-class="{selectedLinkOnNavBar : clicked == 'staffschedule'}"><a href="#/manageStaffSchedule" ng-click="navBarClicked('staffschedule')">Staff Schedule</a></li>
+                    <li ng-class="{selectedLinkOnNavBar : clicked == 'staff'}"><a href="#/staff" ng-click="navBarClicked('staff')">Staff</a></li>
+                    <li ng-class="{selectedLinkOnNavBar : clicked == 'faq'}"><a href="#/faq" ng-click="navBarClicked('faq')">FAQ</a></li>
+                    <li ng-class="{selectedLinkOnNavBar : clicked == 'about'}"><a href="#/about" ng-click="navBarClicked('about')">About</a></li>
+                    <li ng-class="{selectedLinkOnNavBar : clicked == 'wiki'}"><a href="#/wiki" ng-click="navBarClicked('wiki')">Wiki</a></li>
+                    <li ng-class="{selectedLinkOnNavBar : clicked == 'contact'}"><a href="#/contact" ng-click="navBarClicked('contact')">Contact</a></li>
+                    <li ng-class="{selectedLinkOnNavBar : clicked == 'jobs'}"><a href="#/careers" ng-click="navBarClicked('jobs')">Jobs</a></li>
 
                     <!--Admin only features-->
-                    <li class="dropdown" ng-if="isUserLoggedIn">
+                    <li class="dropdown" ng-if="isUserLoggedIn" ng-class="{selectedLinkOnNavBar : clicked == 'features'}">
                         <a class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">Features <span class="caret"></span></a>
                         <ul class="dropdown-menu">
-                            <li ng-if="isExists('/manageJobApplicants')"><a href="#/manageJobApplicants">Job Applicants</a></li>
-                            <li ng-if="isExists('/manageLabAssistants')"><a href="#/manageLabAssistants">Lab Assistants</a></li>
-                            <li ng-if="isExists('/manageRoles')"><a href="#/manageRoles">Roles</a></li>
-                            <li ng-if="isExists('/authorize')"><a href="#/authorize">Authorize</a></li>
-                            <li ng-if="isExists('/manageUsers')"><a href="#/manageUsers">Manage Users</a></li>
-                            <li ng-if="isExists('/settings')"><a href="#/settings">Settings</a></li>
+                            <li ng-if="isExists('/manageJobApplicants')"><a href="#/manageJobApplicants" ng-click="navBarClicked('features')">Job Applicants</a></li>
+                            <li ng-if="isExists('/manageLabAssistants')"><a href="#/manageLabAssistants" ng-click="navBarClicked('features')">Lab Assistants</a></li>
+                            <li ng-if="isExists('/manageRoles')"><a href="#/manageRoles" ng-click="navBarClicked('features')">Roles</a></li>
+                            <li ng-if="isExists('/authorize')"><a href="#/authorize" ng-click="navBarClicked('features')">Authorize</a></li>
+                            <li ng-if="isExists('/manageUsers')"><a href="#/manageUsers" ng-click="navBarClicked('features')">Manage Users</a></li>
+                            <li ng-if="isExists('/settings')"><a href="#/settings" ng-click="navBarClicked('features')">Settings</a></li>
 
                             <!--<li class="divider"></li>-->
 
-                            <li ng-if="isExists('/recordwork')"><a href="#/recordwork">Clock In/Clock out</a></li>
-                            <li ng-if="isExists('/displaywork')"><a href="#/displaywork">Schedule/Timesheet</a></li>
-                            <li ng-if="isExists('/manageprofile')"><a href="#/manageprofile">Manage Profile</a></li>
+                            <li ng-if="isExists('/recordwork')"><a href="#/recordwork" ng-click="navBarClicked('features')">Clock In/Clock out</a></li>
+                            <li ng-if="isExists('/displaywork')"><a href="#/displaywork" ng-click="navBarClicked('features')">Schedule/Timesheet</a></li>
+                            <li ng-if="isExists('/manageprofile')"><a href="#/manageprofile" ng-click="navBarClicked('features')">Manage Profile</a></li>
                         </ul>
                     </li>
 

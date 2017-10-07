@@ -17,6 +17,19 @@
     list-style-type: none;
 }
 
+#navbar a:hover {
+    border-bottom: red solid 1px;
+}
+
+.dropdown:hover .dropdown-menu {
+    display: block;
+    margin-top: 0;
+}
+
+.selectedLinkOnNavBar {
+    border-bottom: red solid 1px;
+}
+
 .staff {
     background-color: #f5f5f5;
 }

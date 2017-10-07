@@ -86,6 +86,10 @@ var computingServicesApp = angular.module('computingServices', [
     console.log('is user logged in : ',$scope.isUserLoggedIn);
     console.log('user role : ',$scope.userRole);
 
+    $scope.navBarClicked = function(linkName) {
+        $scope.clicked = linkName;
+    }
+
     // user logout
     $scope.logout = function logout() {
         console.log('Logging out...');
