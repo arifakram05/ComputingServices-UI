@@ -43,6 +43,9 @@ var constants = {
     SUBNET_RANGE: 'SubnetRange',
     CHANGE_PASSWORD: 'ChangePassword',
 
+    // Staff Schedule
+    CREATE_STAFF_SCHEDULE: 'CreateStaffSchedule',
+
     // Schedule and Timesheet
     SCHEDULE_AND_TIMESHEET: 'ScheduleAndTimesheet',
     SEE_ANY_TIMESHEET: 'ViewAnyTimesheet',

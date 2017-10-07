@@ -239,6 +239,8 @@ angular.module('computingServices.manageStaffSchedule', ['ngRoute', 'ui.calendar
 
 .controller('manageStaffScheduleCtrl', ['$scope', '$http', 'uiCalendarConfig', '$mdDialog', 'SharedService', 'ManageStaffScheduleService', '$location', function ($scope, $http, uiCalendarConfig, $mdDialog, SharedService, ManageStaffScheduleService, $location) {
 
+    $scope.isUserLoggedIn = SharedService.isUserAuthenticated();
+
     // to search for a student/Lab Assistant
     $scope.search = function (searchText) {
         console.log('searching for ... ', searchText);
@@ -261,7 +263,8 @@ angular.module('computingServices.manageStaffSchedule', ['ngRoute', 'ui.calendar
     $scope.isNewEvent = false;
 
     // TODO: check if the user has privileges to create a new event or not. If not, a user can only create an event for themselves, and this needs to be approved by someone who has the privilege (priv name: CreateEventForOthers)
-    $scope.canCreateEventForOthers = false;
+    $scope.canCreateEventForOthers = SharedService.isPrivilegePresent(constants.CREATE_STAFF_SCHEDULE);
+
 
     // get logged in user details
     $scope.userDetails = SharedService.getUserDetails();
@@ -512,6 +515,11 @@ angular.module('computingServices.manageStaffSchedule', ['ngRoute', 'ui.calendar
             //eventLimit: true,
             //event to trigger on selection of a date
             select: function (start, end) {
+                // A user cannot select dates unless logged in
+                if(!$scope.isUserLoggedIn) {
+                    return;
+                }
+
                 //reset
                 $scope.SelectedEvent = {};
                 $scope.event = null;
@@ -538,6 +546,11 @@ angular.module('computingServices.manageStaffSchedule', ['ngRoute', 'ui.calendar
             },
             //event to trigger when an event on calendar is clicked
             eventClick: function (event) {
+                // A user cannot click on a event unless logged in
+                if(!$scope.isUserLoggedIn) {
+                    return;
+                }
+
                 if ($scope.canCreateEventForOthers === false && event.studentId !== $scope.userDetails.userId) {
                     SharedService.showInfo('You can only click on your shifts');
                     return;
@@ -581,7 +594,7 @@ angular.module('computingServices.manageStaffSchedule', ['ngRoute', 'ui.calendar
                 var shiftEndDateTime = constructDateTime(new Date(event.date), moment(event.end).format('H:mm'));
                 var shiftDuration = calculateHours(shiftStartDateTime, shiftEndDateTime);
 
-                var tooltip = '<div class="tooltiptopicevent" style="width:auto;height:auto;background:rgb(16,108,200);color:#fff;position:absolute;z-index:10001;padding: 5px; line-height: 150%;border-top-right-radius: 15px;border-bottom-left-radius: 15px;">' + startTime + ' - ' + endTime + '</br>' + event.title + '</br>' + event.studentId + '</br>' + event.labName + '</br>' + shiftDuration + '</br>' + '</div>';
+                var tooltip = '<div class="tooltiptopicevent" style="width:auto;height:auto;background:rgb(56,56,56);color:#fff;position:absolute;z-index:10001;padding: 10px 10px; line-height: 150%;border-radius: 6px">' + startTime + ' - ' + endTime + '</br>' + event.labName + '</br>' + 'Name: ' + event.title + '</br>' + 'ID: ' + event.studentId + '</br>' + 'Duration: ' +shiftDuration + '</br>' + '</div>';
                 $("body").append(tooltip);
                 $(this).mouseover(function (e) {
                     $(this).css('z-index', 10000);
