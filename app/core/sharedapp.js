@@ -53,7 +53,7 @@ angular.module('computingServices.shared', ['ngRoute'])
 
     function setUserDetails(userDetails) {
         this.userDetails = userDetails;
-        console.log('User details now set :: ', this.userDetails);
+        //console.log('User details now set :: ', this.userDetails);
         $window.localStorage.setItem('csUserDetails', JSON.stringify(userDetails));
     }
 
@@ -102,17 +102,16 @@ angular.module('computingServices.shared', ['ngRoute'])
     function getUserPrivileges() {
         if ($window.localStorage.getItem('csPrivileges')) {
             this.privileges = JSON.parse($window.localStorage.getItem('csPrivileges'));
+            return this.privileges;
         }
-        return this.privileges;
+        return undefined;
     }
 
     function showLoginPage() {
-        //console.log('Inside Shared Controller"s showLoginPage method');
         $location.path('/login');
     }
 
     function navigateToHome() {
-        //console.log('Inside Shared Controller"s NavigateToScurmBoard method');
         $location.path('/home');
     }
 
@@ -128,7 +127,6 @@ angular.module('computingServices.shared', ['ngRoute'])
     //verify if user if authenticated, if not redirect to home page
     function verifyUserAndRedirect() {
         if (!isUserAuthenticated()) {
-            console.log('User is not authorized, redirecting to Login page');
             showLoginPage();
         }
     }
@@ -180,7 +178,6 @@ angular.module('computingServices.shared', ['ngRoute'])
     // verify if user is logged in before showing the view
     function isUserLoggedIn() {
         if (!isUserAuthenticated()) {
-            console.log("Is user authenticated : ", isUserAuthenticated());
             logout();
             showLoginPage();
             showError('Please login to continue');
@@ -202,11 +199,9 @@ angular.module('computingServices.shared', ['ngRoute'])
             })
             .then(
                 function success(response) {
-                    console.log('users retrieved per search criteria: ', response);
                     deferred.resolve(response.data);
                 },
                 function error(errResponse) {
-                    console.error('Error while making service call to search for users ', errResponse);
                     deferred.reject(errResponse);
                 }
             );
@@ -224,11 +219,9 @@ angular.module('computingServices.shared', ['ngRoute'])
             })
             .then(
                 function success(response) {
-                    console.log('LAs retrieved per search criteria: ', response);
                     deferred.resolve(response.data);
                 },
                 function error(errResponse) {
-                    console.error('Error while making service call to search for LAs ', errResponse);
                     deferred.reject(errResponse);
                 }
             );
@@ -243,11 +236,9 @@ angular.module('computingServices.shared', ['ngRoute'])
             })
             .then(
                 function success(response) {
-                    console.log('Roles retreived: ', response);
                     deferred.resolve(response.data);
                 },
                 function error(errResponse) {
-                    console.error('Error while making service call to fetch roles ', errResponse);
                     deferred.reject(errResponse);
                 }
             );
@@ -270,14 +261,14 @@ angular.module('computingServices.shared', ['ngRoute'])
                 }
             })
             .success(function (data, status, headers, config) {
-                console.log('Download operation success - data ', data, ' - status ', status, ' - headers ', headers('filename'));
+                //console.log('Download operation success - data ', data, ' - status ', status, ' - headers ', headers('filename'));
 
                 headers = headers();
 
                 var filename = headers['filename'];
-                console.log('file name is ', filename);
+                //console.log('file name is ', filename);
                 var contentType = headers['content-type'];
-                console.log('content type of the file is ', contentType);
+                //console.log('content type of the file is ', contentType);
 
                 var response = {};
                 response.data = data;
@@ -287,7 +278,7 @@ angular.module('computingServices.shared', ['ngRoute'])
                 deferred.resolve(response);
             })
             .error(function (data, status, headers, config) {
-                console.log('Download operation failure ', status);
+                //console.log('Download operation failure ', status);
                 deferred.reject(data, headers, status);
             });
         return deferred.promise;

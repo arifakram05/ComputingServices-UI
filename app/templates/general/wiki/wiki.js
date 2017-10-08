@@ -11,8 +11,8 @@ angular.module('computingServices.wiki', ['ngRoute', 'ngResource'])
 
 .factory('WikiService', ['$http', '$q', '$resource', function ($http, $q, $resource) {
 
-    var FETCH_URI = constants.url + 'general/wiki'; // Done
-    var UPLOAD_URI = constants.url + 'admin/upload-wiki'; // Done
+    var FETCH_URI = constants.url + 'general/wiki';
+    var UPLOAD_URI = constants.url + 'admin/upload-wiki';
     var DELETE_URI = constants.url + 'general/delete-wiki';
 
     var factory = {
