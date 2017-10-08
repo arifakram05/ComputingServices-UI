@@ -100,7 +100,10 @@ var computingServicesApp = angular.module('computingServices', [
     }
 
     $scope.isExists = function(feature) {
-        return ($scope.userPrivileges.indexOf(feature) != -1)
+        if ($scope.userPrivileges != null && $scope.userPrivileges.length > 0) {
+            return ($scope.userPrivileges.indexOf(feature) != -1);
+        }
+        return false;
     }
 
     // End session and auto logout after 10 mins of inactivity

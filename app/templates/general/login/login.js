@@ -155,7 +155,7 @@ angular.module('computingServices.login', ['ngRoute'])
     var LOGIN_USER_URI = constants.url + 'general/login/';
     var REGISTER_CHECK_URI = constants.url + 'general/check/';
     var REGISTER_USER_URI = constants.url + 'general/register/';
-    var GET_PRIVILEGES_URI = constants.url + 'admin/assigned-privs/';
+    var GET_PRIVILEGES_URI = constants.url + 'admin/privileges/';
 
     var factory = {
         loginUser: loginUser,
@@ -291,11 +291,11 @@ angular.module('computingServices.login', ['ngRoute'])
         var deferred = $q.defer();
 
         //mock data
-        var privileges = ["UploadWiki", "DeleteWiki", "/manageJobApplicants", "/manageLabAssistants", "/authorize", "/manageRoles", "/managelabschedule", "/manageStaffSchedule", "/displaywork", "/recordwork", "/manageprofile", "/manageUsers", "/settings", "ViewApplicantDetails", "JobApplicants", "LabAssistants", "Roles", "DeleteRole", "CreateRole", "Users", "AddUser", "Authorize", "Settings", "ChangePassword", "ScheduleAndTimesheet"];
-        deferred.resolve(privileges);
+        /*var privileges = ["UploadWiki", "DeleteWiki", "/manageJobApplicants", "/manageLabAssistants", "/authorize", "/manageRoles", "/managelabschedule", "/manageStaffSchedule", "/displaywork", "/recordwork", "/manageprofile", "/manageUsers", "/settings", "ViewApplicantDetails", "JobApplicants", "LabAssistants", "Roles", "DeleteRole", "CreateRole", "Users", "AddUser", "Authorize", "Settings", "ChangePassword", "ScheduleAndTimesheet"];
+        deferred.resolve(privileges);*/
 
         //real server call
-        /*$http({
+        $http({
                 method: 'GET',
                 url: GET_PRIVILEGES_URI,
                 params: {
@@ -303,13 +303,13 @@ angular.module('computingServices.login', ['ngRoute'])
                 }
             })
             .success(function (data, status, headers, config) {
-                console.log('privileges fetched ', data);
+                console.log('privileges fetched from server ', data);
                 deferred.resolve(data);
             })
             .error(function (data, status, headers, config) {
-                console.log('Failed to fetch privileges ', status);
+                console.log('Failed to fetch privileges from server ', status);
                 deferred.reject(data);
-            });*/
+            });
         return deferred.promise;
     }
 
