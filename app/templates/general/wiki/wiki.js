@@ -204,32 +204,9 @@ angular.module('computingServices.wiki', ['ngRoute', 'ngResource'])
             });
     }
 
-    // download a document
+    // view a document
     $scope.viewWiki = function (fileId) {
-
-        console.log('viewing wiki with ID: ', fileId.$oid);
-        //call service to download
-        var promise = SharedService.download(fileId.$oid, 'wikipages');
-        promise.then(function (response) {
-                console.log('result : ', response);
-
-                var fileLength = response.data.byteLength;
-
-                if (fileLength !== 0) {
-                    var url = URL.createObjectURL(new Blob([response.data], {
-                        type: 'application/pdf'
-                    }));
-                    // open in new tab
-                    $window.open(url);
-                } else {
-                    //notify that file does not exist for requested user
-                    SharedService.showWarning("File does not exist");
-                }
-            })
-            .catch(function (resError) {
-                console.log('DOWNLOAD FAILURE :: ', resError);
-                SharedService.showError('Error occurred while downloading requested file');
-            });
+        SharedService.viewFile(fileId.$oid, 'wikipages');
     }
 
     //Delete wiki

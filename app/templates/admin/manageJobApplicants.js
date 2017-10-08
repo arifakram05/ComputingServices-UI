@@ -178,11 +178,11 @@ angular.module('computingServices.manageJobApplicants', ['ngRoute'])
     console.log('clicked on manage job applicants');
 
     //Check if user is logged in, only then continue
-    if(!SharedService.isUserLoggedIn()) {
+    if (!SharedService.isUserLoggedIn()) {
         return;
     }
 
-    if(!SharedService.isPrivilegePresent(constants.jobApplicants)) {
+    if (!SharedService.isPrivilegePresent(constants.jobApplicants)) {
         SharedService.showWarning('You do not have privileges to view "Job Applicants" page. Please contact Lab Manager');
         SharedService.showLoginPage();
         return;
@@ -392,6 +392,11 @@ angular.module('computingServices.manageJobApplicants', ['ngRoute'])
                 console.log('DOWNLOAD FAILURE :: ', resError);
                 SharedService.showError('Error occurred while downloading requested file');
             });
+    }
+
+    // view a document
+    $scope.viewResume = function (applicantId) {
+        SharedService.viewFile(applicantId, 'jobapplicants');
     }
 
     $scope.email = function (jobApplicant) {

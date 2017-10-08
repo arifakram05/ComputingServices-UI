@@ -53,10 +53,15 @@
                             </td>
 
                             <td>
-                                <a class="btn btn-default btn" ng-disabled="!canDownloadResume" ng-click="download(applicant.studentId)">
+                                <button class="btn btn-default btn" ng-disabled="!canDownloadResume" ng-click="download(applicant.studentId)">
                                     <i class="fa fa-download"></i>
                                     <md-tooltip>Download Resume</md-tooltip>
-                                </a>
+                                </button>
+
+                                <button class="btn btn-default btn" ng-disabled="!canViewResume" ng-click="viewResume(applicant.studentId)">
+                                    <i class="fa fa-eye"></i>
+                                    <md-tooltip>View Resume</md-tooltip>
+                                </button>
                             </td>
 
                             <td>

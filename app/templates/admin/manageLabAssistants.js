@@ -307,6 +307,11 @@ angular.module('computingServices.manageLabAssistants', ['ngRoute'])
             });
     }
 
+    // view a document
+    $scope.viewResume = function (laId) {
+        SharedService.viewFile(laId, 'labassistants');
+    }
+
     // Update job applicant status
     $scope.updateLabApplicantStatus = function (status, studentId) {
         console.log('status ', status, ' studentId ', studentId);

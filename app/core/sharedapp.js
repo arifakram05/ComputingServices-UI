@@ -46,7 +46,8 @@ angular.module('computingServices.shared', ['ngRoute'])
         searchUsers: searchUsers,
         searchLabAssistants: searchLabAssistants,
         getRoles: getRoles,
-        download: download
+        download: download,
+        viewFile: viewFile
     };
 
     return service;
@@ -282,6 +283,33 @@ angular.module('computingServices.shared', ['ngRoute'])
                 deferred.reject(data, headers, status);
             });
         return deferred.promise;
+    }
+
+    // view file
+    function viewFile(id, source) {
+        console.log('File Id to view is : ', id);
+        //call service to download
+        var promise = download(id, source);
+        promise.then(function (response) {
+                console.log('result : ', response);
+
+                var fileLength = response.data.byteLength;
+
+                if (fileLength !== 0) {
+                    var url = URL.createObjectURL(new Blob([response.data], {
+                        type: 'application/pdf'
+                    }));
+                    // open in new tab
+                    $window.open(url);
+                } else {
+                    //notify that file does not exist for requested user
+                    SharedService.showWarning("File does not exist");
+                }
+            })
+            .catch(function (resError) {
+                console.log('DOWNLOAD FAILURE :: ', resError);
+                SharedService.showError('Error occurred while downloading requested file');
+            });
     }
 
 }]);
