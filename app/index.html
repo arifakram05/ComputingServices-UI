@@ -50,7 +50,7 @@
                     <span class="icon-bar"></span>
                     <span class="icon-bar"></span>
                 </button>
-                <a ng-if="!isUserLoggedIn"class="navbar-brand" href="#/home">Computing Services</a>
+                <a ng-if="!isUserLoggedIn" class="navbar-brand" href="#/home">Computing Services</a>
                 <a ng-if="isUserLoggedIn" class="navbar-brand" href="#/home" ng-class="{selectedLinkOnNavBar : $root.clicked == undefined || $root.clicked == 'home'}" ng-click="navBarClicked('home')">Welcome, {{userDetails.firstName}}</a>
             </div>
             <div id="navbar" class="navbar-collapse collapse">
@@ -105,16 +105,16 @@
     </div>
     <!-- /.container -->
 
-    <!--<footer>
-        <div class="credits text-center">
-            <p>
-                <a href="http://www.fdu.edu/">FDU</a>
-            </p>
-            <p>
-                <a href="http://www.google.com">Arif Akram</a>
-            </p>
+    <footer class="appFooter">
+        <div layout="column">
+            <div>
+                <img ng-src="img/fdu_logo.png">
+            </div>
         </div>
-    </footer>-->
+        <div>
+            <p clas="computingservices">Developed by <a href="http://www.google.com">Arif Akram</a></p>
+        </div>
+    </footer>
 
     <!--JQuery-->
     <script src="lib/jquery.min.js"></script>
@@ -145,7 +145,6 @@
     <script src="lib/moment.min.js"></script>
 
     <!--stick attribute does not work when minified version of calendar is used-->
-    <!--<script src="https://cdnjs.cloudflare.com/ajax/libs/angular-ui-calendar/1.0.0/calendar.js"></script>-->
     <script src="lib/calendar.js"></script>
     <script src="lib/fullcalendar.min.js"></script>
 
