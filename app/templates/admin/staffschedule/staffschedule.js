@@ -262,8 +262,10 @@ angular.module('computingServices.manageStaffSchedule', ['ngRoute', 'ui.calendar
 
     $scope.isNewEvent = false;
 
-    // TODO: check if the user has privileges to create a new event or not. If not, a user can only create an event for themselves, and this needs to be approved by someone who has the privilege (priv name: CreateEventForOthers)
+    // check if the user has privileges to create a new event or not. If not, a user can only create an event for themselves, and this needs to be approved by someone who has this privilege
     $scope.canCreateEventForOthers = SharedService.isPrivilegePresent(constants.CREATE_STAFF_SCHEDULE);
+    // only if the below privilege is present can a user make a request for shift assignment
+    $scope.canRequestWork = SharedService.isPrivilegePresent(constants.REQUEST_SHIFT_ASSIGNMENT);
 
 
     // get logged in user details
@@ -516,7 +518,8 @@ angular.module('computingServices.manageStaffSchedule', ['ngRoute', 'ui.calendar
             //event to trigger on selection of a date
             select: function (start, end) {
                 // A user cannot select dates unless logged in
-                if(!$scope.isUserLoggedIn) {
+                // A user cannot select dates unless he has privilege to do so
+                if(!$scope.isUserLoggedIn || !$scope.canRequestWork) {
                     return;
                 }
 
@@ -547,7 +550,8 @@ angular.module('computingServices.manageStaffSchedule', ['ngRoute', 'ui.calendar
             //event to trigger when an event on calendar is clicked
             eventClick: function (event) {
                 // A user cannot click on a event unless logged in
-                if(!$scope.isUserLoggedIn) {
+                // A user cannot select dates unless he has privilege to do so
+                if(!$scope.isUserLoggedIn || !$scope.canRequestWork) {
                     return;
                 }
 

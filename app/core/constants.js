@@ -45,6 +45,7 @@ var constants = {
 
     // Staff Schedule
     CREATE_STAFF_SCHEDULE: 'CreateStaffSchedule',
+    REQUEST_SHIFT_ASSIGNMENT: 'RequestShiftAssignment',
 
     // Schedule and Timesheet
     SCHEDULE_AND_TIMESHEET: 'ScheduleAndTimesheet',
