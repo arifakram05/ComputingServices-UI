@@ -4,7 +4,7 @@ angular.module('computingServices.wiki', ['ngRoute', 'ngResource'])
 
 .config(['$routeProvider', function ($routeProvider) {
     $routeProvider.when('/wiki', {
-        templateUrl: 'templates/general/wiki/wiki.html',
+        templateUrl: 'general/wiki/wiki.html',
         controller: 'WikiCtrl'
     });
 }])

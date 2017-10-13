@@ -5,7 +5,7 @@ angular.module('computingServices.faq', ['ngRoute'])
 .config(['$routeProvider', function ($routeProvider) {
     $routeProvider.
     when('/faq', {
-        templateUrl: 'templates/general/faq/faq.html',
+        templateUrl: 'general/faq/faq.html',
         controller: 'FaqCtrl'
     })
 }])

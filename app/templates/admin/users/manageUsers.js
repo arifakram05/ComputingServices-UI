@@ -4,7 +4,7 @@ angular.module('computingServices.manageUsers', ['ngRoute', 'ngResource'])
 
 .config(['$routeProvider', function ($routeProvider) {
     $routeProvider.when('/manageUsers', {
-        templateUrl: 'templates/admin/users/manageUsers.html',
+        templateUrl: 'admin/users/manageUsers.html',
         controller: 'ManageUsersCtrl'
     });
 }])

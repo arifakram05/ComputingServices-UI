@@ -5,7 +5,7 @@ angular.module('computingServices.contact', ['ngRoute'])
 .config(['$routeProvider', function ($routeProvider) {
     $routeProvider.
     when('/contact', {
-        templateUrl: 'templates/general/contact/contact.html',
+        templateUrl: 'general/contact/contact.html',
         controller: 'contactCtrl'
     })
 }])

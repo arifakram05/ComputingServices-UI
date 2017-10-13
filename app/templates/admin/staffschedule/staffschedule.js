@@ -2,7 +2,7 @@ angular.module('computingServices.manageStaffSchedule', ['ngRoute', 'ui.calendar
 
 .config(['$routeProvider', function ($routeProvider) {
     $routeProvider.when('/manageStaffSchedule', {
-        templateUrl: 'templates/admin/staffschedule/staffschedule.html',
+        templateUrl: 'admin/staffschedule/staffschedule.html',
         controller: 'manageStaffScheduleCtrl'
     });
     }])

@@ -5,7 +5,7 @@ angular.module('computingServices.settings', ['ngRoute'])
 .config(['$routeProvider', function ($routeProvider) {
     $routeProvider.
     when('/settings', {
-        templateUrl: 'templates/general/settings/settings.html',
+        templateUrl: 'general/settings/settings.html',
         controller: 'SettingsCtrl'
     })
 }])

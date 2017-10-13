@@ -5,7 +5,7 @@ angular.module('computingServices.manageLabAssistants', ['ngRoute'])
 .config(['$routeProvider', function ($routeProvider) {
     $routeProvider.
     when('/manageLabAssistants', {
-        templateUrl: 'templates/admin/manageLabAssistants.html',
+        templateUrl: 'admin/manageLabAssistants.html',
         controller: 'ManageLabAssistantsCtrl'
     })
 }])

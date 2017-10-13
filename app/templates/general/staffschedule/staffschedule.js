@@ -5,7 +5,7 @@ angular.module('computingServices.staffSchedule', ['ngRoute'])
 .config(['$routeProvider', function ($routeProvider) {
     $routeProvider.
     when('/staffSchedule', {
-        templateUrl: 'templates/general/staffschedule/staffschedule.html',
+        templateUrl: 'general/staffschedule/staffschedule.html',
         controller: 'staffScheduleCtrl'
     })
 }])

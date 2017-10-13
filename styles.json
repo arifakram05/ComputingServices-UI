@@ -1,0 +1,11 @@
+[
+    "./app/css/bootstrap.min.css",
+    "./app/css/bootstrap-theme.min.css",
+    "./app/css/angular-material.min.css",
+    "./app/lib/material-calendar/angular-material-event-calendar.css",
+    "./app/lib/daterangepicker/daterangepicker.css",
+    "./app/css/fullcalendar.min.css",
+    "./app/css/angular-growl.min.css",
+    "./app/css/select.min.css",
+    "./app/css/app.css"
+]

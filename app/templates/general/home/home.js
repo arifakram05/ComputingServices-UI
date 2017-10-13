@@ -3,7 +3,7 @@ angular.module('computingServices.home', ['ngRoute'])
 .config(['$routeProvider', function ($routeProvider) {
     $routeProvider.
     when('/home', {
-        templateUrl: 'templates/general/home/home.html',
+        templateUrl: 'general/home/home.html',
         controller: 'homeCtrl'
     })
 }])

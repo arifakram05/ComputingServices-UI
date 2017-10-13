@@ -5,7 +5,7 @@ angular.module('computingServices.manageRoles', ['ngRoute'])
 .config(['$routeProvider', function ($routeProvider) {
     $routeProvider.
     when('/manageRoles', {
-        templateUrl: 'templates/admin/manageRoles.html',
+        templateUrl: 'admin/manageRoles.html',
         controller: 'ManageRolesCtrl'
     })
 }])

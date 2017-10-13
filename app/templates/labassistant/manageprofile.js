@@ -5,7 +5,7 @@ angular.module('computingServices.manageprofile', ['ngRoute'])
 .config(['$routeProvider', function ($routeProvider) {
     $routeProvider.
     when('/manageprofile', {
-        templateUrl: 'templates/labassistant/manageprofile.html',
+        templateUrl: 'labassistant/manageprofile.html',
         controller: 'ManageProfileCtrl'
     })
 }])

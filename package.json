@@ -14,7 +14,22 @@
     "author": "Arif Akram Mohammed",
     "license": "ISC",
     "dependencies": {
-        "express": "^4.13.3"
+        "express": "^4.16.1",
+        "process-nextick-args": "^1.0.7",
+        "jquery": "^3.2.1",
+        "angular": "1.5.5",
+        "angular-cookies": "1.5.5",
+        "angular-route": "1.5.5",
+        "angular-animate": "1.5.5",
+        "angular-aria": "1.5.5",
+        "angular-messages": "1.5.5",
+        "angular-sanitize": "1.5.5",
+        "angular-resource": "1.5.5",
+        "angular-material": "1.1.0",
+        "fullcalendar": "3.3.1",
+        "bootstrap": "3.3.7",
+        "font-awesome": "4.3.0",
+        "angular-activity-monitor": "^1.1.0"
     },
     "engines": {
         "node": "4.1.1"
@@ -22,5 +37,10 @@
     "bugs": {
         "url": "https://github.com/arifakram05/ComputingServices-UI/issues"
     },
-    "homepage": "https://github.com/arifakram05/ComputingServices-UI#readme"
+    "homepage": "https://github.com/arifakram05/ComputingServices-UI#readme",
+    "devDependencies": {
+        "browser-sync": "^2.18.13",
+        "gulp": "^3.9.1",
+        "gulp-concat": "^2.6.1"
+    }
 }

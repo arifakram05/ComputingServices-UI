@@ -4,7 +4,7 @@ angular.module('computingServices.careers', ['ngRoute', 'ngResource'])
 
 .config(['$routeProvider', function ($routeProvider) {
     $routeProvider.when('/careers', {
-        templateUrl: 'templates/general/careers/careers.html',
+        templateUrl: 'general/careers/careers.html',
         controller: 'CareersCtrl'
     });
 }])
