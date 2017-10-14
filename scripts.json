@@ -18,39 +18,5 @@
     "./app/lib/daterangepicker/daterangepicker.js",
     "./app/lib/daterangepicker/angular-daterangepicker.min.js",
     "./app/lib/select.min.js",
-    "./app/lib/activity-monitor.min.js",
-
-    "./app/core/constants.js",
-    "./app/core/app.js",
-    "./app/core/sharedapp.js",
-
-    "./app/templates/general/home/home.js",
-    "./app/templates/general/about/about.js",
-    "./app/templates/general/wiki/wiki.js",
-    "./app/templates/general/careers/careers.js",
-    "./app/templates/general/contact/contact.js",
-    "./app/templates/general/faq/faq.js",
-    "./app/templates/general/staffschedule/staffschedule.js",
-    "./app/templates/general/staff/staff.js",
-    "./app/templates/admin/manageLabAssistants.js",
-    "./app/templates/admin/manageJobApplicants.js",
-    "./app/templates/admin/manageRoles.js",
-    "./app/templates/admin/authorize.js",
-    "./app/templates/admin/staffschedule/staffschedule.js",
-    "./app/templates/admin/users/manageUsers.js",
-    "./app/templates/general/settings/settings.js",
-    "./app/templates/labassistant/recordwork.js",
-    "./app/templates/labassistant/displaywork.js",
-    "./app/templates/labassistant/manageprofile.js",
-    "./app/templates/general/login/login.js",
-
-    "./app/core/dirPagination.js",
-    "./app/directives/formValidation.js",
-    "./app/directives/fileUpload.js",
-    "./app/directives/fileModel.js",
-
-    "./app/lib/ng-file-upload/FileAPI.min.js",
-    "./app/lib/ng-file-upload/ng-file-upload-all.min.js",
-    "./app/lib/ng-file-upload/ng-file-upload-shim.min.js",
-    "./app/lib/ng-file-upload/ng-file-upload.min.js"
+    "./app/lib/activity-monitor.min.js"
 ]
