@@ -4,8 +4,8 @@
     "description": "Lab Management Application",
     "main": "dist/js/scripts.js",
     "scripts": {
-        "build": "gulp start",
         "start": "node app.js",
+        "postinstall" : "gulp start"
         "test": "echo \"Error: no test specified\" && exit 1"
     },
     "repository": {
