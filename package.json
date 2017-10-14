@@ -29,7 +29,14 @@
         "fullcalendar": "3.3.1",
         "bootstrap": "3.3.7",
         "font-awesome": "4.3.0",
-        "angular-activity-monitor": "^1.1.0"
+        "angular-activity-monitor": "^1.1.0",
+        "gulp": "^3.9.1",
+        "gulp-concat": "^2.6.1",
+        "gulp-imagemin": "^3.4.0",
+        "gulp-minify-html": "^1.0.6",
+        "gulp-strip-debug": "^1.1.0",
+        "gulp-uglify": "^3.0.0",
+        "gulp-uglifycss": "^1.0.8"
     },
     "engines": {
         "node": "4.1.1"
@@ -39,13 +46,6 @@
     },
     "homepage": "https://github.com/arifakram05/ComputingServices-UI#readme",
     "devDependencies": {
-        "browser-sync": "^2.18.13",
-        "gulp": "^3.9.1",
-        "gulp-concat": "^2.6.1",
-        "gulp-imagemin": "^3.4.0",
-        "gulp-minify-html": "^1.0.6",
-        "gulp-strip-debug": "^1.1.0",
-        "gulp-uglify": "^3.0.0",
-        "gulp-uglifycss": "^1.0.8"
+        "browser-sync": "^2.18.13"
     }
 }
