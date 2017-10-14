@@ -2,8 +2,9 @@
     "name": "computingservices-ui",
     "version": "1.0.0",
     "description": "Lab Management Application",
-    "main": "app/core/app.js",
+    "main": "dist/js/scripts.js",
     "scripts": {
+        "build": "gulp start",
         "start": "node app.js",
         "test": "echo \"Error: no test specified\" && exit 1"
     },
@@ -39,7 +40,7 @@
         "gulp-uglifycss": "^1.0.8"
     },
     "engines": {
-        "node": "4.1.1"
+        "node": "5.5.1"
     },
     "bugs": {
         "url": "https://github.com/arifakram05/ComputingServices-UI/issues"
