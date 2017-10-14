@@ -1,20 +1,21 @@
 const gulp = require('gulp');
 const concat = require('gulp-concat'); // Join all JS files together to save space
-const minifyHTML = require('gulp-minify-html'); // Minify HTML
 const stripDebug = require('gulp-strip-debug'); // Remove debugging stuffs
+const minifyHTML = require('gulp-minify-html'); // Minify HTML
 var uglify = require('gulp-uglify'); // Minify JavaScript
-/*var imagemin = require('gulp-imagemin'); // Minify images*/
-const browserSync = require('browser-sync').create();
+var imagemin = require('gulp-imagemin'); // Minify images
+var minifyCss = require('gulp-uglifycss');// Minify CSS
+const browserSync = require('browser-sync').create(); // Server
 
 const scripts = require('./scripts');
-const scripts2 = require('./scripts2');
 const styles = require('./styles');
 
-var devMode = false;
+var devMode = true;
 
 gulp.task('css', function () {
     gulp.src(styles)
         .pipe(concat('main.css'))
+        .pipe(minifyCss())
         .pipe(gulp.dest('./dist/css'))
         .pipe(browserSync.reload({
             stream: true
@@ -24,17 +25,6 @@ gulp.task('css', function () {
 gulp.task('js', function () {
     gulp.src(scripts)
         .pipe(concat('scripts.js'))
-        .pipe(stripDebug())
-        /*.pipe(uglify())*/
-        .pipe(gulp.dest('./dist/js'))
-        .pipe(browserSync.reload({
-            stream: true
-        }));
-});
-
-gulp.task('minifyjs', function () {
-    gulp.src(scripts2)
-        .pipe(concat('scripts2.js'))
         .pipe(stripDebug())
         .pipe(uglify({
             mangle: false
@@ -64,9 +54,9 @@ gulp.task('jsons', function () {
 
 gulp.task('img', function () {
     gulp.src('./app/img/*.png')
-        /*.pipe(imagemin({
+        .pipe(imagemin({
                 progressive: true,
-            }))*/
+            }))
         .pipe(gulp.dest('./dist/img'))
         .pipe(browserSync.reload({
             stream: true
@@ -74,7 +64,7 @@ gulp.task('img', function () {
 });
 
 gulp.task('build', function () {
-    gulp.start(['css', 'js', 'minifyjs', 'html', 'jsons', 'img']);
+    gulp.start(['css', 'js', 'html', 'jsons', 'img']);
 });
 
 gulp.task('browser-sync', function () {
@@ -87,8 +77,9 @@ gulp.task('browser-sync', function () {
 });
 
 gulp.task('start', function () {
-    devMode: true;
-    gulp.start(['build', 'browser-sync']);
+    if (devMode) {
+        gulp.start(['build', 'browser-sync']);
+    }
     gulp.watch(['./app/css/**/*.css'], ['css']);
     gulp.watch(['./app/**/*.js'], ['js']);
     gulp.watch(['./app/templates/**/*.html'], ['html']);
