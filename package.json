@@ -2,11 +2,8 @@
     "name": "computingservices-ui",
     "version": "1.0.0",
     "description": "Lab Management Application",
-    //"main": "dist/js/scripts.js",
     "scripts": {
-        //"start": "node app.js",
-        //"postinstall" : "gulp build",
-        //"test": "echo \"Error: no test specified\" && exit 1"
+
     },
     "repository": {
         "type": "git",
