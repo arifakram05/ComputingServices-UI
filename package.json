@@ -2,11 +2,11 @@
     "name": "computingservices-ui",
     "version": "1.0.0",
     "description": "Lab Management Application",
-    "main": "dist/js/scripts.js",
+    //"main": "dist/js/scripts.js",
     "scripts": {
-        "start": "node app.js",
-        "postinstall" : "gulp build",
-        "test": "echo \"Error: no test specified\" && exit 1"
+        //"start": "node app.js",
+        //"postinstall" : "gulp build",
+        //"test": "echo \"Error: no test specified\" && exit 1"
     },
     "repository": {
         "type": "git",
@@ -31,7 +31,7 @@
         "bootstrap": "3.3.7",
         "font-awesome": "4.3.0",
         "angular-activity-monitor": "^1.1.0",
-        "gulp": "^3.9.1",
+
         "gulp-concat": "^2.6.1",
         "gulp-imagemin": "^3.4.0",
         "gulp-minify-html": "^1.0.6",
@@ -48,6 +48,6 @@
     },
     "homepage": "https://github.com/arifakram05/ComputingServices-UI#readme",
     "devDependencies": {
-
+        "gulp": "^3.9.1"
     }
 }

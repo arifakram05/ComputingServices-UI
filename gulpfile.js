@@ -84,3 +84,7 @@ gulp.task('start', function () {
     gulp.watch(['./app/templates/**/*.html'], ['html']);
     gulp.watch(['./app/json/*.json'], ['jsons']);
 });
+
+gulp.task('heroku:production', ['build'], function(){
+    console.log('heroku production');
+});
