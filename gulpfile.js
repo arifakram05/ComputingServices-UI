@@ -10,7 +10,7 @@ const browserSync = require('browser-sync').create(); // Server
 const scripts = require('./scripts');
 const styles = require('./styles');
 
-var devMode = false;
+var devMode = true;
 
 gulp.task('css', function () {
     gulp.src(styles)
@@ -77,9 +77,8 @@ gulp.task('browser-sync', function () {
 });
 
 gulp.task('start', function () {
-    if (devMode) {
-        gulp.start(['build', 'browser-sync']);
-    }
+    devMode = false;
+    gulp.start(['build', 'browser-sync']);
     gulp.watch(['./app/css/**/*.css'], ['css']);
     gulp.watch(['./app/**/*.js'], ['js']);
     gulp.watch(['./app/templates/**/*.html'], ['html']);

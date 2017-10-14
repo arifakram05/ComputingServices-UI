@@ -37,7 +37,8 @@
         "gulp-minify-html": "^1.0.6",
         "gulp-strip-debug": "^1.1.0",
         "gulp-uglify": "^3.0.0",
-        "gulp-uglifycss": "^1.0.8"
+        "gulp-uglifycss": "^1.0.8",
+        "browser-sync": "^2.18.13"
     },
     "engines": {
         "node": "6.11.1"
@@ -47,6 +48,6 @@
     },
     "homepage": "https://github.com/arifakram05/ComputingServices-UI#readme",
     "devDependencies": {
-        "browser-sync": "^2.18.13"
+
     }
 }
