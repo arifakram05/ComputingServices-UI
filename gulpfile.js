@@ -10,7 +10,7 @@ const browserSync = require('browser-sync').create(); // Server
 const scripts = require('./scripts');
 const styles = require('./styles');
 
-var devMode = true;
+var devMode = false;
 
 gulp.task('css', function () {
     gulp.src(styles)
