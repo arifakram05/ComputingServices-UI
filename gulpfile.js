@@ -76,15 +76,4 @@ gulp.task('browser-sync', function () {
     });
 });
 
-gulp.task('start', function () {
-    devMode = false;
-    gulp.start(['build', 'browser-sync']);
-    gulp.watch(['./app/css/**/*.css'], ['css']);
-    gulp.watch(['./app/**/*.js'], ['js']);
-    gulp.watch(['./app/templates/**/*.html'], ['html']);
-    gulp.watch(['./app/json/*.json'], ['jsons']);
-});
 
-gulp.task('heroku:production', ['build'], function(){
-    console.log('heroku production');
-});

@@ -3,7 +3,8 @@
     "version": "1.0.0",
     "description": "Lab Management Application",
     "scripts": {
-
+        "start": "node app",
+        "postinstall": "gulp build"
     },
     "repository": {
         "type": "git",
