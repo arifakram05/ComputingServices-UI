@@ -91,6 +91,46 @@
                 </div>
             </form>
 
+            <!--Subnet Range Form-->
+            <form name="subnetRangeForm" layout="column" ng-if="selectedOptionToShow === options[2]">
+                <div ng-if="canSetSubnetRange">
+                    <div layout="row" layout-align="center">
+                        <p>Define Subnet Range</p>
+                    </div>
+
+                    <md-input-container flex="10"></md-input-container>
+
+                    <div layout="row">
+                        <md-input-container flex="10"></md-input-container>
+
+                        <md-input-container md-no-float class="md-block" flex="50">
+                            <label>Starting IP Address</label>
+                            <input name="subnetStart" ng-model="start" required/>
+                        </md-input-container>
+
+                        <md-input-container flex="10"></md-input-container>
+
+                        <md-input-container md-no-float class="md-block" flex="50">
+                            <label>Ending IP Address</label>
+                            <input name="subnetEnd" ng-model="end" required/>
+                        </md-input-container>
+
+                        <md-input-container flex="10"></md-input-container>
+
+                        <!--Button-->
+                        <md-input-container md-no-float class="md-block">
+                            <div layout="row" layout-align="center center" flex>
+                                <md-button class="md-raised md-primary" ng-disabled="!subnetRangeForm.$valid" ng-click="setSubnetRange(start, end)">Submit</md-button>
+                            </div>
+                        </md-input-container>
+                    </div>
+                </div>
+
+                <div ng-if="!canResetPassword" layout="row" layout-align="center center">
+                    <p ng-style="{'color':'blue'}">You do not have privileges to view this section.</p>
+                </div>
+            </form>
+
             <!--Change Password Form-->
             <form name="changePasswordForm" layout="column" ng-if="selectedOptionToShow === options[3]">
                 <div ng-if="canChangePassword">

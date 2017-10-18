@@ -13,16 +13,18 @@ angular.module('computingServices.settings', ['ngRoute'])
 .factory('SettingsService', ['$http', '$q', function ($http, $q) {
 
     var SETTINGS_URI = constants.url + 'settings';
-    var UPDATE_FROM_EMAIL_URI = constants.url + 'email';
+    var UPDATE_FROM_EMAIL_URI = constants.url + 'settings/email';
     var CHANGE_PASSWORD_URI = constants.url + 'settings/password';
     var RESET_PASSWORD_URI = constants.url + 'settings/password/reset';
+    var DEFINE_SUBNET_RANGE_URI = constants.url + 'settings/subnet-range';
 
     //define all factory methods
     var factory = {
         loadSettings: loadSettings,
         fromEmail: fromEmail,
         resetPassword: resetPassword,
-        changePassword: changePassword
+        changePassword: changePassword,
+        defineSubnetRange: defineSubnetRange
     };
 
     return factory;
@@ -112,6 +114,29 @@ angular.module('computingServices.settings', ['ngRoute'])
         return deferred.promise;
     }
 
+    // reset user password
+    function defineSubnetRange(start, end) {
+        var deferred = $q.defer();
+        $http({
+                method: 'PUT',
+                url: DEFINE_SUBNET_RANGE_URI,
+                params: {
+                    start: start,
+                    end: end
+                }
+            })
+            .then(
+                function success(response) {
+                    console.log('Subnet Ranged Defined: ', response);
+                    deferred.resolve(response.data);
+                },
+                function error(errResponse) {
+                    console.error('Error while defining subnet range: ', errResponse);
+                    deferred.reject(errResponse);
+                });
+        return deferred.promise;
+    }
+
 }])
 
 .controller('SettingsCtrl', ['$scope', 'SettingsService', '$filter', 'SharedService', '$mdDialog', function ($scope, SettingsService, $filter, SharedService, $mdDialog) {
@@ -148,6 +173,9 @@ angular.module('computingServices.settings', ['ngRoute'])
         var promise = SettingsService.loadSettings();
         promise.then(function (result) {
             $scope.email = result.email;
+            let subnetRange = result.subnetRange.split('-');
+            $scope.start = subnetRange[0];
+            $scope.end = subnetRange[1];
             console.log('Settings :', result);
         }).catch(function (resError) {
             console.error('Error while fetching settings');
@@ -162,6 +190,8 @@ angular.module('computingServices.settings', ['ngRoute'])
         var promise = SettingsService.fromEmail(email);
         promise.then(function (result) {
                 SharedService.showSuccess(result.message);
+                // refresh page
+                loadSettings();
             })
             .catch(function (resError) {
                 console.log('UPDATE FROM EMAIL ADDRESS FAILURE :: ', resError);
@@ -207,6 +237,23 @@ angular.module('computingServices.settings', ['ngRoute'])
                 console.log('CHANGE PASSWORD FAILURE :: ', resError);
                 //show failure message to the user
                 SharedService.showError('Failed to change password');
+            });
+    }
+
+    // define subnet range
+    $scope.setSubnetRange = function (start, end) {
+        console.log('start ', start, ' end ', end);
+
+        var promise = SettingsService.defineSubnetRange(start, end);
+        promise.then(function (result) {
+                SharedService.showSuccess(result.message);
+                // refresh page
+                loadSettings();
+            })
+            .catch(function (resError) {
+                console.log('FAILURE WHILE DEFINING SUBNET RANGE :: ', resError);
+                //show failure message to the user
+                SharedService.showError('Failed to set subnet range');
             });
     }
 
