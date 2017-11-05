@@ -1,5 +1,5 @@
 var constants = {
-    url: 'http://127.0.0.1:8080/ComputingServicesApp/',
+    url: 'https://labapp-server.herokuapp.com/',
 
     // Job applicants privs
     jobApplicants: 'JobApplicants',
