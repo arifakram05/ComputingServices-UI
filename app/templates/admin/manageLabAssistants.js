@@ -174,11 +174,11 @@ angular.module('computingServices.manageLabAssistants', ['ngRoute'])
 .controller('ManageLabAssistantsCtrl', ['$scope', 'ManageLabAssistantsService', 'SharedService', '$filter', '$mdDialog', function ($scope, ManageLabAssistantsService, SharedService, $filter, $mdDialog) {
 
     //Check if user is logged in, only then continue
-    if(!SharedService.isUserLoggedIn()) {
+    if (!SharedService.isUserLoggedIn()) {
         return;
     }
 
-    if(!SharedService.isPrivilegePresent(constants.LABASSISTANTS)) {
+    if (!SharedService.isPrivilegePresent(constants.LABASSISTANTS)) {
         SharedService.showWarning('You do not have privileges to "Lab Assistants" this page. Please contact Lab Manager');
         SharedService.showLoginPage();
         return;
@@ -357,6 +357,29 @@ angular.module('computingServices.manageLabAssistants', ['ngRoute'])
     //Delete backup fields
     function deleteBackup(la) {
         delete la.backupComments;
+    }
+
+    //show email modal
+    $scope.showEmailModal = function (labAsst) {
+        $scope.emailApplicant = labAsst;
+        $('#emailModalMLA').modal('show');
+        console.log('preparing to email ', $scope.emailApplicant);
+    }
+
+    // email user
+    $scope.email = function (user) {
+        //call service to send email
+        var promise = SharedService.sendEmail(user);
+        promise.then(function (response) {
+                console.log('Emailing candidate successful, refershing job applicants table');
+                SharedService.showSuccess('Email Sent');
+                // close modal
+                document.getElementById('closeEmailModalinMLA').click();
+            })
+            .catch(function (resError) {
+                console.log('FAILURE :: ', resError);
+                SharedService.showError('Error occurred while sending email');
+            });
     }
 
 }]);

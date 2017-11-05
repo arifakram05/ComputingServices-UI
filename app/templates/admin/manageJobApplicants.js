@@ -16,7 +16,6 @@ angular.module('computingServices.manageJobApplicants', ['ngRoute'])
     var UPDATE_JOB_APPLICANT_URI = constants.url + 'admin/updateJobApplicant';
     var HIRE_JOB_APPLICANT_URI = constants.url + 'admin/hireJobApplicant';
     var UPDATE_JOB_APPLICANT_STATUS_URI = constants.url + 'admin/update-job-applicant-status';
-    var EMAIL_JOB_APPLICANT_URI = constants.url + 'services/emailJobApplicant';
 
     //define all factory methods
     var factory = {
@@ -24,7 +23,6 @@ angular.module('computingServices.manageJobApplicants', ['ngRoute'])
         deleteJobApplicant: deleteJobApplicant,
         updateJobApplicant: updateJobApplicant,
         hireJobApplicant: hireJobApplicant,
-        emailJobApplicant: emailJobApplicant,
         updateJobApplicantStatus: updateJobApplicantStatus
     };
 
@@ -128,23 +126,6 @@ angular.module('computingServices.manageJobApplicants', ['ngRoute'])
             deferred.reject(data);
         });
 
-        return deferred.promise;
-    }
-
-    function emailJobApplicant(jobApplicant) {
-        var deferred = $q.defer();
-
-        $http.post(EMAIL_JOB_APPLICANT_URI, JSON.stringify(jobApplicant))
-            .success(
-                function (data, status, headers, config) {
-                    console.log('Email operation success', data);
-                    deferred.resolve(data);
-                })
-            .error(
-                function (data, status, header, config) {
-                    console.log('Email operation failed ', status);
-                    deferred.reject(data);
-                });
         return deferred.promise;
     }
 
@@ -399,15 +380,29 @@ angular.module('computingServices.manageJobApplicants', ['ngRoute'])
         SharedService.viewFile(applicantId, 'jobapplicants');
     }
 
-    $scope.email = function (jobApplicant) {
-        console.log('Sending email to the candidate ', jobApplicant);
+    //show email modal
+    $scope.showEmailModal = function (applicant) {
+        $scope.emailApplicant = applicant;
+        $('#emailModal').modal('show');
+        console.log('preparing to email ', $scope.emailApplicant);
+    }
 
-        var promise = ManageJobApplicantsService.emailJobApplicant(jobApplicant);
-        promise.then(function (result) {
-            console.log('Emailing candidate successful, refershing job applicants table');
-            //refresh table contents
-            fetchAllJobApplicants();
-        });
+    // email user
+    $scope.email = function (user) {
+        //call service to send email
+        var promise = SharedService.sendEmail(user);
+        promise.then(function (response) {
+                console.log('Emailing candidate successful, refershing job applicants table');
+                $scope.emailForm.$setPristine();
+                $scope.emailForm.$setUntouched();
+                SharedService.showSuccess('Email Sent');
+                // close modal
+                document.getElementById('closeEmailModal').click();
+            })
+            .catch(function (resError) {
+                console.log('FAILURE :: ', resError);
+                SharedService.showError('Error occurred while sending email');
+            });
     }
 
 }])

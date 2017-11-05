@@ -70,7 +70,7 @@
                                     <md-tooltip>View Resume</md-tooltip>
                                 </button>
 
-                                <button type="button" class="btn btn-info btn" ng-disabled="!canEmailLA" ng-click="email(u)">
+                                <button type="button" class="btn btn-info btn" ng-disabled="!canEmailLA" ng-click="showEmailModal(u)">
                                     <i class="fa fa-envelope-o"></i>
                                     <md-tooltip>Email Lab Assistant</md-tooltip>
                                 </button>
@@ -171,6 +171,65 @@
                                 <md-button class="md-raised md-primary" ng-disabled="!canCommentLA" ng-click="update(selectedLA)">Update</md-button>
                             </div>
 
+                        </form>
+                    </md-content>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!--MODAL-->
+    <div class="modal fade" id="emailModalMLA" tabindex="-1" role="dialog" aria-labelledby="jadeModal" aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-body">
+                    <md-toolbar class="md-primary">
+                        <div class="md-toolbar-tools">
+                            <h2 class="md-flex">Email to {{emailApplicant.firstName}} {{emailApplicant.lastName}}</h2>
+                        </div>
+                    </md-toolbar>
+
+                    <md-content class="md-no-momentum">
+
+                        <form name="emailFormMLA" role="form" layout="column" layout-padding ng-cloak>
+                            <!--Email Address-->
+                            <div layout="row">
+                                <md-input-container flex="100">
+                                    <label>To</label>
+                                    <input type="email" name="email" ng-model="emailApplicant.email" required />
+                                    <div class="validation-messages" ng-messages="emailFormMLA.email.$error">
+                                        <div ng-message="required">Required</div>
+                                    </div>
+                                </md-input-container>
+                            </div>
+
+                            <!--Subject-->
+                            <div layout="row">
+                                <md-input-container flex="100">
+                                    <label>Subject</label>
+                                    <input type="text" name="subject" ng-model="emailApplicant.subject" required />
+                                    <div class="validation-messages" ng-messages="emailFormMLA.subject.$error">
+                                        <div ng-message="required">Required</div>
+                                    </div>
+                                </md-input-container>
+                            </div>
+
+                            <!--Email Content-->
+                            <div layout="row">
+                                <md-input-container class="md-block" flex="100">
+                                    <label>Email Content</label>
+                                    <textarea ng-model="emailApplicant.content" name="content" md-maxlength="500" rows="5" max-rows="5" md-select-on-focus required></textarea>
+                                    <div class="validation-messages" ng-messages="emailFormMLA.content.$error">
+                                        <div ng-message="required">Required</div>
+                                    </div>
+                                </md-input-container>
+                            </div>
+
+                            <!--Controls-->
+                            <div layout="row" layout-align="center" flex>
+                                <md-button class="md-raised md-default" data-dismiss="modal" id="closeEmailModalinMLA">close</md-button>
+                                <md-button class="md-raised md-primary" ng-disabled="!emailFormMLA.$valid" ng-click="email(emailApplicant)">Send</md-button>
+                            </div>
                         </form>
                     </md-content>
                 </div>

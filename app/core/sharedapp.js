@@ -6,6 +6,7 @@ angular.module('computingServices.shared', ['ngRoute'])
     var SEARCH_LAB_ASSISTANTS_URI = constants.url + 'search/labassistants';
     var GET_ROLES_URI = constants.url + 'admin/role-names';
     var DOWNLOAD_URI = constants.url + 'admin/download';
+    var EMAIL_URI = constants.url + 'general/email';
 
     this.userDetails = {};
     this.authToken = '';
@@ -47,7 +48,8 @@ angular.module('computingServices.shared', ['ngRoute'])
         searchLabAssistants: searchLabAssistants,
         getRoles: getRoles,
         download: download,
-        viewFile: viewFile
+        viewFile: viewFile,
+        sendEmail: sendEmail
     };
 
     return service;
@@ -310,6 +312,30 @@ angular.module('computingServices.shared', ['ngRoute'])
                 console.log('DOWNLOAD FAILURE :: ', resError);
                 SharedService.showError('Error occurred while downloading requested file');
             });
+    }
+
+    // send email
+    function sendEmail(emailDetails) {
+        const deferred = $q.defer();
+
+        const email = {
+            to: emailDetails.email,
+            subject: emailDetails.subject,
+            content: emailDetails.content
+        };
+
+        $http.post(EMAIL_URI, JSON.stringify(email))
+            .success(
+                function (data, status, headers, config) {
+                    console.log('Email operation success', data);
+                    deferred.resolve(data);
+                })
+            .error(
+                function (data, status, header, config) {
+                    console.log('Email operation failed ', status);
+                    deferred.reject(data);
+                });
+        return deferred.promise;
     }
 
 }]);
